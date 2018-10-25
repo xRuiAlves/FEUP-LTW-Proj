@@ -11,14 +11,12 @@ CREATE TABLE VotableEntity (
 );
 
 CREATE TABLE Comment (
-    comment_id          INTEGER PRIMARY KEY,
-    votable_entity_id   INTEGER NOT NULL REFERENCES VotableEntity,
+    votable_entity_id   INTEGER PRIMARY KEY REFERENCES VotableEntity,
     comment_content     VARCHAR NOT NULL
 );
 
 CREATE TABLE Story (
-    story_id            INTEGER PRIMARY KEY,
-    votable_entity_id   INTEGER NOT NULL REFERENCES VotableEntity,
+    votable_entity_id   INTEGER PRIMARY KEY REFERENCES VotableEntity,
     story_title         VARCHAR NOT NULL,
     story_content       VARCHAR NOT NULL,
     story_creation_date DATE NOT NULL
