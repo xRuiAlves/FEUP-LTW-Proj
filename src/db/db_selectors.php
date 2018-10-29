@@ -109,4 +109,19 @@
         $stmt->execute(array($entity_id));
         return $stmt->fetchAll(); 
     }
+
+    function getUserPoints($user_id) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT sum(vote_value) as points
+            FROM Creator 
+                NATURAL JOIN Story
+                JOIN Vote USING (votable_entity_id)
+            WHERE Creator.user_id = ?
+        ');
+        $stmt->execute(array($user_id));
+        $result = $stmt->fetchAll(); 
+        
+        return $result[0]['points'] ? $result[0]['points'] : 0; 
+    }
 ?>

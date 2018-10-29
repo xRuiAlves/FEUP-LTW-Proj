@@ -27,9 +27,16 @@ INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 2, 2);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 3, 1);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 4, 3);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 4);
-INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 2, 5);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 3, 4);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 4, 4);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 2, 5);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 3, 5);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 4, 5);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 5);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 6);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 7);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 8);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 3, 7);
 
 INSERT INTO Creator (user_id, votable_entity_id) VALUES (1, 1);
 INSERT INTO Creator (user_id, votable_entity_id) VALUES (1, 2);

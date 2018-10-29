@@ -36,6 +36,21 @@
         echo "UP: "; echo getEntityNumUpVotes(7);
         echo "<br>";
         echo "Down: "; echo getEntityNumDownVotes(7);
+
+        echo "<br><br>";
+        echo "<br><br>";
+
+        echo "User 1 score: ";
+        print_r(getUserPoints(1));
+        echo "<br>";
+        echo "User 2 score: ";
+        print_r(getUserPoints(2));
+        echo "<br>";
+        echo "User 3 score: ";
+        print_r(getUserPoints(3));
+        echo "<br>";
+        echo "User 4 score: ";
+        print_r(getUserPoints(4));
     ?>
 </body>
 </html>
