@@ -1,5 +1,5 @@
 <?php
-    include_once('db/Database.php');
+    include_once($_SERVER['DOCUMENT_ROOT'] . '/db/Database.php');
 
     function getUserInfo($user_id) {
         $db = Database::getInstance()->getDB();
@@ -7,7 +7,7 @@
             SELECT user_id, user_username, user_realname, user_bio 
             FROM User 
             WHERE user_id = ?
-        ');
+        '); 
         $stmt->execute(array($user_id));
         return $stmt->fetchAll(); 
     }
@@ -53,7 +53,7 @@
         $stmt = $db->prepare('
             SELECT * 
             FROM Story 
-            WHERE story_id = ?
+            WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($story_id));
         return $stmt->fetchAll(); 
