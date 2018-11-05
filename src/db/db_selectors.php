@@ -1,6 +1,21 @@
 <?php
     include_once($_SERVER['DOCUMENT_ROOT'] . '/db/Database.php');
 
+    function userExists($user_id) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT EXISTS (
+                SELECT * 
+                FROM User 
+                WHERE user_id = ?
+            ) as "exists"
+        '); 
+        $stmt->execute(array($user_id));
+        $result = $stmt->fetchAll(); 
+
+        return $result[0]["exists"];
+    }
+
     function getUserInfo($user_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
@@ -12,12 +27,12 @@
         return $stmt->fetchAll(); 
     }
 
-    function getUserStories($used_id) {
+    function getUserStories($user_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT Story.story_title, Story.story_content, Story.story_creation_date
             FROM User 
-                 NATURAL JOIN Creator 
+                 NATURAL JOIN VotableEntity 
                  NATURAL JOIN Story
             WHERE User.user_id = ?
         ');
@@ -114,12 +129,15 @@
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT sum(vote_value) as points
-            FROM Creator 
-                NATURAL JOIN Story
-                JOIN Vote USING (votable_entity_id)
-            WHERE Creator.user_id = ?
+            FROM User  
+                 NATURAL JOIN VotableEntity
+                 NATURAL JOIN Story
+                 JOIN Vote using(votable_entity_id)
+            WHERE User.user_id = ?
         ');
         $stmt->execute(array($user_id));
+
+        //print_r($stmt->fetchAll());
         $result = $stmt->fetchAll(); 
         
         return $result[0]['points'] ? $result[0]['points'] : 0; 
