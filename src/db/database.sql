@@ -7,7 +7,8 @@ CREATE TABLE User (
 );
 
 CREATE TABLE VotableEntity (
-    votable_entity_id   INTEGER PRIMARY KEY
+    votable_entity_id   INTEGER PRIMARY KEY,
+    user_id             INTEGER NOT NULL REFERENCES User
 );
 
 CREATE TABLE Comment (
@@ -26,15 +27,6 @@ CREATE TABLE Vote (
     vote_value          INTEGER NOT NULL CHECK (vote_value = -1 OR vote_value = 1),
     user_id             INTEGER NOT NULL REFERENCES User,
     votable_entity_id   INTEGER NOT NULL REFERENCES VotableEntity,
-    PRIMARY KEY (
-        user_id,
-        votable_entity_id
-    )
-);
-
-CREATE TABLE Creator (
-    user_id             INTEGER NOT NULL REFERENCES User,
-    votable_entity_id   INTEGER NOT NULL REFERENCES VotableEntity, 
     PRIMARY KEY (
         user_id,
         votable_entity_id

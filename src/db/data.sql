@@ -3,14 +3,14 @@ INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES 
 INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES ('limalimao', 'Henrique', 'naoGostoDeESOF', 'Nao gosto de BDAD');
 INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES ('angelico', 'Angelo', 'mexicano', 'salsaTequilla');
 
-INSERT INTO VotableEntity (votable_entity_id) VALUES (1);
-INSERT INTO VotableEntity (votable_entity_id) VALUES (2);
-INSERT INTO VotableEntity (votable_entity_id) VALUES (3);
-INSERT INTO VotableEntity (votable_entity_id) VALUES (4);
-INSERT INTO VotableEntity (votable_entity_id) VALUES (5);
-INSERT INTO VotableEntity (votable_entity_id) VALUES (6);
-INSERT INTO VotableEntity (votable_entity_id) VALUES (7);
-INSERT INTO VotableEntity (votable_entity_id) VALUES (8);
+INSERT INTO VotableEntity (votable_entity_id, user_id) VALUES (1, 1);
+INSERT INTO VotableEntity (votable_entity_id, user_id) VALUES (2, 1);
+INSERT INTO VotableEntity (votable_entity_id, user_id) VALUES (3, 2);
+INSERT INTO VotableEntity (votable_entity_id, user_id) VALUES (4, 2);
+INSERT INTO VotableEntity (votable_entity_id, user_id) VALUES (5, 3);
+INSERT INTO VotableEntity (votable_entity_id, user_id) VALUES (6, 3);
+INSERT INTO VotableEntity (votable_entity_id, user_id) VALUES (7, 4);
+INSERT INTO VotableEntity (votable_entity_id, user_id) VALUES (8, 4);
 
 INSERT INTO Comment (votable_entity_id, comment_content) VALUES (1, 'Gostei imenso deste texto!');
 INSERT INTO Comment (votable_entity_id, comment_content) VALUES (2, 'Que fotos horríveis');
@@ -37,15 +37,6 @@ INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 6);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 7);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 8);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 3, 7);
-
-INSERT INTO Creator (user_id, votable_entity_id) VALUES (1, 1);
-INSERT INTO Creator (user_id, votable_entity_id) VALUES (1, 2);
-INSERT INTO Creator (user_id, votable_entity_id) VALUES (2, 3);
-INSERT INTO Creator (user_id, votable_entity_id) VALUES (2, 4);
-INSERT INTO Creator (user_id, votable_entity_id) VALUES (3, 5);
-INSERT INTO Creator (user_id, votable_entity_id) VALUES (3, 6);
-INSERT INTO Creator (user_id, votable_entity_id) VALUES (4, 7);
-INSERT INTO Creator (user_id, votable_entity_id) VALUES (4, 8);
 
 INSERT INTO VotableEntityComment (comment_id, votable_entity_id) VALUES (1, 7);
 INSERT INTO VotableEntityComment (comment_id, votable_entity_id) VALUES (2, 7);
