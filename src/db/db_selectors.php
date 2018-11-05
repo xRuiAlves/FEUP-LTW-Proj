@@ -63,6 +63,21 @@
         }
     }
 
+    function storyExists($story_id) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT EXISTS (
+                SELECT * 
+                FROM Story 
+                WHERE votable_entity_id = ?
+            ) as "exists"
+        '); 
+        $stmt->execute(array($story_id));
+        $result = $stmt->fetchAll(); 
+
+        return $result[0]["exists"];
+    }
+
     function getStory($story_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
