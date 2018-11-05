@@ -51,6 +51,21 @@
         echo "<br>";
         echo "User 4 score: ";
         print_r(getUserPoints(4));
+
+        echo "<br><br>";
+        echo "<br><br>";
+
+        echo "User 1 stories: ";
+        print_r(getUserStories(1));
+        echo "<br>";
+        echo "User 2 stories: ";
+        print_r(getUserStories(2));
+        echo "<br>";
+        echo "User 3 stories: ";
+        print_r(getUserStories(3));
+        echo "<br>";
+        echo "User 4 stories: ";
+        print_r(getUserStories(4));
     ?>
 </body>
 </html>
