@@ -66,6 +66,33 @@
         echo "<br>";
         echo "User 4 stories: ";
         print_r(getUserStories(4));
+
+        echo "<br><br>";
+        echo "<br><br>";
+
+        echo "Entity 1 comments: ";
+        print_r(getEntityComments(1));
+        echo "<br>";
+        echo "Entity 2 comments: ";
+        print_r(getEntityComments(2));
+        echo "<br>";
+        echo "Entity 3 comments: ";
+        print_r(getEntityComments(3));
+        echo "<br>";
+        echo "Entity 4 comments: ";
+        print_r(getEntityComments(4));
+        echo "<br>";
+        echo "Entity 5 comments: ";
+        print_r(getEntityComments(5));
+        echo "<br>";
+        echo "Entity 6 comments: ";
+        print_r(getEntityComments(6));
+        echo "<br>";
+        echo "Entity 7 comments: ";
+        print_r(getEntityComments(7));
+        echo "<br>";
+        echo "Entity 8 comments: ";
+        print_r(getEntityComments(8));
     ?>
 </body>
 </html>

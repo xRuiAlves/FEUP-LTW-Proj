@@ -5,7 +5,7 @@
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT EXISTS (
-                SELECT * 
+                SELECT user_id 
                 FROM User 
                 WHERE user_id = ?
             ) as "exists"
@@ -67,8 +67,23 @@
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT EXISTS (
-                SELECT * 
+                SELECT votable_entity_id 
                 FROM Story 
+                WHERE votable_entity_id = ?
+            ) as "exists"
+        '); 
+        $stmt->execute(array($story_id));
+        $result = $stmt->fetchAll(); 
+
+        return $result[0]["exists"];
+    }
+
+    function commentExists($story_id) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT EXISTS (
+                SELECT votable_entity_id 
+                FROM Comment 
                 WHERE votable_entity_id = ?
             ) as "exists"
         '); 
@@ -131,10 +146,10 @@
     function getEntityComments($entity_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT Comment.comment_content
-            FROM Comment, VotableEntityComment
-            WHERE Comment.votable_entity_id = VotableEntityComment.comment_id
-                  AND VotableEntityComment.votable_entity_id = ?
+            SELECT Comment.votable_entity_id, Comment.comment_content, VotableEntity.user_id
+            FROM Comment 
+                 NATURAL JOIN VotableEntity
+            WHERE Comment.parent_entity_id = ?
         ');
         $stmt->execute(array($entity_id));
         return $stmt->fetchAll(); 
