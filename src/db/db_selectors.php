@@ -98,8 +98,12 @@
     function getStory($story_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT * 
+            SELECT Story.votable_entity_id,
+                   Story.story_title,
+                   Story.story_content,
+                   VotableEntity.votable_entity_creation_date 
             FROM Story 
+                 NATURAL JOIN VotableEntity
             WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($story_id));
