@@ -30,7 +30,9 @@
     function getUserStories($user_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT Story.story_title, Story.story_content, Story.story_creation_date
+            SELECT Story.story_title, 
+                   Story.story_content, 
+                   VotableEntity.votable_entity_creation_date
             FROM User 
                  NATURAL JOIN VotableEntity 
                  NATURAL JOIN Story
@@ -146,7 +148,10 @@
     function getEntityComments($entity_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT Comment.votable_entity_id, Comment.comment_content, VotableEntity.user_id
+            SELECT Comment.votable_entity_id, 
+                   Comment.comment_content, 
+                   VotableEntity.votable_entity_creation_date, 
+                   VotableEntity.user_id
             FROM Comment 
                  NATURAL JOIN VotableEntity
             WHERE Comment.parent_entity_id = ?
