@@ -197,4 +197,20 @@
 
         return $stmt->fetchAll();
     }
+
+    function createUserComment($user_id, $date, $parent_entity_id, $comment_content) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (?, ?);
+        ');
+        $stmt->execute(array($user_id, $date));
+        $id = $db->lastInsertId();
+
+        $stmt = $db->prepare('
+            INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (?, ?, ?);
+        ');
+        $stmt->execute(array($id, $parent_entity_id, $comment_content));
+
+        return $stmt->fetchAll();
+    }
 ?>
