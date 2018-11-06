@@ -9,8 +9,9 @@ CREATE TABLE User (
 
 DROP TABLE IF EXISTS VotableEntity; 
 CREATE TABLE VotableEntity (
-    votable_entity_id   INTEGER PRIMARY KEY,
-    user_id             INTEGER NOT NULL REFERENCES User
+    votable_entity_id               INTEGER PRIMARY KEY,
+    user_id                         INTEGER NOT NULL REFERENCES User,
+    votable_entity_creation_date    DATE NOT NULL
 );
 
 DROP TABLE IF EXISTS Comment; 
@@ -24,8 +25,7 @@ DROP TABLE IF EXISTS Story;
 CREATE TABLE Story (
     votable_entity_id   INTEGER PRIMARY KEY REFERENCES VotableEntity,
     story_title         VARCHAR NOT NULL,
-    story_content       VARCHAR NOT NULL,
-    story_creation_date DATE NOT NULL
+    story_content       VARCHAR NOT NULL
 );
 
 DROP TABLE IF EXISTS Vote; 
