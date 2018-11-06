@@ -223,4 +223,14 @@
 
         return $stmt->fetchAll();
     }
+
+    function createUser($user_username, $user_realname, $user_password, $user_bio) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (?, ?, ?, ?);
+        ');
+        $stmt->execute(array($user_username, $user_realname, $user_password, $user_bio));
+
+        return $stmt->fetchAll();
+    }
 ?>
