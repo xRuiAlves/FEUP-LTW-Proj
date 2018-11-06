@@ -181,4 +181,20 @@
         
         return $result[0]['points'] ? $result[0]['points'] : 0; 
     }
+
+     function createUserStory($user_id, $date, $story_title, $story_content) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (?, ?);
+        ');
+        $stmt->execute(array($user_id, $date));
+        $id = $db->lastInsertId();
+
+        $stmt = $db->prepare('
+            INSERT INTO Story (votable_entity_id, story_title, story_content) VALUES (?, ?, ?);
+        ');
+        $stmt->execute(array($id, $story_title, $story_content));
+
+        return $stmt->fetchAll();
+    }
 ?>
