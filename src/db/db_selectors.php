@@ -213,4 +213,14 @@
 
         return $stmt->fetchAll();
     }
+
+    function createUserVote($vote_value, $user_id, $votable_entity_id) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (?, ?, ?);
+        ');
+        $stmt->execute(array($vote_value, $user_id, $votable_entity_id));
+
+        return $stmt->fetchAll();
+    }
 ?>
