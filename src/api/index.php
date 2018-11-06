@@ -1,6 +1,7 @@
 <?php
     include_once($_SERVER['DOCUMENT_ROOT'] . '/api/story.php');
     include_once($_SERVER['DOCUMENT_ROOT'] . '/api/user.php');
+    include_once($_SERVER['DOCUMENT_ROOT'] . '/api/comment.php');
 
     header('Content-Type: application/json');
 
@@ -16,7 +17,9 @@
             handleStoryRequest($request, $method);
         } else if ($req === "user") {
             handleUserRequest($request, $method);
-        } else {
+        } else if ($req === "comment") {
+            handleCommentRequest($request, $method);
+        }  else {
             // Invalid request
             http_response_code(400);
         }

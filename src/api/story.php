@@ -12,6 +12,8 @@
             api_getStoryUpVotes($_GET['id']);
         } else if ($req === "downvotes" && $method === "GET" && isset($_GET['id'])) {
             api_getStoryDownVotes($_GET['id']);
+        } else if ($req === "comments" && $method === "GET" && isset($_GET['id'])) {
+            api_getStoryComments($_GET['id']);
         } else {
             // Invalid request
             http_response_code(400);
@@ -55,4 +57,13 @@
             echo json_encode(getEntityNumDownVotes($id));
         }
     }  
+
+    function api_getStoryComments($id) {
+        if(!storyExists($id)) {
+            http_response_code(404);
+        } else {
+            http_response_code(200);
+            echo json_encode(getEntityComments($id));
+        }
+    }
 ?>
