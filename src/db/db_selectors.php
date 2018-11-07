@@ -16,6 +16,20 @@
         return $result[0]["exists"];
     }
 
+    function usernameExists($user_username) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT EXISTS (
+                SELECT user_username 
+                FROM User 
+                WHERE user_username = ?
+            ) as "exists"
+        '); 
+        $stmt->execute(array($user_username));
+        $result = $stmt->fetchAll(); 
+        return $result[0]["exists"];
+    }
+
     function getUserInfo($user_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
@@ -176,7 +190,6 @@
         ');
         $stmt->execute(array($user_id));
 
-        //print_r($stmt->fetchAll());
         $result = $stmt->fetchAll(); 
         
         return $result[0]['points'] ? $result[0]['points'] : 0; 
