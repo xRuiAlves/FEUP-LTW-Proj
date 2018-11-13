@@ -4,7 +4,12 @@
     function handleStoryRequest($request, $method) {
         $req = array_shift($request);
 
-        if ($req === "user_stories" && $method === "GET" && isset($_GET['user_id'])) {
+        if ($req === "create" && $method === "POST") {
+            api_createStory($_POST['user_id'],
+                            $_POST['date'],
+                            $_POST['story_title'],
+                            $_POST['story_content']);
+        } else if ($req === "user_stories" && $method === "GET" && isset($_GET['user_id'])) {
             api_getUserStories($_GET['user_id']);
         } else if ($req === "info" && $method === "GET" && isset($_GET['id'])) {
             api_getStoryInfo($_GET['id']);
@@ -27,6 +32,11 @@
             // Invalid request
             http_response_code(404);
         }
+    }
+
+    function api_createStory($user_id, $date, $story_title, $story_content) {
+        createUserStory($user_id, $date, $story_title, $story_content);
+        http_response_code(201);
     }
 
     function api_getUserStories($user_id) {
