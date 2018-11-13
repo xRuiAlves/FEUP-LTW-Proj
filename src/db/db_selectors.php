@@ -94,7 +94,7 @@
         return $result[0]["exists"];
     }
 
-    function commentExists($story_id) {
+    function commentExists($comment_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT EXISTS (
@@ -103,7 +103,22 @@
                 WHERE votable_entity_id = ?
             ) as "exists"
         '); 
-        $stmt->execute(array($story_id));
+        $stmt->execute(array($comment_id));
+        $result = $stmt->fetchAll(); 
+
+        return $result[0]["exists"];
+    }
+
+    function voteExists($user_id, $votable_entity_id) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT EXISTS (
+                SELECT vote_value
+                FROM Vote
+                WHERE user_id = ? AND votable_entity_id = ?
+            ) as "exists"
+        '); 
+        $stmt->execute(array($user_id, $votable_entity_id));
         $result = $stmt->fetchAll(); 
 
         return $result[0]["exists"];
@@ -161,6 +176,17 @@
 
         $result = $stmt->fetchAll();
         return $result[0]["num_votes"];
+    }
+
+    function updateUserEntityVote($user_id, $entity_id, $vote_value) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            UPDATE Vote
+            SET vote_value = ?
+            WHERE user_id = ? AND votable_entity_id = ?
+        ');
+        $stmt->execute(array($vote_value, $user_id, $entity_id));
+        return $stmt->fetchAll(); 
     }
 
     function getEntityComments($entity_id) {
