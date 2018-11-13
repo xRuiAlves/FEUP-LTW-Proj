@@ -4,7 +4,12 @@
     function handleCommentRequest($request, $method) {
         $req = array_shift($request);
 
-        if ($req === "upvotes" && $method === "GET" && isset($_GET['id'])) {
+        if ($req === "create" && $method === "POST") {
+            api_createComment($_POST['user_id'], 
+                              $_POST['date'], 
+                              $_POST['parent_entity_id'], 
+                              $_POST['comment_content']);
+        } else if ($req === "upvotes" && $method === "GET" && isset($_GET['id'])) {
             api_getCommentUpVotes($_GET['id']);
         } else if ($req === "downvotes" && $method === "GET" && isset($_GET['id'])) {
             api_getCommentDownVotes($_GET['id']);
@@ -21,8 +26,13 @@
             api_userCommentUnvote($data['user_id'], $data['comment_id']);
         } else {
             // Invalid request
-            http_response_code(400);
+            http_response_code(404);
         }
+    }
+
+    function api_createComment($user_id, $date, $parent_entity_id, $comment_content) {
+        createUserComment($user_id, $date, $parent_entity_id, $comment_content);
+        http_response_code(201);
     }
 
     function api_getCommentUpVotes($id) {

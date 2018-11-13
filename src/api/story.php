@@ -25,7 +25,7 @@
             api_userStoryUnvote($data['user_id'], $data['story_id']);
         } else {
             // Invalid request
-            http_response_code(400);
+            http_response_code(404);
         }
     }
 
