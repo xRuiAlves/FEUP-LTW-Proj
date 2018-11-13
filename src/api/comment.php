@@ -16,6 +16,9 @@
         } else if ($req === "downvote" && $method === "PUT") {
             $data = json_decode(file_get_contents("php://input"), true);
             api_userCommentDownvote($data['user_id'], $data['comment_id']);
+        } else if ($req === "unvote" && $method === "DELETE") {
+            $data = json_decode(file_get_contents("php://input"), true);
+            api_userCommentUnvote($data['user_id'], $data['comment_id']);
         } else {
             // Invalid request
             http_response_code(400);
@@ -69,5 +72,10 @@
             createUserVote(-1, $user_id, $comment_id);
             http_response_code(201);
         }
+    }
+
+    function api_userCommentUnvote($user_id, $comment_id) {
+        removeUserEntityVote($user_id, $comment_id);
+        http_response_code(200);
     }
 ?>
