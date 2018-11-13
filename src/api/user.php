@@ -8,8 +8,8 @@
             api_getUserInfo($_GET['id']);
         } else if ($req === "points" && $method === "GET" && isset($_GET['id'])) {
             api_getUserPoints($_GET['id']);
-        } else if ($req === "add" && $method === "POST") {
-            api_addUser($_POST);
+        } else if ($req === "create" && $method === "POST") {
+            api_createUser($_POST);
         } else {
             // Invalid request
             http_response_code(400);
@@ -34,11 +34,15 @@
         }
     }
 
-    function api_addUser($postData) {
+    function api_createUser($postData) {
         if (usernameExists($postData['username'])){
             http_response_code(500);
         } else {
-            echo json_encode(createUser($postData['username'], $postData['realname'], $postData['password'], $postData['bio']));
+            echo json_encode(createUser($postData['username'], 
+                                        $postData['realname'], 
+                                        $postData['password'], 
+                                        $postData['bio']));
+            http_response_code(201);
         }
     }
 ?>
