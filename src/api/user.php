@@ -39,9 +39,13 @@
 
     function api_createUser($user_username, $user_realname, $user_password, $user_bio) {
         if (usernameExists($user_username)){
+            echo(json_encode(array(
+                'error:' => "username already exists"
+            )));
             http_response_code(400);
         } else {
-            echo json_encode(createUser($user_username, $user_realname, $user_password, $user_bio));
+            $comment_id = createUser($user_username, $user_realname, $user_password, $user_bio);
+            echo(json_encode(getUserInfo($comment_id)));
             http_response_code(201);
         }
     }

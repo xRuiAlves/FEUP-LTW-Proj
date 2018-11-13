@@ -17,8 +17,8 @@
             api_getStoryUpVotes($_GET['id']);
         } else if ($req === "downvotes" && $method === "GET" && isset($_GET['id'])) {
             api_getStoryDownVotes($_GET['id']);
-        } else if ($req === "stories" && $method === "GET" && isset($_GET['id'])) {
-            api_getStoryStorys($_GET['id']);
+        } else if ($req === "comments" && $method === "GET" && isset($_GET['id'])) {
+            api_getStoryComments($_GET['id']);
         } else if ($req === "upvote" && $method === "PUT") {
             $data = json_decode(file_get_contents("php://input"), true);
             api_userStoryUpvote($data['user_id'], $data['story_id']);
@@ -35,12 +35,23 @@
     }
 
     function api_createStory($user_id, $date, $story_title, $story_content) {
-        createUserStory($user_id, $date, $story_title, $story_content);
-        http_response_code(201);
+        if (!userExists($user_id)) {
+            echo(json_encode(array(
+                'error:' => "user with id $user_id does not exist"
+            )));
+            http_response_code(404);
+        } else {
+            $story_id = createUserStory($user_id, $date, $story_title, $story_content);
+            echo(json_encode(getStory($story_id)));
+            http_response_code(201);
+        }
     }
 
     function api_getUserStories($user_id) {
         if (!userExists($user_id)) {
+            echo(json_encode(array(
+                'error:' => "user with id $user_id does not exist"
+            )));
             http_response_code(404);
         } else {
             http_response_code(200);
@@ -48,41 +59,51 @@
         }
     }
 
-    function api_getStoryInfo($id) {
-        $story = getStory($id);
-
-        if(count($story) == 0) {
+    function api_getStoryInfo($story_id) {
+        if (!storyExists($story_id)) {
+            echo(json_encode(array(
+                'error:' => "story with id $story_id does not exist"
+            )));
             http_response_code(404);
         } else {
+            echo(json_encode(getStory($story_id)));
             http_response_code(200);
-            echo json_encode($story);
         }
     }
 
-    function api_getStoryUpVotes($id) {
-        if(!storyExists($id)) {
+    function api_getStoryUpVotes($story_id) {
+        if(!storyExists($story_id)) {
+            echo(json_encode(array(
+                'error:' => "story with id $story_id does not exist"
+            )));
             http_response_code(404);
         } else {
             http_response_code(200);
-            echo json_encode(getEntityNumUpVotes($id));
+            echo(json_encode(getEntityNumUpVotes($story_id)));
         }
     }   
 
-    function api_getStoryDownVotes($id) {
-        if(!storyExists($id)) {
+    function api_getStoryDownVotes($story_id) {
+        if(!storyExists($story_id)) {
+            echo(json_encode(array(
+                'error:' => "story with id $story_id does not exist"
+            )));
             http_response_code(404);
         } else {
             http_response_code(200);
-            echo json_encode(getEntityNumDownVotes($id));
+            echo(json_encode(getEntityNumDownVotes($story_id)));
         }
     }  
 
-    function api_getStoryComments($id) {
-        if(!storyExists($id)) {
+    function api_getStoryComments($story_id) {
+        if(!storyExists($story_id)) {
+            echo(json_encode(array(
+                'error:' => "story with id $story_id does not exist"
+            )));
             http_response_code(404);
         } else {
             http_response_code(200);
-            echo json_encode(getEntityComments($id));
+            echo(json_encode(getEntityComments($story_id)));
         }
     }
 
@@ -90,8 +111,17 @@
         if(voteExists($user_id, $story_id)) {
             updateUserEntityVote($user_id, $story_id, 1);
             http_response_code(200);
-        }
-        else {
+        } else if (!userExists($user_id)) {
+            echo(json_encode(array(
+                'error:' => "user with id $user_id does not exist"
+            )));
+            http_response_code(404);
+        } else if (!storyExists($story_id)) {
+            echo(json_encode(array(
+                'error:' => "story with id $story_id does not exist"
+            )));
+            http_response_code(404);
+        } else {
             createUserVote(1, $user_id, $story_id);
             http_response_code(201);
         }
@@ -101,15 +131,37 @@
         if(voteExists($user_id, $story_id)) {
             updateUserEntityVote($user_id, $story_id, -1);
             http_response_code(200);
-        }
-        else {
+        } else if (!userExists($user_id)) {
+            echo(json_encode(array(
+                'error:' => "user with id $user_id does not exist"
+            )));
+            http_response_code(404);
+        } else if (!storyExists($story_id)) {
+            echo(json_encode(array(
+                'error:' => "story with id $story_id does not exist"
+            )));
+            http_response_code(404);
+        } else {
             createUserVote(-1, $user_id, $story_id);
             http_response_code(201);
         }
     }
 
     function api_userStoryUnvote($user_id, $story_id) {
-        removeUserEntityVote($user_id, $story_id);
-        http_response_code(200);
+        if (!userExists($user_id)) {
+            echo(json_encode(array(
+                'error:' => "user with id $user_id does not exist"
+            )));
+            http_response_code(404);
+        } else if (!storyExists($story_id)) {
+            echo(json_encode(array(
+                'error:' => "story with id $story_id does not exist"
+            )));
+            http_response_code(404);
+        } else {
+            removeUserEntityVote($user_id, $story_id);
+            http_response_code(200);
+        }
+
     }
 ?>

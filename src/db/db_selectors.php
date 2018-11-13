@@ -38,7 +38,7 @@
             WHERE user_id = ?
         '); 
         $stmt->execute(array($user_id));
-        return $stmt->fetchAll(); 
+        return $stmt->fetchAll()[0]; 
     }
 
     function getUserStories($user_id) {
@@ -134,7 +134,7 @@
             WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($story_id));
-        return $stmt->fetchAll(); 
+        return $stmt->fetchAll()[0]; 
     }
     
     function getComment($comment_id) {
@@ -142,10 +142,10 @@
         $stmt = $db->prepare('
             SELECT * 
             FROM Comment 
-            WHERE comment_id = ?
+            WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($comment_id));
-        return $stmt->fetchAll(); 
+        return $stmt->fetchAll()[0]; 
     }
 
     function getEntityNumUpVotes($entity_id) {
@@ -232,7 +232,7 @@
         ');
         $stmt->execute(array($id, $story_title, $story_content));
 
-        return $stmt->fetchAll();
+        return $id;
     }
 
     function createUserComment($user_id, $date, $parent_entity_id, $comment_content) {
@@ -248,7 +248,7 @@
         ');
         $stmt->execute(array($id, $parent_entity_id, $comment_content));
 
-        return $stmt->fetchAll();
+        return $id;
     }
 
     function createUserVote($vote_value, $user_id, $votable_entity_id) {
@@ -257,8 +257,9 @@
             INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (?, ?, ?);
         ');
         $stmt->execute(array($vote_value, $user_id, $votable_entity_id));
+        $id = $db->lastInsertId();
 
-        return $stmt->fetchAll();
+        return $id;
     }
 
     function createUser($user_username, $user_realname, $user_password, $user_bio) {
@@ -267,8 +268,9 @@
             INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (?, ?, ?, ?);
         ');
         $stmt->execute(array($user_username, $user_realname, $user_password, $user_bio));
+        $id = $db->lastInsertId();
 
-        return $stmt->fetchAll();
+        return $id;
     }
 
     function removeUserEntityVote($user_id, $comment_id) {
