@@ -62,12 +62,10 @@
     function getUserEntityVote($user_id, $entity_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT Vote.vote_value
-            FROM User 
-                 NATURAL JOIN Vote 
-                 NATURAL JOIN VotableEntity
-            WHERE User.user_id = ?
-                  AND VotableEntity.votable_entity_id = ?
+            SELECT vote_value
+            FROM Vote 
+            WHERE user_id = ?
+                  AND votable_entity_id = ?
         ');
         $stmt->execute(array($user_id, $entity_id));
 
@@ -270,6 +268,17 @@
         ');
         $stmt->execute(array($user_username, $user_realname, $user_password, $user_bio));
 
+        return $stmt->fetchAll();
+    }
+
+    function removeUserEntityVote($user_id, $comment_id) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            DELETE FROM Vote
+            WHERE user_id = ?
+                AND votable_entity_id = ?
+        ');
+        $stmt->execute(array($user_id, $comment_id));
         return $stmt->fetchAll();
     }
 ?>
