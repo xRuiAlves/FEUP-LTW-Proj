@@ -12,8 +12,17 @@
             api_getStoryUpVotes($_GET['id']);
         } else if ($req === "downvotes" && $method === "GET" && isset($_GET['id'])) {
             api_getStoryDownVotes($_GET['id']);
-        } else if ($req === "comments" && $method === "GET" && isset($_GET['id'])) {
-            api_getStoryComments($_GET['id']);
+        } else if ($req === "stories" && $method === "GET" && isset($_GET['id'])) {
+            api_getStoryStorys($_GET['id']);
+        } else if ($req === "upvote" && $method === "PUT") {
+            $data = json_decode(file_get_contents("php://input"), true);
+            api_userStoryUpvote($data['user_id'], $data['story_id']);
+        } else if ($req === "downvote" && $method === "PUT") {
+            $data = json_decode(file_get_contents("php://input"), true);
+            api_userStoryDownvote($data['user_id'], $data['story_id']);
+        } else if ($req === "unvote" && $method === "DELETE") {
+            $data = json_decode(file_get_contents("php://input"), true);
+            api_userStoryUnvote($data['user_id'], $data['story_id']);
         } else {
             // Invalid request
             http_response_code(400);
@@ -65,5 +74,32 @@
             http_response_code(200);
             echo json_encode(getEntityComments($id));
         }
+    }
+
+    function api_userStoryUpvote($user_id, $story_id) {
+        if(voteExists($user_id, $story_id)) {
+            updateUserEntityVote($user_id, $story_id, 1);
+            http_response_code(200);
+        }
+        else {
+            createUserVote(1, $user_id, $story_id);
+            http_response_code(201);
+        }
+    }
+
+    function api_userStoryDownvote($user_id, $story_id) {
+        if(voteExists($user_id, $story_id)) {
+            updateUserEntityVote($user_id, $story_id, -1);
+            http_response_code(200);
+        }
+        else {
+            createUserVote(-1, $user_id, $story_id);
+            http_response_code(201);
+        }
+    }
+
+    function api_userStoryUnvote($user_id, $story_id) {
+        removeUserEntityVote($user_id, $story_id);
+        http_response_code(200);
     }
 ?>
