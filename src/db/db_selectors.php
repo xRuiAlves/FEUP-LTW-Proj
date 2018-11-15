@@ -187,6 +187,28 @@
         return $stmt->fetchAll(); 
     }
 
+    function updateUserBio($user_id, $bio_info) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            UPDATE User
+            SET user_bio = ?
+            WHERE user_id = ?
+        ');
+        $stmt->execute(array($bio_info, $user_id));
+        return $stmt->fetchAll(); 
+    }
+
+    function updateUserPassword($user_id, $new_password) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            UPDATE User
+            SET user_password = ?
+            WHERE user_id = ?
+        ');
+        $stmt->execute(array($new_password, $user_id));
+        return $stmt->fetchAll(); 
+    }
+
     function getEntityComments($entity_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
