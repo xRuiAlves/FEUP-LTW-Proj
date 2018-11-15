@@ -1,0 +1,180 @@
+:root{
+    --slider_width: 8em;
+    --slider_text_height: 2em;
+    --slider_image_size: 2.6em;
+    --top_bar_height: 3.5em;
+
+    --slider-animation-duration: 0.3s;
+    --side-menu-width: 14em;
+    --side-menu-font-size: 1.1em;
+
+    --hamburguer-bar-width: 1.4em;
+    --hamburguer-bar-height: 0.15em;
+    --hamburguer-spacing: 0.5em;
+    --hamburguer-padding: 1.2em;
+}
+
+#topbar {
+    color: var(--text-color-light);
+    width: 100%;
+    height: var(--top_bar_height);
+    background-color: var(--main-color);
+    box-shadow: 0px 7px 7px var(--main-color-light);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+#topbar .nav-bar-right-section{
+    display: flex;
+    align-items: center;
+}
+
+#topbar > h1{
+    padding: 1em;
+}
+
+#topbar #login_slider{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: var(--slider_width);
+    padding: 1em;
+}
+
+#topbar #login_slider > .slider_text{
+    position:relative;
+    display: inline-block;
+    background-color: var(--main-color-dark);
+    border-radius: Calc(var(--slider_text_height) / 2);
+    overflow: hidden;
+    min-width: 100%;
+    height: var(--slider_text_height);
+}
+
+#topbar #login_slider > .slider_text div{
+    transform: translate(-100%, 0%);
+    position: absolute;
+    line-height: var(--slider_text_height);
+    text-align: center;
+    width:100%;
+    display: inline-block;
+    transition: transform var(--slider-animation-duration) ease-in-out;
+}
+
+#topbar #login_slider > .slider_text div.left{
+    transform: translate(0%,0%);
+}
+#topbar #login_slider.active > .slider_text div.left{
+    transform: translate(100%,0%);
+}
+
+#topbar #login_slider.active > .slider_text div.right{
+    transform: translate(0%,0%);
+}
+
+#topbar #login_slider > img{
+    display: inline-block;
+    transform: translate(Calc(-50% - var(--slider_width)), 0);
+    transition: transform var(--slider-animation-duration) ease-in-out;
+    width: var(--slider_image_size);
+    height: var(--slider_image_size);
+    border-radius: 100%;
+    z-index: 2;
+}
+
+#topbar #login_slider.active > img{
+    transform: translate(-50%, 0);
+}
+
+#topbar ul.page-side-menu{
+    right: 0;
+    margin: 0;
+    padding: 0;
+    height: Calc(100% - var(--top_bar_height));
+    width: var(--side-menu-width);
+    top: var(--top_bar_height);
+    position: fixed;
+    background-color: white;
+    color: var(--main-color-dark);
+    box-shadow: 0 0 10px var(--main-color-light);
+    border-radius: 0em 0 0.5em 0.5em;
+    list-style-type: none;
+    transform: translate(100%, 0%);
+    transition: transform var(--slider-animation-duration) ease-in-out;
+    text-align: right;
+}
+
+#topbar ul.page-side-menu.active{
+    transform: translate(0%, 0%);
+}
+
+#topbar ul.page-side-menu *{
+    font-size: var(--side-menu-font-size);
+    padding: 1em 1em 0em;
+    transform: scale(1,1);
+    transform-origin: 100% 75%;
+    transition: transform 0.1s linear;
+    cursor: pointer;
+}
+
+#topbar ul.page-side-menu *:hover{
+    transform: scale(1.1,1.1);
+}
+
+
+/***********************************************************/
+/*********************** HAMBURGUER ************************/
+/***********************************************************/
+
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: var(--slider_image_size);
+    padding: var(--hamburguer-padding);
+}
+
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar,
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar:after,
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar:before{
+    height: var(--hamburguer-bar-height);
+    width: var(--hamburguer-bar-width);
+    background-color: white;
+    content: "";
+    position: relative;
+    transform: translate(Calc(100% + var(--hamburguer-padding)),0%);
+    transition: transform var(--slider-animation-duration) ease-out, background-color var(--slider-animation-duration) ease-out;
+}
+
+#topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer .side-menu-hamburguer-bar,
+#topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer .side-menu-hamburguer-bar:after,
+#topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer .side-menu-hamburguer-bar:before{
+    transform: translate(0%, 0%);
+}
+
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar:after{
+    top: var(--hamburguer-spacing);
+    position: absolute;
+}
+
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar:before{
+    bottom: var(--hamburguer-spacing);
+    position: absolute;
+}
+
+#topbar .page-side-menu.active ~ .nav-bar-right-section #login_slider ~  #side-menu-hamburguer .side-menu-hamburguer-bar{
+    background-color: transparent;
+}
+
+#topbar .page-side-menu.active ~ .nav-bar-right-section #login_slider ~  #side-menu-hamburguer .side-menu-hamburguer-bar:after{
+    transform: translate(0%, Calc(0em - var(--hamburguer-spacing))) rotate(45deg);
+}
+
+#topbar .page-side-menu.active ~ .nav-bar-right-section #login_slider ~  #side-menu-hamburguer .side-menu-hamburguer-bar:before{
+    transform: translate(0%, var(--hamburguer-spacing)) rotate(-45deg);
+}
