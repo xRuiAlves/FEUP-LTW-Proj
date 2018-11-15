@@ -18,18 +18,23 @@
 
         <nav id="topbar">
             <h1><?=$_env_website_name?></h1>
-            <div id="login_slider">
-                <div class="slider_text">
-                    <div class="left">Henrique</div>
-                    <div class="right"><?=$_env_login?></div>
-                </div>
-                <img src="<?=$_env_default_profile_img ?>"/>
-            </div>
-            <ul class="dropdown">
+            <ul class="page-side-menu">
                 <li><?=$_env_profile?><i class="fas fa-user"></i></li>
                 <li><?=$_env_settings?><i class="fas fa-cog"></i></li>
                 <li><?=$_env_logout?><i class="fas fa-sign-out-alt"></i></li>
             </ul>
+            <div class="nav-bar-right-section">
+                <div id="login_slider">
+                    <div class="slider_text">
+                        <div class="left"><?=$_env_login?></div>
+                        <div class="right">Henrique</div>
+                    </div>
+                    <img src="<?=$_env_default_profile_img ?>"/>
+                </div>
+                <div id="side-menu-hamburguer">
+                    <div class="side-menu-hamburguer-bar"></div>
+                </div>
+            </div>
         </nav>
 
 
