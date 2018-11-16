@@ -1,5 +1,12 @@
 <?php
     include_once($_SERVER['DOCUMENT_ROOT'] . '/templates/env.php');
+
+    $sideMenuEntries = [
+        (object) ['text' => 'Add new story', 'icon' => 'fa-plus', 'href' => '#'],
+        (object) ['text' => 'Profile', 'icon' => 'fa-user', 'href' => '#'],
+        (object) ['text' => 'Settings', 'icon' => 'fa-cog', 'href' => '#'],
+        (object) ['text' => 'Log out', 'icon' => 'fa-sign-out-alt', 'href' => '#']
+    ]
 ?>
 
 <!DOCTYPE html>
@@ -17,9 +24,9 @@
     <nav id="topbar">
         <h1><?=$_env_website_name?></h1>
         <ul class="page-side-menu">
-            <li><?=$_env_profile?><i class="fas fa-user"></i></li>
-            <li><?=$_env_settings?><i class="fas fa-cog"></i></li>
-            <li><?=$_env_logout?><i class="fas fa-sign-out-alt"></i></li>
+            <?php foreach($sideMenuEntries as $entry){ ?>
+                        <li><a href="<?=$entry->href?>"><?=$entry->text?><i class="fas <?=$entry->icon?>"></i></a></li>
+            <?php } ?>
         </ul>
         <div class="nav-bar-right-section">
             <div id="login_slider">

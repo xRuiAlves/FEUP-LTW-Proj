@@ -1,12 +1,13 @@
 :root{
-    --slider_width: 8em;
-    --slider_text_height: 2em;
-    --slider_image_size: 2.6em;
-    --top_bar_height: 3.5em;
+    --slider-width: 8em;
+    --slider-text-height: 2em;
+    --slider-image-size: 2.6em;
+    --top-bar-height: 3.5em;
 
     --slider-animation-duration: 0.3s;
-    --side-menu-width: 14em;
-    --side-menu-font-size: 1.1em;
+    --side-menu-width: 15em;
+    --side-menu-font-size: 1em;
+    --side-menu-shadow-size: 0.5em;
 
     --hamburguer-bar-width: 1.4em;
     --hamburguer-bar-height: 0.15em;
@@ -17,7 +18,7 @@
 #topbar {
     color: var(--text-color-light);
     width: 100%;
-    height: var(--top_bar_height);
+    height: var(--top-bar-height);
     background-color: var(--main-color);
     box-shadow: 0px 7px 7px var(--main-color-light);
     display: flex;
@@ -25,6 +26,7 @@
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
+    position: sticky;
 }
 
 #topbar .nav-bar-right-section{
@@ -41,7 +43,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: var(--slider_width);
+    width: var(--slider-width);
     padding: 1em;
 }
 
@@ -49,16 +51,16 @@
     position:relative;
     display: inline-block;
     background-color: var(--main-color-dark);
-    border-radius: Calc(var(--slider_text_height) / 2);
+    border-radius: Calc(var(--slider-text-height) / 2);
     overflow: hidden;
     min-width: 100%;
-    height: var(--slider_text_height);
+    height: var(--slider-text-height);
 }
 
 #topbar #login_slider > .slider_text div{
     transform: translate(-100%, 0%);
     position: absolute;
-    line-height: var(--slider_text_height);
+    line-height: var(--slider-text-height);
     text-align: center;
     width:100%;
     display: inline-block;
@@ -78,10 +80,10 @@
 
 #topbar #login_slider > img{
     display: inline-block;
-    transform: translate(Calc(-50% - var(--slider_width)), 0);
+    transform: translate(Calc(-50% - var(--slider-width)), 0);
     transition: transform var(--slider-animation-duration) ease-in-out;
-    width: var(--slider_image_size);
-    height: var(--slider_image_size);
+    width: var(--slider-image-size);
+    height: var(--slider-image-size);
     border-radius: 100%;
     z-index: 2;
 }
@@ -94,18 +96,18 @@
     right: 0;
     margin: 0;
     padding: 0;
-    height: Calc(100% - var(--top_bar_height));
+    height: Calc(100% - var(--top-bar-height));
     width: var(--side-menu-width);
-    top: var(--top_bar_height);
+    top: var(--top-bar-height);
     position: fixed;
     background-color: white;
     color: var(--main-color-dark);
-    box-shadow: 0 0 10px var(--main-color-light);
+    box-shadow: 0 0 var(--side-menu-shadow-size) var(--main-color-light);
     border-radius: 0em 0 0.5em 0.5em;
     list-style-type: none;
-    transform: translate(100%, 0%);
-    transition: transform var(--slider-animation-duration) ease-in-out;
+    transform: translate(Calc(100% + var(--side-menu-shadow-size)), 0%);
     text-align: right;
+    transition: transform var(--slider-animation-duration) ease-in-out;
 }
 
 #topbar ul.page-side-menu.active{
@@ -114,14 +116,14 @@
 
 #topbar ul.page-side-menu *{
     font-size: var(--side-menu-font-size);
-    padding: 1em 1em 0em;
+    padding: 0.8em 1em 0em;
     transform: scale(1,1);
     transform-origin: 100% 75%;
     transition: transform 0.1s linear;
     cursor: pointer;
 }
 
-#topbar ul.page-side-menu *:hover{
+#topbar ul.page-side-menu li:hover{
     transform: scale(1.1,1.1);
 }
 
@@ -131,11 +133,11 @@
 /***********************************************************/
 
 #topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer{
-    position: relative;
     display: flex;
+    position: relative;
     flex-direction: column;
     justify-content: space-around;
-    height: var(--slider_image_size);
+    height: var(--slider-image-size);
     padding: var(--hamburguer-padding);
     pointer-events: none;
 }

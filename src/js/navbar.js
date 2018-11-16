@@ -1,11 +1,19 @@
 
 window.addEventListener('load', function() {
-    var login_slider = document.getElementById('login_slider');
-    var hamburguer = document.getElementById('side-menu-hamburguer');
-    login_slider.addEventListener("click", () =>
-        login_slider.classList.toggle('active')
-    );
+    let login_slider = document.getElementById('login_slider');
+    let hamburguer = document.getElementById('side-menu-hamburguer');
+    let side_menu = document.querySelector('#topbar .page-side-menu');
+    let page_content = document.getElementById('page-content');
+    login_slider.addEventListener("click", () => {
+        if(login_slider.classList.contains('active')){
+            side_menu.classList.remove('active');
+        }
+        login_slider.classList.toggle('active');
+    });
     hamburguer.addEventListener("click", () => 
-        document.querySelector("#topbar .page-side-menu").classList.toggle('active')
-    )
+        side_menu.classList.toggle('active')
+    );
+    page_content.addEventListener("click", () => 
+        side_menu.classList.remove('active')
+    );
 })

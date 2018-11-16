@@ -12,3 +12,22 @@ body header {
     margin: 0;
     padding: 0;
 }
+
+a{
+    color: inherit;
+    text-decoration: none;
+    font-size: inherit;
+}
+
+#page-content {
+    min-height: Calc(100vh - var(--top-bar-height));
+}
+
+#page-content > footer{
+    text-align: center;
+    position: sticky;
+    top: Calc(100vh - var(--top-bar-height));
+    color: var(--main-color-light);
+    padding: 2em;
+    z-index: -1;
+}
