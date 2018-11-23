@@ -5,7 +5,7 @@
     --top-bar-height: 3.5em;
 
     --slider-animation-duration: 0.3s;
-    --side-menu-width: 15em;
+    --side-menu-width: 16em;
     --side-menu-font-size: 1em;
     --side-menu-shadow-size: 0.5em;
 
@@ -105,13 +105,13 @@
     box-shadow: 0 0 var(--side-menu-shadow-size) var(--main-color-light);
     border-radius: 0em 0 0.5em 0.5em;
     list-style-type: none;
-    transform: translate(Calc(100% + var(--side-menu-shadow-size)), 0%);
+    transform: translate(Calc(100% + var(--side-menu-shadow-size)*2), 0%);
     text-align: right;
     transition: transform var(--slider-animation-duration) ease-in-out;
 }
 
 #topbar ul.page-side-menu.active{
-    transform: translate(0%, 0%);
+    transform: translate(var(--scroll-bar-width), 0%);
 }
 
 #topbar ul.page-side-menu *{

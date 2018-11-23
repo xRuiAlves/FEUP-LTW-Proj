@@ -109,12 +109,16 @@ class StoriesRenderer{
     }
 
     showFullStory(story){
+        if(this.fullStoryView.firstChild){
+            this.fullStoryView.removeChild(this.fullStoryView.firstChild);
+        }
+
         this.fullStoryView.appendChild(this.generateStoryElem(story));
+        
         document.body.classList.add('modal-open');
     }
 
     hideFullStory(){
-        this.fullStoryView.removeChild(this.fullStoryView.firstChild);
         document.body.classList.remove('modal-open');
     }
 }
