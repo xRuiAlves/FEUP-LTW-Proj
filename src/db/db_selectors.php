@@ -285,11 +285,17 @@
     }
 
     function createUser($user_username, $user_realname, $user_password, $user_bio) {
+        $pass_hashing_options = ['cost' => 10];
+
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (?, ?, ?, ?);
         ');
-        $stmt->execute(array($user_username, $user_realname, $user_password, $user_bio));
+        $stmt->execute(array(
+            $user_username, 
+            $user_realname, 
+            password_hash($user_password, PASSWORD_DEFAULT, $pass_hashing_options),
+            $user_bio));
         $id = $db->lastInsertId();
 
         return $id;

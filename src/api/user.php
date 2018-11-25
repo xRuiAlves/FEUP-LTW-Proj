@@ -74,9 +74,11 @@
         if (usernameExists($user_username)){
             httpBadRequest("username already exists");
         } else {
-            $comment_id = createUser($user_username, $user_realname, $user_password, $user_bio);
-            echo(json_encode(getUserInfo($comment_id)));
-            http_response_code(201);
+            if (!api_checkInvalidUsername($user_username) && !api_checkInvalidRealname($user_realname)) {
+                $user_id = createUser($user_username, $user_realname, $user_password, $user_bio);
+                echo(json_encode(getUserInfo($user_id)));
+                http_response_code(201);
+            }
         }
     }
 
@@ -95,6 +97,38 @@
         } else {
             updateUserPassword($user_id, $user_password);
             http_response_code(200);
+        }
+    }
+
+    function api_checkInvalidUsername($user_username) {
+        $username_min_size = 5;
+        $username_max_size = 14;
+
+        if (!preg_match ("/^[A-Za-z][A-Za-z0-9]+$/", $user_username)) {
+            httpBadRequest("username can only contain letters and numbers and must start with a letter");
+            return true;
+        } else if (strlen($user_username) < $username_min_size) {
+            httpBadRequest("username must have at least $username_min_size characters");
+            return true;
+        } else if (strlen($user_username) > $username_max_size) {
+            httpBadRequest("username must have at most $username_max_size characters");
+            return true;
+        } else {
+            return false;   // Not Invalid
+        }
+    }
+
+    function api_checkInvalidRealname($user_realname) {
+        $realname_max_size = 60;
+
+        if (!preg_match ("/^[A-Za-z][A-Za-z\s]+$/", $user_realname)) {
+            httpBadRequest("real name can only contain letters and spaces and must start with a letter");
+            return true;
+        } else if (strlen($user_realname) > $realname_max_size) {
+            httpBadRequest("real name must have at most $realname_max_size characters");
+            return true;
+        } else {
+            return false;   // Not Invalid
         }
     }
 ?>
