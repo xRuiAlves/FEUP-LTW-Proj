@@ -26,4 +26,15 @@
         $mime_type_parts = explode("/", $mime_type);
         return $mime_type_parts[1];
     }
+
+    function uploadImage($img, $img_name) {
+        $extension = getImageExtension($img["type"]);
+        $target_file = $_SERVER["DOCUMENT_ROOT"] . "/db/images/" . $img_name . "." . $extension;
+
+        if (move_uploaded_file($img["tmp_name"], $target_file)) {
+            return "uploaded";
+        } else {
+            return "failed to upload image";
+        }
+    }
 ?>

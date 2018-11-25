@@ -1,6 +1,7 @@
 <?php 
     include_once($_SERVER['DOCUMENT_ROOT'] . '/db/db_selectors.php');
     include_once($_SERVER['DOCUMENT_ROOT'] . '/api/http_responses.php');
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
 
     function handleStoryRequest($request, $method) {
         if ($method === "POST") {
@@ -75,7 +76,26 @@
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
         } else {
+            if (!isset($_FILES["story_img"])) {
+                httpBadRequest("image missing");
+                return;
+            }
+            $img = $_FILES["story_img"];
+
+            $img_validation = validateImage($img);
+            if ($img_validation !== "valid") {
+                httpBadRequest($img_validation);
+                return;
+            }
+
             $story_id = createUserStory($user_id, $date, $story_title, $story_content);
+
+            $img_upload = uploadImage($img, "story" . $story_id);
+            if ($img_upload !== "uploaded") {
+                httpInternalError($img_upload);
+                return;
+            }
+
             echo(json_encode(getStory($story_id)));
             http_response_code(201);
         }
@@ -170,6 +190,5 @@
             removeUserEntityVote($user_id, $story_id);
             http_response_code(200);
         }
-
     }
 ?>

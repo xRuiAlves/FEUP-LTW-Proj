@@ -105,7 +105,7 @@
 
             if (!api_checkInvalidUsername($user_username) && !api_checkInvalidRealname($user_realname)) {
                 $user_id = createUser($user_username, $user_realname, $user_password, $user_bio);
-                $img_upload = api_uploadUserImage($img, $user_id);
+                $img_upload = uploadImage($img, "user" . $user_id);
                 if ($img_upload !== "uploaded") {
                     httpInternalError($img_upload);
                     return;
@@ -145,7 +145,7 @@
                 return;
             }
 
-            $img_upload = api_uploadUserImage($img, $user_id);
+            $img_upload = uploadImage($img, "user" . $user_id);
             if ($img_upload !== "uploaded") {
                 httpInternalError($img_upload);
             } else {
@@ -186,17 +186,5 @@
         } else {
             return false;   // Not Invalid
         }
-    }
-
-    function api_uploadUserImage($img, $user_id) {
-        $extension = getImageExtension($img["type"]);
-        $target_file = $_SERVER["DOCUMENT_ROOT"] . "/db/images/" . "user" . $user_id . "." . $extension;
-
-        if (move_uploaded_file($img["tmp_name"], $target_file)) {
-            return "uploaded";
-        } else {
-            return "failed to upload image";
-        }
-
     }
 ?>
