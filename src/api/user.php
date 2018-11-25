@@ -22,6 +22,8 @@
                            $_POST['user_realname'], 
                            $_POST['user_password'], 
                            $_POST['user_bio']);
+        } else if ($req === "login") {
+            api_logUser($_POST['user_username'], $_POST['user_password']);
         } else {
             httpNotFound('request not found');
         }
@@ -43,9 +45,9 @@
         $req = array_shift($request);  
         $data = json_decode(file_get_contents("php://input"), true);
         
-        if ($req === "updateBio") {
+        if ($req === "updatebio") {
             api_userUpdateBio($data['user_id'], $data['user_bio']);
-        } else if ($req === "updatePassword") {
+        } else if ($req === "updatepassword") {
             api_userUpdatePassword($data['user_id'], $data['user_password']);
         } else {
             httpNotFound('request not found');
@@ -58,6 +60,18 @@
         } else {
             http_response_code(200);
             echo json_encode(getUserInfo($user_id));
+        }
+    }
+
+    function api_logUser($user_username, $user_password) {
+        if (!usernameExists($user_username)){
+            httpNotFound("user with username $user_username does not exist");
+        } else {
+            if (verifyUser($user_username, $user_password)) {
+                http_response_code(200);
+            } else {
+                httpBadRequest("invalid password");
+            }
         }
     }
 

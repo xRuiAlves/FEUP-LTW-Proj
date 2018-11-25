@@ -11,9 +11,9 @@
             ) as "exists"
         '); 
         $stmt->execute(array($user_id));
-        $result = $stmt->fetchAll(); 
+        $result = $stmt->fetch(); 
 
-        return $result[0]["exists"];
+        return $result["exists"];
     }
 
     function usernameExists($user_username) {
@@ -26,8 +26,8 @@
             ) as "exists"
         '); 
         $stmt->execute(array($user_username));
-        $result = $stmt->fetchAll(); 
-        return $result[0]["exists"];
+        $result = $stmt->fetch(); 
+        return $result["exists"];
     }
 
     function getUserInfo($user_id) {
@@ -38,7 +38,7 @@
             WHERE user_id = ?
         '); 
         $stmt->execute(array($user_id));
-        return $stmt->fetchAll()[0]; 
+        return $stmt->fetch(); 
     }
 
     function getUserStories($user_id) {
@@ -87,9 +87,9 @@
             ) as "exists"
         '); 
         $stmt->execute(array($story_id));
-        $result = $stmt->fetchAll(); 
+        $result = $stmt->fetch(); 
 
-        return $result[0]["exists"];
+        return $result["exists"];
     }
 
     function commentExists($comment_id) {
@@ -102,9 +102,9 @@
             ) as "exists"
         '); 
         $stmt->execute(array($comment_id));
-        $result = $stmt->fetchAll(); 
+        $result = $stmt->fetch(); 
 
-        return $result[0]["exists"];
+        return $result["exists"];
     }
 
     function voteExists($user_id, $votable_entity_id) {
@@ -117,9 +117,9 @@
             ) as "exists"
         '); 
         $stmt->execute(array($user_id, $votable_entity_id));
-        $result = $stmt->fetchAll(); 
+        $result = $stmt->fetch(); 
 
-        return $result[0]["exists"];
+        return $result["exists"];
     }
 
     function getStory($story_id) {
@@ -134,7 +134,7 @@
             WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($story_id));
-        return $stmt->fetchAll()[0]; 
+        return $stmt->fetch(); 
     }
     
     function getComment($comment_id) {
@@ -145,7 +145,7 @@
             WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($comment_id));
-        return $stmt->fetchAll()[0]; 
+        return $stmt->fetch(); 
     }
 
     function getEntityNumUpVotes($entity_id) {
@@ -158,8 +158,8 @@
         ');
         $stmt->execute(array($entity_id));
 
-        $result = $stmt->fetchAll();
-        return $result[0]["num_votes"];
+        $result = $stmt->fetch();
+        return $result["num_votes"];
     }
 
     function getEntityNumDownVotes($entity_id) {
@@ -172,8 +172,8 @@
         ');
         $stmt->execute(array($entity_id));
 
-        $result = $stmt->fetchAll();
-        return $result[0]["num_votes"];
+        $result = $stmt->fetch();
+        return $result["num_votes"];
     }
 
     function updateUserEntityVote($user_id, $entity_id, $vote_value) {
@@ -184,7 +184,6 @@
             WHERE user_id = ? AND votable_entity_id = ?
         ');
         $stmt->execute(array($vote_value, $user_id, $entity_id));
-        return $stmt->fetchAll(); 
     }
 
     function updateUserBio($user_id, $bio_info) {
@@ -195,18 +194,19 @@
             WHERE user_id = ?
         ');
         $stmt->execute(array($bio_info, $user_id));
-        return $stmt->fetchAll(); 
     }
 
     function updateUserPassword($user_id, $new_password) {
+        $pass_hashing_options = ['cost' => 10];
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT, $pass_hashing_options);
+
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             UPDATE User
             SET user_password = ?
             WHERE user_id = ?
         ');
-        $stmt->execute(array($new_password, $user_id));
-        return $stmt->fetchAll(); 
+        $stmt->execute(array($hashed_password, $user_id));
     }
 
     function getEntityComments($entity_id) {
@@ -236,9 +236,9 @@
         ');
         $stmt->execute(array($user_id));
 
-        $result = $stmt->fetchAll(); 
+        $result = $stmt->fetch(); 
         
-        return $result[0]['points'] ? $result[0]['points'] : 0; 
+        return $result['points'] ? $result['points'] : "0"; 
     }
 
      function createUserStory($user_id, $date, $story_title, $story_content) {
@@ -286,19 +286,29 @@
 
     function createUser($user_username, $user_realname, $user_password, $user_bio) {
         $pass_hashing_options = ['cost' => 10];
+        $hashed_password = password_hash($user_password, PASSWORD_DEFAULT, $pass_hashing_options);
 
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (?, ?, ?, ?);
         ');
-        $stmt->execute(array(
-            $user_username, 
-            $user_realname, 
-            password_hash($user_password, PASSWORD_DEFAULT, $pass_hashing_options),
-            $user_bio));
+        $stmt->execute(array($user_username, $user_realname, $hashed_password, $user_bio));
         $id = $db->lastInsertId();
 
         return $id;
+    }
+
+    function verifyUser($user_username, $user_password) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT user_password 
+            FROM User 
+            WHERE user_username = ?
+        '); 
+        $stmt->execute(array($user_username));
+        $user = $stmt->fetch(); 
+
+        return password_verify($user_password, $user['user_password']);
     }
 
     function removeUserEntityVote($user_id, $comment_id) {
@@ -309,6 +319,5 @@
                 AND votable_entity_id = ?
         ');
         $stmt->execute(array($user_id, $comment_id));
-        return $stmt->fetchAll();
     }
 ?>
