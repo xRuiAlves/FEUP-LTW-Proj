@@ -12,4 +12,11 @@
         )));
         http_response_code(400);
     }
+
+    function httpInternalError($message) {
+        echo(json_encode(array(
+            'error:' => $message
+        )));
+        http_response_code(500);
+    }
 ?>

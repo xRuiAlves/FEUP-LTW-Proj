@@ -1,6 +1,7 @@
 <?php 
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/db/db_selectors.php');
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/api/http_responses.php');
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
 
     function handleUserRequest($request, $method) {
         if ($method === "POST") {
@@ -10,7 +11,7 @@
         } else if ($method === "PUT") {
             handleUserPutRequest($request);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -18,26 +19,28 @@
         $req = array_shift($request);
 
         if ($req === "create") {
-            api_createUser($_POST['user_username'], 
-                           $_POST['user_realname'], 
-                           $_POST['user_password'], 
-                           $_POST['user_bio']);
+            api_createUser($_POST["user_username"], 
+                           $_POST["user_realname"], 
+                           $_POST["user_password"], 
+                           $_POST["user_bio"]);
         } else if ($req === "login") {
-            api_logUser($_POST['user_username'], $_POST['user_password']);
+            api_logUser($_POST["user_username"], $_POST["user_password"]);
+        } else if ($req === "updateimage") {
+            api_userUpdateImage($_POST["user_id"]);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
     function handleUserGetRequest($request) {
         $req = array_shift($request);
 
-        if ($req === "info" && isset($_GET['id'])) {
-            api_getUserInfo($_GET['id']);
-        } else if ($req === "points" && isset($_GET['id'])) {
-            api_getUserPoints($_GET['id']);
+        if ($req === "info" && isset($_GET["id"])) {
+            api_getUserInfo($_GET["id"]);
+        } else if ($req === "points" && isset($_GET["id"])) {
+            api_getUserPoints($_GET["id"]);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -46,11 +49,11 @@
         $data = json_decode(file_get_contents("php://input"), true);
         
         if ($req === "updatebio") {
-            api_userUpdateBio($data['user_id'], $data['user_bio']);
+            api_userUpdateBio($data["user_id"], $data["user_bio"]);
         } else if ($req === "updatepassword") {
-            api_userUpdatePassword($data['user_id'], $data['user_password']);
+            api_userUpdatePassword($data["user_id"], $data["user_password"]);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -114,6 +117,27 @@
         }
     }
 
+    function api_userUpdateImage($user_id) {
+        if (!userExists($user_id)) {
+            httpNotFound("user with id $user_id does not exist");
+        } else if (isset($_FILES["user_img"])) {
+            $img = $_FILES["user_img"];
+            $img_validation = validateImage($img);
+            if ($img_validation !== "valid") {
+                httpBadRequest($img_validation);
+            }
+
+            $img_upload = api_uploadUserImage($img, $user_id);
+            if ($img_upload !== "uploaded") {
+                httpInternalError($img_upload);
+            } else {
+                http_response_code(200);
+            }
+        } else {
+            httpBadRequest("image missing");
+        }
+    }
+
     function api_checkInvalidUsername($user_username) {
         $username_min_size = 5;
         $username_max_size = 14;
@@ -144,5 +168,17 @@
         } else {
             return false;   // Not Invalid
         }
+    }
+
+    function api_uploadUserImage($img, $user_id) {
+        $extension = getImageExtension($img["type"]);
+        $target_file = $_SERVER["DOCUMENT_ROOT"] . "/db/images/" . "user" . $user_id . "." . $extension;
+
+        if (move_uploaded_file($img["tmp_name"], $target_file)) {
+            return "uploaded";
+        } else {
+            return "failed to upload image";
+        }
+
     }
 ?>
