@@ -94,7 +94,14 @@
         if (!storyExists($story_id)) {
             httpNotFound("story with id $story_id does not exist");
         } else {
-            echo(json_encode(getStory($story_id)));
+            $upvotes = getEntityNumUpVotes($story_id);
+            $downvotes = getEntityNumDownVotes($story_id);
+            $story_info = getStory($story_id);
+            $story_votes = [
+                'upvotes' => $upvotes,
+                'downvotes' => $downvotes
+            ];
+            echo(json_encode(array_merge($story_info, $story_votes)));
             http_response_code(200);
         }
     }
