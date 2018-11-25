@@ -91,8 +91,25 @@
         if (usernameExists($user_username)){
             httpBadRequest("username already exists");
         } else {
+            if (!isset($_FILES["user_img"])) {
+                httpBadRequest("image missing");
+                return;
+            }
+            $img = $_FILES["user_img"];
+
+            $img_validation = validateImage($img);
+            if ($img_validation !== "valid") {
+                httpBadRequest($img_validation);
+                return;
+            }
+
             if (!api_checkInvalidUsername($user_username) && !api_checkInvalidRealname($user_realname)) {
                 $user_id = createUser($user_username, $user_realname, $user_password, $user_bio);
+                $img_upload = api_uploadUserImage($img, $user_id);
+                if ($img_upload !== "uploaded") {
+                    httpInternalError($img_upload);
+                    return;
+                }
                 echo(json_encode(getUserInfo($user_id)));
                 http_response_code(201);
             }
@@ -125,6 +142,7 @@
             $img_validation = validateImage($img);
             if ($img_validation !== "valid") {
                 httpBadRequest($img_validation);
+                return;
             }
 
             $img_upload = api_uploadUserImage($img, $user_id);
