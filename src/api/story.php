@@ -33,6 +33,8 @@
     function handleStoryGetRequest($request) {
         $req = array_shift($request);
 
+        print_r("GET");
+
         if ($req === "user_stories" && isset($_GET['user_id'])) {
             api_getUserStories($_GET['user_id']);
         } else if ($req === "info" && isset($_GET['id'])) {
@@ -43,6 +45,9 @@
             api_getStoryDownVotes($_GET['id']);
         } else if ($req === "comments" && isset($_GET['id'])) {
             api_getStoryComments($_GET['id']);
+        } else if ($req === "recent" && isset($_GET['num_stories'])) {
+            print_r("HERE");
+            api_getRecentStories($_GET['num_stories']);
         } else {
             httpNotFound('request not found');
         }
@@ -93,7 +98,7 @@
                     return;
                 }
             }
-            
+
             echo(json_encode(getStory($story_id)));
             http_response_code(201);
         }
@@ -188,5 +193,10 @@
             removeUserEntityVote($user_id, $story_id);
             http_response_code(200);
         }
+    }
+
+    function api_getRecentStories($num_stories) {
+        echo(json_encode(getRecentStories($num_stories)));
+        http_response_code(200);
     }
 ?>
