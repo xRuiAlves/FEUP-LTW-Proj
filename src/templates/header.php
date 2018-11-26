@@ -19,9 +19,12 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="js/navbar.js"></script>
     <script src="js/storiesRenderer.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/login.js"></script>
     <title><?=$_env_website_name?></title>
 </head>
 <body>
+    <div id="modal-container"></div>
     <nav id="topbar">
         <h1><?=$_env_website_name?></h1>
         <ul class="page-side-menu">

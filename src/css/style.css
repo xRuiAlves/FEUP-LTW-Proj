@@ -1,6 +1,7 @@
 @import url("navbar.css");
 @import url("stories.css");
 @import url("palette.css");
+@import url("modal.css");
 
 :root{
     --scroll-bar-width: 15px;
@@ -57,4 +58,32 @@ a{
     color: var(--main-color-light);
     padding: 2em;
     z-index: -1;
+}
+
+input, button{
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: inherit;
+    border-bottom: 1px var(--main-color) solid;
+    height: 2.5em;
+}
+
+input[type="submit"], button{
+    border: 0.1em var(--main-color) solid;
+    color: var(--main-color-dark);
+    margin: 1em 0em;
+    border-radius: 2em;
+    padding: 0em 1.5em;
+}
+
+input[type="submit"]:hover, button:hover{
+    background-color: var(--background-color);
+}
+
+.notification.warning{
+    border-radius: 1em;
+    background-color: var(--color-warning-background);
+    color: var(--color-warning-text);
+    padding: 0em 1em;
 }

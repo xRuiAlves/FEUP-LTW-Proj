@@ -11,6 +11,9 @@
     handleRequest($request, $method);
 
     function handleRequest($request, $method) {
+
+        session_start();
+
         $req = array_shift($request);
 
         if ($req === "story") {

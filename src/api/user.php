@@ -68,9 +68,10 @@
 
     function api_logUser($user_username, $user_password) {
         if (!usernameExists($user_username)){
-            httpNotFound("user with username $user_username does not exist");
+            httpBadRequest("user with username $user_username does not exist");
         } else {
             if (verifyUser($user_username, $user_password)) {
+                $_SESSION['user'] = $user_username;
                 http_response_code(200);
             } else {
                 httpBadRequest("invalid password");

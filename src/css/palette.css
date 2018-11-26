@@ -6,4 +6,7 @@
 
     --text-color: #333;
     --text-color-light: #ffffff;
+
+    --color-warning-background: #f2dca2;
+    --color-warning-text: #82630e;
 }

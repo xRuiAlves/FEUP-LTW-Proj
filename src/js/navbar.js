@@ -6,9 +6,14 @@ window.addEventListener('load', function() {
     let page_content = document.getElementById('page-content');
     login_slider.addEventListener("click", () => {
         if(login_slider.classList.contains('active')){
-            side_menu.classList.remove('active');
+                side_menu.classList.remove('active');
+                login_slider.classList.remove('active');
+        }else{
+            showLoginForm().then(() => {
+                login_slider.classList.add('active');
+            });
         }
-        login_slider.classList.toggle('active');
+        
     });
     hamburguer.addEventListener("click", () => 
         side_menu.classList.toggle('active')

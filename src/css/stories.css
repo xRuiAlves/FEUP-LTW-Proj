@@ -59,29 +59,7 @@
 
 /******************* FULL STORY *************/
 
-body .full-story-container{
-    pointer-events: none;
-    top: -100vh;
-    padding: 4em;
-    padding-top: Calc(100vh + 4em);
-    position: fixed;
-    min-width: 100vw;
-    height: 200vh;
-    box-sizing: border-box;
-    text-align: center;
-    overflow-y: auto;
-    background-color: rgba(0,0,0,0);
-    transform: translate(0%, 50%);
-    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-body.modal-open .full-story-container{
-    pointer-events: auto;
-    background-color: rgba(0,0,0,0.5);
-    transform: translate(0%, 0%);
-}
-
-body .full-story-container .story-container{
+body #modal-container .story-container{
     box-shadow: 0px 0px 2em #000;
     text-align: left;
     max-width: 50em;

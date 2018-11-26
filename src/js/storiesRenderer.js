@@ -18,11 +18,6 @@ class StoriesRenderer{
         this.displayedStories = {};
 
         window.addEventListener('resize', this.rerenderStories.bind(this));
-
-        this.fullStoryView = document.createElement('DIV');
-        this.fullStoryView.classList.add('full-story-container');
-        this.fullStoryView.addEventListener('click', e => { if(e.target === this.fullStoryView) this.hideFullStory()});
-        document.body.appendChild(this.fullStoryView);
     }
 
     rerenderStories(){
@@ -109,16 +104,6 @@ class StoriesRenderer{
     }
 
     showFullStory(story){
-        if(this.fullStoryView.firstChild){
-            this.fullStoryView.removeChild(this.fullStoryView.firstChild);
-        }
-
-        this.fullStoryView.appendChild(this.generateStoryElem(story));
-        
-        document.body.classList.add('modal-open');
-    }
-
-    hideFullStory(){
-        document.body.classList.remove('modal-open');
+        ModalHandler.show(this.generateStoryElem(story));
     }
 }
