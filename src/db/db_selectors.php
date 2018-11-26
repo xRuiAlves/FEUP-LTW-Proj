@@ -125,6 +125,40 @@
         return $stmt->fetchAll(); 
     }
 
+    function getMostUpvotedStories($num_stories) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT votable_entity_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            FROM
+                (SELECT votable_entity_id, COUNT(*) as num_up_votes
+                FROM Vote 
+                    NATURAL JOIN Story
+                WHERE vote_value = 1
+                GROUP BY votable_entity_id
+                UNION
+                SELECT votable_entity_id, 0
+                FROM Story)
+            
+                NATURAL JOIN
+                (SELECT votable_entity_id, COUNT(*) as num_down_votes
+                FROM Vote 
+                    NATURAL JOIN Story
+                WHERE vote_value = -1
+                GROUP BY votable_entity_id
+                UNION
+                SELECT votable_entity_id, 0
+                FROM Story)
+                
+                NATURAL JOIN VotableEntity
+                NATURAL JOIN Story
+            GROUP BY votable_entity_id
+            ORDER BY upvotes DESC, downvotes DESC
+            LIMIT ?;
+        ');
+        $stmt->execute(array($num_stories));
+        return $stmt->fetchAll(); 
+    }
+
     /**
      * Gets the User's vote on a story/comment (+1 or -1). If no vote is found, 0 is returned.
      */

@@ -47,6 +47,8 @@
             api_getRecentStories($_GET['num_stories']);
         } else if ($req === "recentuser" && isset($_GET['user_id']) && isset($_GET['num_stories'])) {
             api_getUserRecentStories($_GET['user_id'], $_GET['num_stories']);
+        } else if ($req === "mostupvoted" && isset($_GET['num_stories'])) {
+            api_getMostUpvotedStories($_GET['num_stories']);
         } else {
             httpNotFound('request not found');
         }
@@ -206,5 +208,10 @@
             echo(json_encode(getUserRecentStories($user_id, $num_stories)));
             http_response_code(200);
         }
+    }
+
+    function api_getMostUpvotedStories($num_stories) {
+        echo(json_encode(getMostUpvotedStories($num_stories)));
+        http_response_code(200);
     }
 ?>
