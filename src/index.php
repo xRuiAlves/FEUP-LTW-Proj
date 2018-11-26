@@ -1,5 +1,8 @@
 <?php include('./templates/header.php') ?>
-
+<div class="page-divider"> 
+    Latest stories
+    <hr>
+</div>
 <div id="latest-stories" class="stories-container"></div>
 <button onclick="load_more()">
     asdf

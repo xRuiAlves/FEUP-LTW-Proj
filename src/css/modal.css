@@ -33,7 +33,6 @@ body.modal-open #modal-container{
 }
 
 .modal-box input{
-    min-width: 20em;
     font-size: inherit;
     text-align: center;
     display: block;

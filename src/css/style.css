@@ -51,6 +51,13 @@ a{
     min-height: Calc(100vh - var(--top-bar-height));
 }
 
+@media only screen and (min-width: 1300px) {
+    #page-content {
+        padding-left: 2em;
+        padding-right: 2em;
+    }
+}
+
 #page-content > footer{
     text-align: center;
     position: sticky;
@@ -85,5 +92,11 @@ input[type="submit"]:hover, button:hover{
     border-radius: 1em;
     background-color: var(--color-warning-background);
     color: var(--color-warning-text);
+    padding: 0em 1em;
+}
+
+.page-divider{
+    font-size: 1.2em;
+    margin: 2em 0em;
     padding: 0em 1em;
 }
