@@ -2,6 +2,8 @@
     include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/authentication.php");
+
 
     function handleUserRequest($request, $method) {
         if ($method === "POST") {
@@ -171,6 +173,12 @@
 
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
+            return;
+        }
+
+        $user_username = getUserUsername($user_id);
+        if(!verifyAuthentication($user_username)) {
+            httpUnauthorizedRequest("invalid permissions");
         } else {
             updateUserBio($user_id, $user_bio);
             http_response_code(200);
@@ -208,7 +216,16 @@
 
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
-        } else if (isset($_FILES["user_img"])) {
+            return;
+        } 
+        
+        $user_username = getUserUsername($user_id);
+        if(!verifyAuthentication($user_username)) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+        
+        if (isset($_FILES["user_img"])) {
             $img = $_FILES["user_img"];
             $img_validation = validateImage($img);
             if ($img_validation !== "valid") {
