@@ -41,6 +41,17 @@
         return $stmt->fetch(); 
     }
 
+    function getUserInfoByUsername($user_username) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT user_id, user_username, user_realname, user_bio 
+            FROM User 
+            WHERE user_username = ?
+        '); 
+        $stmt->execute(array($user_username));
+        return $stmt->fetch(); 
+    }
+
     function getRecentStories($offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('

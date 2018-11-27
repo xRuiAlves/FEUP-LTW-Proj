@@ -71,6 +71,7 @@
             httpNotFound("user with username $user_username does not exist");
         } else {
             if (verifyUser($user_username, $user_password)) {
+                echo json_encode(getUserInfoByUsername($user_username));
                 http_response_code(200);
             } else {
                 httpUnauthorizedRequest("invalid password");
