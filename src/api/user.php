@@ -72,7 +72,7 @@
         } else {
             if (verifyUser($user_username, $user_password)) {
                 echo json_encode(getUserInfoByUsername($user_username));
-                $_SESSION['user'] = $user_username;
+                $_SESSION['username'] = $user_username;
                 http_response_code(200);
             } else {
                 httpUnauthorizedRequest("invalid password");

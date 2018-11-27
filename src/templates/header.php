@@ -28,7 +28,10 @@
 <body>
     <div id="modal-container"></div>
     <nav id="topbar">
-        <h1><?=$_env_website_name?></h1>
+        <div class="logo">
+            <img src="images/logo_simple.png" />
+            <h1><?=$_env_website_name?></h1>
+        </div>
         <ul class="page-side-menu">
             <?php foreach($sideMenuEntries as $entry){ ?>
                         <li><div onclick="<?=$entry->onclick?>"><?=$entry->text?><i class="fas <?=$entry->icon?>"></i></div></li>
@@ -37,8 +40,8 @@
         <div class="nav-bar-right-section">
             <div id="login_slider" class="<?=isset($_SESSION['username']) ? 'active' : '' ?>">
                 <div class="slider_text">
-                    <div class="left"><?=$_env_login?></div>
-                    <div class="right"><?=$_SESSION['username']?></div>
+                    <div class="left"><?=$_SESSION['username']?></div>
+                    <div class="right"><?=$_env_login?></div>
                 </div>
                 <img src="<?=$_env_default_profile_img ?>"/>
             </div>

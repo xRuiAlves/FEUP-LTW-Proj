@@ -35,8 +35,24 @@
     align-items: center;
 }
 
-#topbar > h1{
-    padding: 1em;
+#topbar .logo{
+    display: flex;
+    flex-direction: row;
+}
+
+#topbar .logo, #topbar .logo img{
+    height: 100%;
+}
+
+#topbar .logo h1{
+    margin: 0;
+    align-self: center;
+}
+@media only screen and (max-width: 500px){
+
+    #topbar .logo h1{
+        display: none;
+    }
 }
 
 #topbar #login_slider{
@@ -69,14 +85,14 @@
     cursor: pointer;
 }
 
-#topbar #login_slider > .slider_text div.left{
+#topbar #login_slider > .slider_text div.right{
     transform: translate(0%,0%);
 }
-#topbar #login_slider.active > .slider_text div.left{
+#topbar #login_slider.active > .slider_text div.right{
     transform: translate(100%,0%);
 }
 
-#topbar #login_slider.active > .slider_text div.right{
+#topbar #login_slider.active > .slider_text div.left{
     transform: translate(0%,0%);
 }
 

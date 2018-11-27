@@ -34,20 +34,17 @@ function submitLogin(form, resolve){
             {method: "POST",
             body: formData})
     .then(res => {
-        console.log(res)
-        return res.json()
-        /*
         if(res.status === 200){
             ModalHandler.hide();
-            console.log('asd')
             return res.json();
         }else{
             form.querySelector('.notification').innerText = 'Could not login. Check your credentials and try again';
-        }*/
+        }
     })
     .then((data) => {
-        console.log(data);
+        console.log(data)
         document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
+        resolve();
     })
     .catch((res) => {
         form.querySelector('.notification').innerText = 'Could not login: ' + res.statusText;
@@ -83,8 +80,7 @@ function showLogOutModal(){
 
 function submitLogOut(resolve, reject){
     fetch('api/user/logout', 
-            {method: "POST",
-            body: formData})
+            {method: "DELETE"})
     .then(res => {
         if(res.status === 200){
             ModalHandler.hide();
