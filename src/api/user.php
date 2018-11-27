@@ -73,7 +73,7 @@
             if (verifyUser($user_username, $user_password)) {
                 http_response_code(200);
             } else {
-                httpBadRequest("invalid password");
+                httpUnauthorizedRequest("invalid password");
             }
         }
     }
