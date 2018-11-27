@@ -41,21 +41,6 @@
         return $stmt->fetch(); 
     }
 
-    function getUserStories($user_id) {
-        $db = Database::getInstance()->getDB();
-        $stmt = $db->prepare('
-            SELECT Story.story_title, 
-                   Story.story_content, 
-                   VotableEntity.votable_entity_creation_date
-            FROM User 
-                 NATURAL JOIN VotableEntity 
-                 NATURAL JOIN Story
-            WHERE User.user_id = ?
-        ');
-        $stmt->execute(array($user_id));
-        return $stmt->fetchAll(); 
-    }
-
     function getRecentStories($offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('

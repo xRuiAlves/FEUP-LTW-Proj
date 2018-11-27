@@ -33,9 +33,7 @@
     function handleStoryGetRequest($request) {
         $req = array_shift($request);
 
-        if ($req === "user_stories" && isset($_GET['user_id'])) {
-            api_getUserStories($_GET['user_id']);
-        } else if ($req === "info" && isset($_GET['id'])) {
+        if ($req === "info" && isset($_GET['id'])) {
             api_getStoryInfo($_GET['id']);
         } else if ($req === "upvotes" && isset($_GET['id'])) {
             api_getStoryUpVotes($_GET['id']);
@@ -104,15 +102,6 @@
 
             echo(json_encode(getStory($story_id)));
             http_response_code(201);
-        }
-    }
-
-    function api_getUserStories($user_id) {
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-        } else {
-            http_response_code(200);
-            echo json_encode(getUserStories($user_id));
         }
     }
 
