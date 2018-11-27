@@ -21,10 +21,7 @@
         $req = array_shift($request);
 
         if ($req === "create") {
-            api_createStory($_POST['user_id'],
-                            $_POST['date'],
-                            $_POST['story_title'],
-                            $_POST['story_content']);
+            api_createStory($_POST);
         } else {
             httpNotFound('request not found');
         }
@@ -33,22 +30,22 @@
     function handleStoryGetRequest($request) {
         $req = array_shift($request);
 
-        if ($req === "info" && isset($_GET['id'])) {
-            api_getStoryInfo($_GET['id']);
-        } else if ($req === "upvotes" && isset($_GET['id'])) {
-            api_getStoryUpVotes($_GET['id']);
-        } else if ($req === "downvotes" && isset($_GET['id'])) {
-            api_getStoryDownVotes($_GET['id']);
-        } else if ($req === "comments" && isset($_GET['id'])) {
-            api_getStoryComments($_GET['id']);
-        } else if ($req === "recent" && isset($_GET['offset']) && isset($_GET['num_stories'])) {
-            api_getRecentStories($_GET['offset'], $_GET['num_stories']);
-        } else if ($req === "recentuser" && isset($_GET['user_id']) && isset($_GET['offset']) && isset($_GET['num_stories'])) {
-            api_getUserRecentStories($_GET['user_id'], $_GET['offset'], $_GET['num_stories']);
-        } else if ($req === "mostupvoted" && isset($_GET['offset']) && isset($_GET['num_stories'])) {
-            api_getMostUpvotedStories($_GET['offset'], $_GET['num_stories']);
-        } else if ($req === "mostupvoteduser" && isset($_GET['user_id']) && isset($_GET['offset']) && isset($_GET['num_stories'])) {
-            api_getUserMostUpvotedStories($_GET['user_id'], $_GET['offset'], $_GET['num_stories']);
+        if ($req === "info") {
+            api_getStoryInfo($_GET);
+        } else if ($req === "upvotes") {
+            api_getStoryUpVotes($_GET);
+        } else if ($req === "downvotes") {
+            api_getStoryDownVotes($_GET);
+        } else if ($req === "comments") {
+            api_getStoryComments($_GET);
+        } else if ($req === "recent") {
+            api_getRecentStories($_GET);
+        } else if ($req === "recentuser") {
+            api_getUserRecentStories($_GET);
+        } else if ($req === "mostupvoted") {
+            api_getMostUpvotedStories($_GET);
+        } else if ($req === "mostupvoteduser") {
+            api_getUserMostUpvotedStories($_GET);
         } else {
             httpNotFound('request not found');
         }
@@ -59,9 +56,9 @@
         $data = json_decode(file_get_contents("php://input"), true); 
 
         if ($req === "upvote") {
-            api_userStoryUpvote($data['user_id'], $data['story_id']);
+            api_userStoryUpvote($data);
         } else if ($req === "downvote") {
-            api_userStoryDownvote($data['user_id'], $data['story_id']);
+            api_userStoryDownvote($data);
         } else {
             httpNotFound('request not found');
         }
@@ -72,13 +69,22 @@
         $data = json_decode(file_get_contents("php://input"), true);
 
         if ($req === "unvote") {
-            api_userStoryUnvote($data['user_id'], $data['story_id']);
+            api_userStoryUnvote($data);
         } else {
             httpNotFound('request not found');
         }
     }
 
-    function api_createStory($user_id, $date, $story_title, $story_content) {
+    function api_createStory($data) {
+        if(!verifyRequestParameters($data, ["user_id", "date", "story_title", "story_content"])) {
+            return;
+        }
+
+        $user_id = $data["user_id"];
+        $date = $data["date"];
+        $story_title = $data["story_title"];
+        $story_content = $data["story_content"];
+
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
         } else {
@@ -105,13 +111,19 @@
         }
     }
 
-    function api_getStoryInfo($story_id) {
-        if (!storyExists($story_id)) {
-            httpNotFound("story with id $story_id does not exist");
+    function api_getStoryInfo($data) {
+        if(!verifyRequestParameters($data, ["id"])) {
+            return;
+        }
+
+        $id = $data["id"];
+
+        if (!storyExists($id)) {
+            httpNotFound("story with id $id does not exist");
         } else {
-            $upvotes = getEntityNumUpVotes($story_id);
-            $downvotes = getEntityNumDownVotes($story_id);
-            $story_info = getStory($story_id);
+            $upvotes = getEntityNumUpVotes($id);
+            $downvotes = getEntityNumDownVotes($id);
+            $story_info = getStory($id);
             $story_votes = [
                 'upvotes' => $upvotes,
                 'downvotes' => $downvotes
@@ -121,34 +133,59 @@
         }
     }
 
-    function api_getStoryUpVotes($story_id) {
-        if(!storyExists($story_id)) {
-            httpNotFound("story with id $story_id does not exist");
+    function api_getStoryUpVotes($data) {
+        if(!verifyRequestParameters($data, ["id"])) {
+            return;
+        }
+
+        $id = $data["id"];
+
+        if(!storyExists($id)) {
+            httpNotFound("story with id $id does not exist");
         } else {
             http_response_code(200);
-            echo(json_encode(getEntityNumUpVotes($story_id)));
+            echo(json_encode(getEntityNumUpVotes($id)));
         }
     }   
 
-    function api_getStoryDownVotes($story_id) {
-        if(!storyExists($story_id)) {
-            httpNotFound("story with id $story_id does not exist");
+    function api_getStoryDownVotes($data) {
+        if(!verifyRequestParameters($data, ["id"])) {
+            return;
+        }
+
+        $id = $data["id"];
+
+        if(!storyExists($id)) {
+            httpNotFound("story with id $id does not exist");
         } else {
             http_response_code(200);
-            echo(json_encode(getEntityNumDownVotes($story_id)));
+            echo(json_encode(getEntityNumDownVotes($id)));
         }
     }  
 
-    function api_getStoryComments($story_id) {
-        if(!storyExists($story_id)) {
-            httpNotFound("story with id $story_id does not exist");
+    function api_getStoryComments($data) {
+        if(!verifyRequestParameters($data, ["id"])) {
+            return;
+        }
+
+        $id = $data["id"];
+
+        if(!storyExists($id)) {
+            httpNotFound("story with id $id does not exist");
         } else {
             http_response_code(200);
-            echo(json_encode(getEntityComments($story_id)));
+            echo(json_encode(getEntityComments($id)));
         }
     }
 
-    function api_userStoryUpvote($user_id, $story_id) {
+    function api_userStoryUpvote($data) {
+        if(!verifyRequestParameters($data, ["user_id", "story_id"])) {
+            return;
+        }
+
+        $user_id = $data["user_id"];
+        $story_id = $data["story_id"];
+
         if(voteExists($user_id, $story_id)) {
             updateUserEntityVote($user_id, $story_id, 1);
             http_response_code(200);
@@ -162,7 +199,14 @@
         }
     }
 
-    function api_userStoryDownvote($user_id, $story_id) {
+    function api_userStoryDownvote($data) {
+        if(!verifyRequestParameters($data, ["user_id", "story_id"])) {
+            return;
+        }
+
+        $user_id = $data["user_id"];
+        $story_id = $data["story_id"];
+
         if(voteExists($user_id, $story_id)) {
             updateUserEntityVote($user_id, $story_id, -1);
             http_response_code(200);
@@ -176,7 +220,14 @@
         }
     }
 
-    function api_userStoryUnvote($user_id, $story_id) {
+    function api_userStoryUnvote($data) {
+        if(!verifyRequestParameters($data, ["user_id", "story_id"])) {
+            return;
+        }
+
+        $user_id = $data["user_id"];
+        $story_id = $data["story_id"];
+
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
         } else if (!storyExists($story_id)) {
@@ -187,12 +238,27 @@
         }
     }
 
-    function api_getRecentStories($offset, $num_stories) {
+    function api_getRecentStories($data) {
+        if(!verifyRequestParameters($data, ["offset", "num_stories"])) {
+            return;
+        }
+
+        $offset = $data["offset"];
+        $num_stories = $data["num_stories"];
+
         echo(json_encode(getRecentStories($offset, $num_stories)));
         http_response_code(200);
     }
 
-    function api_getUserRecentStories($user_id, $offset, $num_stories) {
+    function api_getUserRecentStories($data) {
+        if(!verifyRequestParameters($data, ["user_id", "offset", "num_stories"])) {
+            return;
+        }
+
+        $user_id = $data["user_id"];
+        $offset = $data["offset"];
+        $num_stories = $data["num_stories"];
+
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
         } else {
@@ -201,12 +267,27 @@
         }
     }
 
-    function api_getMostUpvotedStories($offset, $num_stories) {
+    function api_getMostUpvotedStories($data) {
+        if(!verifyRequestParameters($data, ["offset", "num_stories"])) {
+            return;
+        }
+
+        $offset = $data["offset"];
+        $num_stories = $data["num_stories"];
+
         echo(json_encode(getMostUpvotedStories($offset, $num_stories)));
         http_response_code(200);
     }
 
-    function api_getUserMostUpvotedStories($user_id, $offset, $num_stories) {
+    function api_getUserMostUpvotedStories($data) {
+        if(!verifyRequestParameters($data, ["user_id", "offset", "num_stories"])) {
+            return;
+        }
+
+        $user_id = $data["user_id"];
+        $offset = $data["offset"];
+        $num_stories = $data["num_stories"];
+
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
         } else {

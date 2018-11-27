@@ -279,8 +279,12 @@
     function getComment($comment_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT * 
-            FROM Comment 
+            SELECT Comment.votable_entity_id,
+                   Comment.comment_content,
+                   Comment.parent_entity_id,
+                   VotableEntity.votable_entity_creation_date
+            FROM Comment
+                 NATURAL JOIN VotableEntity
             WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($comment_id));
@@ -335,7 +339,7 @@
         $stmt->execute(array($bio_info, $user_id));
     }
 
-    function updateUserPassword($user_id, $new_password) {
+    function updateUserPassword($user_username, $new_password) {
         $pass_hashing_options = ['cost' => 10];
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT, $pass_hashing_options);
 
@@ -343,9 +347,9 @@
         $stmt = $db->prepare('
             UPDATE User
             SET user_password = ?
-            WHERE user_id = ?
+            WHERE user_username = ?
         ');
-        $stmt->execute(array($hashed_password, $user_id));
+        $stmt->execute(array($hashed_password, $user_username));
     }
 
     function getEntityComments($entity_id) {
