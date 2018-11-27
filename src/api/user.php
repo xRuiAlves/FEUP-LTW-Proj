@@ -10,6 +10,8 @@
             handleUserGetRequest($request);
         } else if ($method === "PUT") {
             handleUserPutRequest($request);
+        } else if ($method === "DELETE") {
+            handleUserDeleteRequest($request);
         } else {
             httpNotFound("request not found");
         }
@@ -54,6 +56,15 @@
         }
     }
 
+    function handleUserDeleteRequest($request) {
+        $req = array_shift($request);  
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($req === "logout") {
+            api_logoutUser();
+        }
+    }
+
     function api_getUserInfo($data) {
         if(!verifyRequestParameters($data, ["id"])) {
             return;
@@ -82,11 +93,19 @@
         } else {
             if (verifyUser($user_username, $user_password)) {
                 echo json_encode(getUserInfoByUsername($user_username));
+
+                $_SESSION["username"] = $user_username;
+
                 http_response_code(200);
             } else {
                 httpUnauthorizedRequest("invalid password");
             }
         }
+    }
+
+    function api_logoutUser() {
+        session_unset($_SESSION['username']);
+        session_destroy();
     }
 
     function api_getUserPoints($id) {
