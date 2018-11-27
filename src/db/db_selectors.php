@@ -56,7 +56,7 @@
         return $stmt->fetchAll(); 
     }
 
-    function getRecentStories($num_stories) {
+    function getRecentStories($offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT votable_entity_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
@@ -84,13 +84,14 @@
                 NATURAL JOIN Story
             GROUP BY votable_entity_id
             ORDER BY votable_entity_creation_date DESC
-            LIMIT ?;
+            LIMIT ?
+            OFFSET ?;
         ');
-        $stmt->execute(array($num_stories));
+        $stmt->execute(array($num_stories, $offset));
         return $stmt->fetchAll(); 
     }
 
-    function getUserRecentStories($user_id, $num_stories) {
+    function getUserRecentStories($user_id, $offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT votable_entity_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
@@ -119,13 +120,14 @@
             WHERE user_id = ?
             GROUP BY votable_entity_id
             ORDER BY votable_entity_creation_date DESC
-            LIMIT ?;
+            LIMIT ?
+            OFFSET ?;
         ');
-        $stmt->execute(array($user_id, $num_stories));
+        $stmt->execute(array($user_id, $num_stories, $offset));
         return $stmt->fetchAll(); 
     }
 
-    function getMostUpvotedStories($num_stories) {
+    function getMostUpvotedStories($offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT votable_entity_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
@@ -153,13 +155,14 @@
                 NATURAL JOIN Story
             GROUP BY votable_entity_id
             ORDER BY upvotes DESC, downvotes DESC
-            LIMIT ?;
+            LIMIT ?
+            OFFSET ?;
         ');
-        $stmt->execute(array($num_stories));
+        $stmt->execute(array($num_stories, $offset));
         return $stmt->fetchAll(); 
     }
 
-    function getUserMostUpvotedStories($user_id, $num_stories) {
+    function getUserMostUpvotedStories($user_id, $offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT votable_entity_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
@@ -188,9 +191,10 @@
             WHERE user_id = ?
             GROUP BY votable_entity_id
             ORDER BY upvotes DESC, downvotes DESC
-            LIMIT ?;
+            LIMIT ?
+            OFFSET ?;
         ');
-        $stmt->execute(array($user_id, $num_stories));
+        $stmt->execute(array($user_id, $num_stories, $offset));
         return $stmt->fetchAll(); 
     }
 
