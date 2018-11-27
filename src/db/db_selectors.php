@@ -347,6 +347,7 @@
             FROM Comment 
                  NATURAL JOIN VotableEntity
             WHERE Comment.parent_entity_id = ?
+            ORDER BY VotableEntity.votable_entity_creation_date
         ');
         $stmt->execute(array($entity_id));
         return $stmt->fetchAll(); 
