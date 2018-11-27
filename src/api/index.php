@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     include_once($_SERVER['DOCUMENT_ROOT'] . '/api/story.php');
     include_once($_SERVER['DOCUMENT_ROOT'] . '/api/user.php');
     include_once($_SERVER['DOCUMENT_ROOT'] . '/api/comment.php');
@@ -11,8 +13,6 @@
     handleRequest($request, $method);
 
     function handleRequest($request, $method) {
-
-        session_start();
 
         $req = array_shift($request);
 

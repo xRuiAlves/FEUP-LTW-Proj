@@ -7,6 +7,8 @@
     --text-color: #333;
     --text-color-light: #ffffff;
 
-    --color-warning-background: #f2dca2;
-    --color-warning-text: #82630e;
+    --color-warning-background: #f2b8b8;
+    --color-warning-text: #752d2d;
+
+    --button-highlight-color: #dceeea;
 }

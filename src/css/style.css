@@ -74,10 +74,11 @@ input, button{
     color: inherit;
     border-bottom: 1px var(--main-color) solid;
     height: 2.5em;
+    padding-top: 0.8em;
 }
 
 input[type="submit"], button{
-    border: 0.1em var(--main-color) solid;
+    border: 0;
     color: var(--main-color-dark);
     margin: 1em 0em;
     border-radius: 2em;
@@ -85,7 +86,7 @@ input[type="submit"], button{
 }
 
 input[type="submit"]:hover, button:hover{
-    background-color: var(--background-color);
+    background-color: var(--button-highlight-color);
 }
 
 .notification.warning{

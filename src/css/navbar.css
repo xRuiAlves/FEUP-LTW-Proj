@@ -1,5 +1,5 @@
 :root{
-    --slider-width: 8em;
+    --slider-width: 11em;
     --slider-text-height: 2em;
     --slider-image-size: 2.6em;
     --top-bar-height: 3.5em;
@@ -20,13 +20,14 @@
     width: 100%;
     height: var(--top-bar-height);
     background-color: var(--main-color);
-    box-shadow: 0px 7px 7px var(--main-color-light);
+    box-shadow: 0px -1px 14px black;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
     position: sticky;
+    top: 0;
 }
 
 #topbar .nav-bar-right-section{
@@ -48,8 +49,8 @@
 }
 
 #topbar #login_slider > .slider_text{
-    position:relative;
     display: inline-block;
+    position:relative;
     background-color: var(--main-color-dark);
     border-radius: Calc(var(--slider-text-height) / 2);
     overflow: hidden;
@@ -65,6 +66,7 @@
     width:100%;
     display: inline-block;
     transition: transform var(--slider-animation-duration) ease-in-out;
+    cursor: pointer;
 }
 
 #topbar #login_slider > .slider_text div.left{
@@ -131,6 +133,7 @@
 /***********************************************************/
 /*********************** HAMBURGUER ************************/
 /***********************************************************/
+
 
 #topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer{
     display: flex;
