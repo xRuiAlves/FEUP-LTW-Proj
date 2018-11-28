@@ -80,12 +80,12 @@ export default class StoriesRenderer{
                         <span class="author-name">${story.author}</span>
                     </div>
                     <div class="reactions">
-                        <span class="reaction-amount">${story.comments}</span>
-                        <span class="reaction-name">comments</span>
-                        <span class="reaction-amount">${story.upvotes}</span>
-                        <span class="reaction-name">upvotes</span>
-                        <span class="reaction-amount">${story.downvotes}</span>
-                        <span class="reaction-name">downvotes</span>
+                        <span class="reaction-amount">${story.comments || 0}</span>
+                        <span class="reaction-name"><i class="fas fa-comment"></i></span>
+                        <span class="reaction-amount">${story.upvotes || 0}</span>
+                        <span class="reaction-name"><i class="fas fa-arrow-up"></i></i></span>
+                        <span class="reaction-amount">${story.downvotes || 0}</span>
+                        <span class="reaction-name"><i class="fas fa-arrow-down"></i></span>
                     </div>
                 </footer>
             </div>`

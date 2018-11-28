@@ -2,6 +2,7 @@
     display:flex;
     align-items: flex-start;
     justify-content: space-around;
+    text-align: left;
 }
 
 .stories-container .masonry-col{
@@ -41,15 +42,5 @@
 
 .story-container .reactions .reaction-amount{
     font-weight: bold;
-}
-
-
-/******************* FULL STORY *************/
-
-body #modal-container .story-container{
-    box-shadow: 0px 0px 2em #000;
-    text-align: left;
-    max-width: 50em;
-    padding: 0;
-    margin: 0;
+    margin-left: 0.5em;
 }
