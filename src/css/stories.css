@@ -4,23 +4,6 @@
     justify-content: space-around;
 }
 
-.story-container{
-    display: inline-block;
-    background-color: white;
-    box-shadow: 0px 1px 1px var(--main-color-light);
-    border-radius: 0.5em;
-    overflow: hidden;
-    margin: 1em;
-}
-
-.story-container > img.banner{
-    width: 100%;
-}
-
-.story-container .content{
-    padding: 0em 1em 1em 1em;
-}
-
 .story-container .title{
     font-weight: bold;
     color: var(--main-color-dark);
@@ -53,8 +36,6 @@
 .story-container .reactions .reaction-amount{
     font-weight: bold;
 }
-
-
 
 
 /******************* FULL STORY *************/
