@@ -4,6 +4,12 @@
     justify-content: space-around;
 }
 
+.stories-container .masonry-col{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
 .story-container .title{
     font-weight: bold;
     color: var(--main-color-dark);

@@ -1,15 +1,4 @@
-var sampleStory = {
-    image: 'https://www.w3schools.com/w3css/img_lights.jpg',
-    title: 'Yo listen up here\'s the story about a little guy that lives in a blue world',
-    text: 'And all day and all night and everything he sees is just blue like him, inside and outside. Blue his house with a blue little window and a blue Corvette and everything is blue for him and himself and everybody around cause he ain\'t got nobody to listen',
-    author: 'Eiffel 65',
-    comments: '100',
-    upvotes: '12',
-    downvotes: '3',
-    authorImage: './images/default_profile.png'
-}
-
-class StoriesRenderer{
+export default class StoriesRenderer{
 
     get STORY_TARGET_WIDTH() { return 650 }
     
@@ -83,8 +72,8 @@ class StoriesRenderer{
         storyContainer.innerHTML = `
             ${story.image ? `<img class="banner" src="${story.image}"/> ` : ''}
             <div class="content">
-                <p class="title">${story.title}<p>
-                <p class="text">${story.text}<p>
+                <p class="title">${story.story_title}<p>
+                <p class="text">${story.story_content}<p>
                 <footer class="story-details">
                     <div class="author">
                         <img class="profile-image" src="${story.authorImage}"/>
