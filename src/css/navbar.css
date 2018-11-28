@@ -163,6 +163,7 @@
 
 #topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer{
     pointer-events: auto;
+    cursor: pointer;
 }
 
 #topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar,

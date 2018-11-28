@@ -11,6 +11,7 @@ function showLoginForm(){
         <div class="notification warning"></div>`;
         
         let passwordDOM = form.querySelector('input[type="password"]');
+        let usernameDOM = form.querySelector('input[type="text"]');
 
         passwordDOM.addEventListener('keydown', (e) => {
             if (e.keyCode === 13) submitLogin(form, resolve);
@@ -19,6 +20,8 @@ function showLoginForm(){
         form.querySelector('button').addEventListener('click', () => submitLogin(form, resolve));
 
         ModalHandler.show(form);
+
+        usernameDOM.focus();
     });
 }
 

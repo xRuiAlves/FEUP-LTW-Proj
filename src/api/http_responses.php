@@ -24,4 +24,15 @@
             'error:' => $message
         )));
     }
+
+    function verifyRequestParameters($requestParameters, $mandatoryParameters) {
+        foreach($mandatoryParameters as $parameter) {
+            if(!isset($requestParameters[$parameter])) {
+                httpBadRequest("'$parameter' request parameter is missing");
+                return false;
+            }
+        }
+
+        return true;
+    }
 ?>

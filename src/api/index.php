@@ -5,6 +5,8 @@
     include_once($_SERVER['DOCUMENT_ROOT'] . '/api/user.php');
     include_once($_SERVER['DOCUMENT_ROOT'] . '/api/comment.php');
 
+    session_start();
+
     header('Content-Type: application/json');
 
     $method = $_SERVER['REQUEST_METHOD'];
