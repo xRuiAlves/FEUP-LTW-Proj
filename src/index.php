@@ -14,5 +14,14 @@
     Load More Recent Stories!
 </button>
 
+<div class="page-divider"> 
+    Most Upvoted stories
+    <hr>
+</div>
+<div id="most-upvoted-stories" class="stories-container"></div>
+<button id="btn-load-most-upvoted">
+    Load More Stories!
+</button>
+
 
 <?php include('./templates/footer.php') ?>

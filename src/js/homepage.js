@@ -2,28 +2,33 @@ import StoriesRenderer from './storiesRenderer.js';
 
 let storiesRenderer = new StoriesRenderer();
 
-const AMOUNT_OF_STORIES_PER_FETCH = 3;
+const AMOUNT_OF_STORIES_PER_FETCH = 10;
 
-load_latest_stories();
-document.getElementById('btn-load-latest').addEventListener('click', load_latest_stories);
+generic_story_fetch('latest-stories', 'api/story/recent');
+generic_story_fetch('most-upvoted-stories', 'api/story/mostupvoted');
+
+document.getElementById('btn-load-latest').addEventListener('click', 
+    e => generic_story_fetch('latest-stories', 'api/story/recent', e.target));
+
+document.getElementById('btn-load-most-upvoted').addEventListener('click', 
+    e => generic_story_fetch('most-upvoted-stories', 'api/story/mostupvoted', e.target));
 
 
-function load_latest_stories(){
+function generic_story_fetch(destinationDOMId, requestPath, loadMoreButton){
     let offset;
-    if(storiesRenderer.displayedStories['latest-stories']){
-        offset = storiesRenderer.displayedStories['latest-stories'].length;
+    if(storiesRenderer.displayedStories[destinationDOMId]){
+        offset = storiesRenderer.displayedStories[destinationDOMId].length;
     }else{
         offset = 0;
     }
 
-    fetch(`api/story/recent?offset=${offset}&num_stories=${AMOUNT_OF_STORIES_PER_FETCH}`)
+    fetch(`${requestPath}?offset=${offset}&num_stories=${AMOUNT_OF_STORIES_PER_FETCH}`)
     .then(res => res.json())
     .then(data => {
-        storiesRenderer.displayStories(data, "latest-stories");
+        storiesRenderer.displayStories(data, destinationDOMId);
         if(data.length < AMOUNT_OF_STORIES_PER_FETCH){
-            let btnLoadLatest = document.getElementById('btn-load-latest')
-            btnLoadLatest.parentNode.removeChild(btnLoadLatest);
+            loadMoreButton.parentNode.removeChild(loadMoreButton);
         }
     })
-    .catch(err => console.log('Could not load latest stories'));
+    .catch(err => console.log('Could not load stories'));
 }
