@@ -52,14 +52,14 @@ a{
     min-height: Calc(100vh - var(--top-bar-height));
 }
 
-@media only screen and (min-width: 1300px) {
+@media only screen and (min-width: 800px) {
     #page-content {
         padding-left: 2em;
         padding-right: 2em;
     }
 }
 
-#page-content > footer{
+body > footer{
     text-align: center;
     position: sticky;
     top: Calc(100vh - var(--top-bar-height));
