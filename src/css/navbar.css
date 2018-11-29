@@ -1,5 +1,5 @@
 :root{
-    --slider-width: 8em;
+    --slider-width: 11em;
     --slider-text-height: 2em;
     --slider-image-size: 2.6em;
     --top-bar-height: 3.5em;
@@ -20,13 +20,14 @@
     width: 100%;
     height: var(--top-bar-height);
     background-color: var(--main-color);
-    box-shadow: 0px 7px 7px var(--main-color-light);
+    box-shadow: 0px -1px 14px black;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
     position: sticky;
+    top: 0;
 }
 
 #topbar .nav-bar-right-section{
@@ -34,8 +35,24 @@
     align-items: center;
 }
 
-#topbar > h1{
-    padding: 1em;
+#topbar .logo{
+    display: flex;
+    flex-direction: row;
+}
+
+#topbar .logo, #topbar .logo img{
+    height: 100%;
+}
+
+#topbar .logo h1{
+    margin: 0;
+    align-self: center;
+}
+@media only screen and (max-width: 500px){
+
+    #topbar .logo h1{
+        display: none;
+    }
 }
 
 #topbar #login_slider{
@@ -48,8 +65,8 @@
 }
 
 #topbar #login_slider > .slider_text{
-    position:relative;
     display: inline-block;
+    position:relative;
     background-color: var(--main-color-dark);
     border-radius: Calc(var(--slider-text-height) / 2);
     overflow: hidden;
@@ -65,16 +82,17 @@
     width:100%;
     display: inline-block;
     transition: transform var(--slider-animation-duration) ease-in-out;
+    cursor: pointer;
 }
 
-#topbar #login_slider > .slider_text div.left{
+#topbar #login_slider > .slider_text div.right{
     transform: translate(0%,0%);
 }
-#topbar #login_slider.active > .slider_text div.left{
+#topbar #login_slider.active > .slider_text div.right{
     transform: translate(100%,0%);
 }
 
-#topbar #login_slider.active > .slider_text div.right{
+#topbar #login_slider.active > .slider_text div.left{
     transform: translate(0%,0%);
 }
 
@@ -132,6 +150,7 @@
 /*********************** HAMBURGUER ************************/
 /***********************************************************/
 
+
 #topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer{
     display: flex;
     position: relative;
@@ -144,6 +163,7 @@
 
 #topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer{
     pointer-events: auto;
+    cursor: pointer;
 }
 
 #topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar,

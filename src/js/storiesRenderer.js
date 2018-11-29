@@ -1,15 +1,4 @@
-var sampleStory = {
-    image: 'https://www.w3schools.com/w3css/img_lights.jpg',
-    title: 'Yo listen up here\'s the story about a little guy that lives in a blue world',
-    text: 'And all day and all night and everything he sees is just blue like him, inside and outside. Blue his house with a blue little window and a blue Corvette and everything is blue for him and himself and everybody around cause he ain\'t got nobody to listen',
-    author: 'Eiffel 65',
-    comments: '100',
-    upvotes: '12',
-    downvotes: '3',
-    authorImage: './images/default_profile.png'
-}
-
-class StoriesRenderer{
+export default class StoriesRenderer{
 
     get STORY_TARGET_WIDTH() { return 650 }
     
@@ -83,20 +72,20 @@ class StoriesRenderer{
         storyContainer.innerHTML = `
             ${story.image ? `<img class="banner" src="${story.image}"/> ` : ''}
             <div class="content">
-                <p class="title">${story.title}<p>
-                <p class="text">${story.text}<p>
+                <p class="title">${story.story_title}<p>
+                <p class="text">${story.story_content}<p>
                 <footer class="story-details">
                     <div class="author">
                         <img class="profile-image" src="${story.authorImage}"/>
                         <span class="author-name">${story.author}</span>
                     </div>
                     <div class="reactions">
-                        <span class="reaction-amount">${story.comments}</span>
-                        <span class="reaction-name">comments</span>
-                        <span class="reaction-amount">${story.upvotes}</span>
-                        <span class="reaction-name">upvotes</span>
-                        <span class="reaction-amount">${story.downvotes}</span>
-                        <span class="reaction-name">downvotes</span>
+                        <span class="reaction-amount">${story.comments || 0}</span>
+                        <span class="reaction-name"><i class="fas fa-comment"></i></span>
+                        <span class="reaction-amount">${story.upvotes || 0}</span>
+                        <span class="reaction-name"><i class="fas fa-arrow-up"></i></i></span>
+                        <span class="reaction-amount">${story.downvotes || 0}</span>
+                        <span class="reaction-name"><i class="fas fa-arrow-down"></i></span>
                     </div>
                 </footer>
             </div>`

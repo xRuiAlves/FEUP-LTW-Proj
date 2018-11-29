@@ -1,7 +1,5 @@
 function showLoginForm(){
-    return new Promise((resolve, reject) => {
-
-        
+    return new Promise((resolve, reject) => {   
         let form = document.createElement('DIV');
         form.classList.add('modal-box');
         form.innerHTML = 
@@ -13,6 +11,7 @@ function showLoginForm(){
         <div class="notification warning"></div>`;
         
         let passwordDOM = form.querySelector('input[type="password"]');
+        let usernameDOM = form.querySelector('input[type="text"]');
 
         passwordDOM.addEventListener('keydown', (e) => {
             if (e.keyCode === 13) submitLogin(form, resolve);
@@ -21,6 +20,8 @@ function showLoginForm(){
         form.querySelector('button').addEventListener('click', () => submitLogin(form, resolve));
 
         ModalHandler.show(form);
+
+        usernameDOM.focus();
     });
 }
 
@@ -38,12 +39,61 @@ function submitLogin(form, resolve){
     .then(res => {
         if(res.status === 200){
             ModalHandler.hide();
-            resolve();
+            return res.json();
         }else{
             form.querySelector('.notification').innerText = 'Could not login. Check your credentials and try again';
         }
     })
-    .catch(() => {
+    .then((data) => {
+        console.log(data)
+        document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
+        resolve();
+    })
+    .catch((res) => {
         form.querySelector('.notification').innerText = 'Could not login: ' + res.statusText;
     })    
+}
+
+function showLogOutModal(){
+    
+    let form = document.createElement('DIV');
+    form.classList.add('modal-box');
+    form.innerHTML = 
+    `
+    <p>You are about to log out. Are you sure?</p> 
+    <button class="cancel">Cancel</button>
+    <button class="confirm">Log out</button>
+    </div>`;
+    
+    let cancelDOM = form.querySelector('button.cancel');
+    let confirmDOM = form.querySelector('button.confirm');
+
+    form.addEventListener('keydown', (e) => {
+        if (e.keyCode === 13){ submitLogOut();}
+    });
+    
+    confirmDOM.addEventListener('click', () => { submitLogOut();});
+
+    cancelDOM.addEventListener('click', () => {
+        ModalHandler.hide();
+    })
+
+    ModalHandler.show(form);
+}
+
+function submitLogOut(resolve, reject){
+    fetch('api/user/logout', 
+            {method: "DELETE"})
+    .then(res => {
+        if(res.status === 200){
+            ModalHandler.hide();
+            document.getElementById('login_slider').classList.remove('active');
+            document.querySelector('#topbar .page-side-menu').classList.remove('active');
+        }else{
+            ModalHandler.hide();
+        }
+    })
+    .catch(() => {
+        ModalHandler.hide();
+    })
 }

@@ -6,8 +6,7 @@ window.addEventListener('load', function() {
     let page_content = document.getElementById('page-content');
     login_slider.addEventListener("click", () => {
         if(login_slider.classList.contains('active')){
-                side_menu.classList.remove('active');
-                login_slider.classList.remove('active');
+            //GO TO PROFILE PAGE
         }else{
             showLoginForm().then(() => {
                 login_slider.classList.add('active');
