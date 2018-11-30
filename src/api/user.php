@@ -66,17 +66,24 @@
     }
 
     function api_getUserInfo($data) {
-        if(!verifyRequestParameters($data, ["id"])) {
-            return;
-        }
-
-        $id = $data["id"];
-
-        if (!userExists($id)) {
-            httpNotFound("user with id $id does not exist");
+        if (isset($data["id"])) {       // Data by ID
+            $id = $data["id"];
+            if (!userExists($id)) {
+                httpNotFound("user with id $id does not exist");
+            } else {
+                echo json_encode(getUserInfo($id));
+                http_response_code(200);
+            }
+        } else if (isset($data["user_username"])) {       // Data by Username
+            $user_username = $data["user_username"];
+            if (!usernameExists($user_username)){
+                httpNotFound("user with username $user_username does not exist");
+            } else {
+                echo json_encode(getUserInfoByUsername($user_username));
+                http_response_code(200);
+            }
         } else {
-            http_response_code(200);
-            echo json_encode(getUserInfo($id));
+            httpBadRequest("'id' or 'user_username' request parameter is missing");
         }
     }
 
