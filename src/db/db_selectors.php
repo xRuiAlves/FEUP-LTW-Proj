@@ -291,6 +291,17 @@
         return $stmt->fetch(); 
     }
 
+    function getUserUsername($user_id) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT user_username
+            FROM User
+            WHERE user_id = ?
+        ');
+        $stmt->execute(array($user_id));
+        return $stmt->fetch()["user_username"]; 
+    }
+
     function getEntityNumUpVotes($entity_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('

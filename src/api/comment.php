@@ -76,6 +76,12 @@
 
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
+            return;
+        } 
+        
+        $user_username = getUserUsername($user_id);
+        if(!verifyAuthentication($user_username)) {
+            httpUnauthorizedRequest("invalid permissions");
         } else {
             $comment_id = createUserComment($user_id, $date, $parent_entity_id, $comment_content);
             echo(json_encode(getComment($comment_id)));
@@ -136,15 +142,24 @@
         $user_id = $data["user_id"];
         $comment_id = $data["comment_id"];
 
+        if (!userExists($user_id)) {
+            httpNotFound("user with id $user_id does not exist");
+            return;
+        } else if (!commentExists($comment_id)) {
+            httpNotFound("comment with id $comment_id does not exist");
+            return;
+        }
+
+        $user_username = getUserUsername($user_id);
+        if(!verifyAuthentication($user_username)) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
         if(voteExists($user_id, $comment_id)) {
             updateUserEntityVote($user_id, $comment_id, 1);
             http_response_code(200);
-        } else if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-        } else if (!commentExists($comment_id)) {
-            httpNotFound("comment with id $comment_id does not exist");
-        }
-        else {
+        } else {
             createUserVote(1, $user_id, $comment_id);
             http_response_code(201);
         }
@@ -158,13 +173,23 @@
         $user_id = $data["user_id"];
         $comment_id = $data["comment_id"];
 
+        if (!userExists($user_id)) {
+            httpNotFound("user with id $user_id does not exist");
+            return;
+        } else if (!commentExists($comment_id)) {
+            httpNotFound("comment with id $comment_id does not exist");
+            return;
+        }
+
+        $user_username = getUserUsername($user_id);
+        if(!verifyAuthentication($user_username)) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
         if(voteExists($user_id, $comment_id)) {
             updateUserEntityVote($user_id, $comment_id, -1);
             http_response_code(200);
-        } else if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-        } else if (!commentExists($comment_id)) {
-            httpNotFound("comment with id $comment_id does not exist");
         } else {
             createUserVote(-1, $user_id, $comment_id);
             http_response_code(201);
@@ -181,12 +206,18 @@
 
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
+            return;
         } else if (!commentExists($comment_id)) {
             httpNotFound("comment with id $comment_id does not exist");
+            return;
+        } 
+        
+        $user_username = getUserUsername($user_id);
+        if(!verifyAuthentication($user_username)) {
+            httpUnauthorizedRequest("invalid permissions");
         } else {
             removeUserEntityVote($user_id, $comment_id);
             http_response_code(200);
         }
-
     }
 ?>
