@@ -39,24 +39,26 @@
     }
 
     function api_getUserImgJSON($user_id) {
-        $file_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id;
+        $relative_file_path = "/db/images/user" . $user_id;
+        $file_path = $_SERVER["DOCUMENT_ROOT"] . $relative_file_path;
         $isJpeg = file_exists($file_path . ".jpeg");
-        $file_path = $file_path . ($isJpeg ? ".jpeg" : ".png");
+        $relative_file_path = $relative_file_path . ($isJpeg ? ".jpeg" : ".png");
         
-        return ["user_img" => $file_path];
+        return ["user_img" => $relative_file_path];
     }
 
     function api_getStoryImgJSON($story_id) {
-        $file_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/story" . $story_id;
+        $relative_file_path = "/db/images/story" . $story_id;
+        $file_path = $_SERVER["DOCUMENT_ROOT"] . $relative_file_path;
         
         if (file_exists($file_path . ".jpeg")) {
-            $file_path = $file_path . ".jpeg";
+            $relative_file_path = $relative_file_path . ".jpeg";
         } else if (file_exists($file_path . ".png")) {
-            $file_path = $file_path . ".png";
+            $relative_file_path = $relative_file_path . ".png";
         } else {
             return null;
         }
         
-        return ["story_img" => $file_path];
+        return ["story_img" => $relative_file_path];
     }
 ?>
