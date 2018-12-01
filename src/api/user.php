@@ -269,12 +269,4 @@
             return false;   // Not Invalid
         }
     }
-
-    function api_getUserImgJSON($user_id) {
-        $file_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id;
-        $isJpeg = file_exists($file_path . ".jpeg");
-        $file_path = $file_path . ($isJpeg ? ".jpeg" : ".png");
-        
-        return ["user_img" => $file_path];
-    }
 ?>

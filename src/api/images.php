@@ -37,4 +37,26 @@
             return "failed to upload image";
         }
     }
+
+    function api_getUserImgJSON($user_id) {
+        $file_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id;
+        $isJpeg = file_exists($file_path . ".jpeg");
+        $file_path = $file_path . ($isJpeg ? ".jpeg" : ".png");
+        
+        return ["user_img" => $file_path];
+    }
+
+    function api_getStoryImgJSON($story_id) {
+        $file_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/story" . $story_id;
+        
+        if (file_exists($file_path . ".jpeg")) {
+            $file_path = $file_path . ".jpeg";
+        } else if (file_exists($file_path . ".png")) {
+            $file_path = $file_path . ".png";
+        } else {
+            return null;
+        }
+        
+        return ["user_img" => $file_path];
+    }
 ?>
