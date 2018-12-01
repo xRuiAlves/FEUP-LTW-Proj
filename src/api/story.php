@@ -125,15 +125,22 @@
             $downvotes = getEntityNumDownVotes($id);
             $num_comments = getEntityNumComments($id);
             $story_info = getStory($id);
+
+            // Votes / Commetns extra info
             $story_extra_info = [
                 'upvotes' => $upvotes,
                 'downvotes' => $downvotes,
                 'num_comments' => $num_comments
             ];
+
+            // Story image (if existant) and creator image
             $img = api_getStoryImgJSON($id);
             if ($img !== null) {
                 $story_info = array_merge($story_info, $img);
             }
+
+            $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"]));
+            unset($story_info["user_id"]);
 
             echo(json_encode(array_merge($story_info, $story_extra_info)));
             http_response_code(200);
@@ -324,13 +331,19 @@
     }
 
     function api_addStoryExtraInfo($story) {
-        $img = api_getStoryImgJSON($story["votable_entity_id"]);
+        // Number of story comments
         $num_comments = ["num_comments" => getEntityNumComments($story["votable_entity_id"])];
         $story = array_merge($story, $num_comments);
         
+        // Story image
+        $img = api_getStoryImgJSON($story["votable_entity_id"]);
         if ($img !== null) {
             $story = array_merge($story, $img);
         }
+
+        // Story creator user image
+        $story = array_merge($story, api_getUserImgJSON($story["user_id"]));
+        unset($story["user_id"]);        
         
         return $story;
     }

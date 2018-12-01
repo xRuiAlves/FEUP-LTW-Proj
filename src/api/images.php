@@ -57,6 +57,6 @@
             return null;
         }
         
-        return ["user_img" => $file_path];
+        return ["story_img" => $file_path];
     }
 ?>

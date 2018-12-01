@@ -55,7 +55,7 @@
     function getRecentStories($offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT votable_entity_id, user_username, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            SELECT votable_entity_id, user_username, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
             FROM
                 (SELECT votable_entity_id, COUNT(*) as num_up_votes
                 FROM Vote 
@@ -91,7 +91,7 @@
     function getUserRecentStories($user_id, $offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT votable_entity_id, user_username, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            SELECT votable_entity_id, user_username, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
             FROM
                 (SELECT votable_entity_id, COUNT(*) as num_up_votes
                 FROM Vote 
@@ -128,7 +128,7 @@
     function getMostUpvotedStories($offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT votable_entity_id, user_username, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            SELECT votable_entity_id, user_username, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
             FROM
                 (SELECT votable_entity_id, COUNT(*) as num_up_votes
                 FROM Vote 
@@ -164,7 +164,7 @@
     function getUserMostUpvotedStories($user_id, $offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT votable_entity_id, user_username, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            SELECT votable_entity_id, user_username, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
             FROM
                 (SELECT votable_entity_id, COUNT(*) as num_up_votes
                 FROM Vote 
@@ -271,6 +271,7 @@
                    Story.story_title,
                    Story.story_content,
                    VotableEntity.votable_entity_creation_date,
+                   User.user_id,
                    User.user_username
             FROM Story 
                  NATURAL JOIN VotableEntity
