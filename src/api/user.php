@@ -68,17 +68,26 @@
     }
 
     function api_getUserInfo($data) {
-        if(!verifyRequestParameters($data, ["id"])) {
-            return;
-        }
-
-        $id = $data["id"];
-
-        if (!userExists($id)) {
-            httpNotFound("user with id $id does not exist");
+        if (isset($data["id"])) {       // Data by ID
+            $id = $data["id"];
+            if (!userExists($id)) {
+                httpNotFound("user with id $id does not exist");
+            } else {
+                echo json_encode(array_merge(getUserInfo($id), api_getUserImgJSON($id)));
+                http_response_code(200);
+            }
+        } else if (isset($data["user_username"])) {       // Data by Username
+            $user_username = $data["user_username"];
+            if (!usernameExists($user_username)){
+                httpNotFound("user with username $user_username does not exist");
+            } else {
+                $info = getUserInfoByUsername($user_username);
+                $userImgJSON = api_getUserImgJSON($info["user_id"]);
+                echo json_encode(array_merge($info, $userImgJSON));
+                http_response_code(200);
+            }
         } else {
-            http_response_code(200);
-            echo json_encode(getUserInfo($id));
+            httpBadRequest("'id' or 'user_username' request parameter is missing");
         }
     }
 
@@ -94,7 +103,9 @@
             httpNotFound("user with username $user_username does not exist");
         } else {
             if (verifyUser($user_username, $user_password)) {
-                echo json_encode(getUserInfoByUsername($user_username));
+                $info = getUserInfoByUsername($user_username);
+                $userImgJSON = api_getUserImgJSON($info["user_id"]);
+                echo json_encode(array_merge($info, $userImgJSON));
 
                 $_SESSION["username"] = $user_username;
 
@@ -157,7 +168,7 @@
                     httpInternalError($img_upload);
                     return;
                 }
-                echo(json_encode(getUserInfo($user_id)));
+                echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id))));
                 http_response_code(201);
             }
         }

@@ -1,13 +1,13 @@
 <?php 
     function validateImage($img) {
-        $img_max_size = 50000;  // in bytes
+        $img_max_size = 256000;  // in bytes
         $img_size = $img["size"];
         $img_type = $img["type"];
         
         if ($img_size === 0) {
             return "image is empty";
         } else if ($img_size > $img_max_size) {
-            return "image is too big - max accepted size is $img_max_size";
+            return "image is too big - max accepted size is $img_max_size bytes";
         }
 
         if (!isImageTypeValid($img_type)) {
@@ -36,5 +36,27 @@
         } else {
             return "failed to upload image";
         }
+    }
+
+    function api_getUserImgJSON($user_id) {
+        $file_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id;
+        $isJpeg = file_exists($file_path . ".jpeg");
+        $file_path = $file_path . ($isJpeg ? ".jpeg" : ".png");
+        
+        return ["user_img" => $file_path];
+    }
+
+    function api_getStoryImgJSON($story_id) {
+        $file_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/story" . $story_id;
+        
+        if (file_exists($file_path . ".jpeg")) {
+            $file_path = $file_path . ".jpeg";
+        } else if (file_exists($file_path . ".png")) {
+            $file_path = $file_path . ".png";
+        } else {
+            return null;
+        }
+        
+        return ["story_img" => $file_path];
     }
 ?>
