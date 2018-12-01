@@ -123,17 +123,19 @@
         } else {
             $upvotes = getEntityNumUpVotes($id);
             $downvotes = getEntityNumDownVotes($id);
+            $num_comments = getEntityNumComments($id);
             $story_info = getStory($id);
-            $story_votes = [
+            $story_extra_info = [
                 'upvotes' => $upvotes,
-                'downvotes' => $downvotes
+                'downvotes' => $downvotes,
+                'num_comments' => $num_comments
             ];
             $img = api_getStoryImgJSON($id);
             if ($img !== null) {
                 $story_info = array_merge($story_info, $img);
             }
 
-            echo(json_encode(array_merge($story_info, $story_votes)));
+            echo(json_encode(array_merge($story_info, $story_extra_info)));
             http_response_code(200);
         }
     }
@@ -252,12 +254,8 @@
         $num_stories = $data["num_stories"];
 
         $stories = getRecentStories($offset, $num_stories);
-
         foreach ($stories as $index => $story) {
-            $img = api_getStoryImgJSON($story["votable_entity_id"]);
-            if ($img !== null) {
-                $stories[$index] = array_merge($story, $img);
-            }
+            $stories[$index] = api_addStoryExtraInfo($story);
         }
         
         echo(json_encode($stories));
@@ -277,12 +275,8 @@
             httpNotFound("user with id $user_id does not exist");
         } else {
             $stories = getUserRecentStories($user_id, $offset, $num_stories);
-
             foreach ($stories as $index => $story) {
-                $img = api_getStoryImgJSON($story["votable_entity_id"]);
-                if ($img !== null) {
-                    $stories[$index] = array_merge($story, $img);
-                }
+                $stories[$index] = api_addStoryExtraInfo($story);
             }
 
             echo(json_encode($stories));
@@ -299,12 +293,8 @@
         $num_stories = $data["num_stories"];
 
         $stories = getMostUpvotedStories($offset, $num_stories);
-
         foreach ($stories as $index => $story) {
-            $img = api_getStoryImgJSON($story["votable_entity_id"]);
-            if ($img !== null) {
-                $stories[$index] = array_merge($story, $img);
-            }
+            $stories[$index] = api_addStoryExtraInfo($story);
         }
 
         echo(json_encode($stories));
@@ -324,16 +314,24 @@
             httpNotFound("user with id $user_id does not exist");
         } else {
             $stories = getUserMostUpvotedStories($user_id, $offset, $num_stories);
-
             foreach ($stories as $index => $story) {
-                $img = api_getStoryImgJSON($story["votable_entity_id"]);
-                if ($img !== null) {
-                    $stories[$index] = array_merge($story, $img);
-                }
+                $stories[$index] = api_addStoryExtraInfo($story);
             }
 
             echo(json_encode($stories));
             http_response_code(200);
         }
+    }
+
+    function api_addStoryExtraInfo($story) {
+        $img = api_getStoryImgJSON($story["votable_entity_id"]);
+        $num_comments = ["num_comments" => getEntityNumComments($story["votable_entity_id"])];
+        $story = array_merge($story, $num_comments);
+        
+        if ($img !== null) {
+            $story = array_merge($story, $img);
+        }
+        
+        return $story;
     }
 ?>

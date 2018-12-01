@@ -373,6 +373,18 @@
         return $stmt->fetchAll(); 
     }
 
+    function getEntityNumComments($entity_id) {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT COUNT(*) as num_comments
+            FROM Comment 
+                 NATURAL JOIN VotableEntity
+            WHERE Comment.parent_entity_id = ?
+        ');
+        $stmt->execute(array($entity_id));
+        return $stmt->fetch()["num_comments"]; 
+    }
+
     function getUserPoints($user_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
