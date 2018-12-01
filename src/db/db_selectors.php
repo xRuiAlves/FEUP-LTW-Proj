@@ -55,7 +55,7 @@
     function getRecentStories($offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT votable_entity_id, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            SELECT votable_entity_id, user_username, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
             FROM
                 (SELECT votable_entity_id, COUNT(*) as num_up_votes
                 FROM Vote 
@@ -78,6 +78,7 @@
                 
                 NATURAL JOIN VotableEntity
                 NATURAL JOIN Story
+                NATURAL JOIN User
             GROUP BY votable_entity_id
             ORDER BY votable_entity_creation_date DESC
             LIMIT ?
@@ -90,7 +91,7 @@
     function getUserRecentStories($user_id, $offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT votable_entity_id, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            SELECT votable_entity_id, user_username, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
             FROM
                 (SELECT votable_entity_id, COUNT(*) as num_up_votes
                 FROM Vote 
@@ -113,6 +114,7 @@
                 
                 NATURAL JOIN VotableEntity
                 NATURAL JOIN Story
+                NATURAL JOIN User
             WHERE user_id = ?
             GROUP BY votable_entity_id
             ORDER BY votable_entity_creation_date DESC
@@ -126,7 +128,7 @@
     function getMostUpvotedStories($offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT votable_entity_id, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            SELECT votable_entity_id, user_username, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
             FROM
                 (SELECT votable_entity_id, COUNT(*) as num_up_votes
                 FROM Vote 
@@ -149,6 +151,7 @@
                 
                 NATURAL JOIN VotableEntity
                 NATURAL JOIN Story
+                NATURAL JOIN User
             GROUP BY votable_entity_id
             ORDER BY upvotes DESC, downvotes DESC
             LIMIT ?
@@ -161,7 +164,7 @@
     function getUserMostUpvotedStories($user_id, $offset, $num_stories) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT votable_entity_id, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            SELECT votable_entity_id, user_username, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
             FROM
                 (SELECT votable_entity_id, COUNT(*) as num_up_votes
                 FROM Vote 
@@ -184,6 +187,7 @@
                 
                 NATURAL JOIN VotableEntity
                 NATURAL JOIN Story
+                NATURAL JOIN User
             WHERE user_id = ?
             GROUP BY votable_entity_id
             ORDER BY upvotes DESC, downvotes DESC
@@ -267,9 +271,10 @@
                    Story.story_title,
                    Story.story_content,
                    VotableEntity.votable_entity_creation_date,
-                   VotableEntity.user_id
+                   User.user_username
             FROM Story 
                  NATURAL JOIN VotableEntity
+                 NATURAL JOIN User
             WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($story_id));
