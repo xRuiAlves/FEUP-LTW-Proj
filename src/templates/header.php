@@ -22,6 +22,7 @@
     <script src="js/navbar.js" defer></script>
     <script src="js/modal.js" defer></script>
     <script src="js/login.js" defer></script>
+    <script src="js/signUp.js" defer></script>
     <script src="js/storyfetchers.js" type="module"></script>
     <title><?=$_env_website_name?></title>
 </head>
