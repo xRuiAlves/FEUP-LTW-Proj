@@ -372,14 +372,33 @@
     function getEntityComments($entity_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT Comment.votable_entity_id, 
-                   Comment.comment_content, 
-                   VotableEntity.votable_entity_creation_date, 
-                   VotableEntity.user_id
-            FROM Comment 
-                 NATURAL JOIN VotableEntity
-            WHERE Comment.parent_entity_id = ?
-            ORDER BY VotableEntity.votable_entity_creation_date
+            SELECT votable_entity_id, user_username, user_id, comment_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            FROM
+                (SELECT votable_entity_id, COUNT(*) as num_up_votes
+                FROM Vote 
+                    NATURAL JOIN Comment
+                WHERE vote_value = 1
+                GROUP BY votable_entity_id
+                UNION
+                SELECT votable_entity_id, 0
+                FROM Comment)
+            
+                NATURAL JOIN
+                (SELECT votable_entity_id, COUNT(*) as num_down_votes
+                FROM Vote 
+                    NATURAL JOIN Comment
+                WHERE vote_value = -1
+                GROUP BY votable_entity_id
+                UNION
+                SELECT votable_entity_id, 0
+                FROM Comment)
+                
+                NATURAL JOIN VotableEntity
+                NATURAL JOIN Comment
+                NATURAL JOIN User
+            WHERE parent_entity_id = ?
+            GROUP BY votable_entity_id
+            ORDER BY votable_entity_creation_date DESC;
         ');
         $stmt->execute(array($entity_id));
         return $stmt->fetchAll(); 

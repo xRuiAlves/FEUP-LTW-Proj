@@ -209,8 +209,13 @@
         if(!storyExists($id)) {
             httpNotFound("story with id $id does not exist");
         } else {
+            $comments = getEntityComments($id);
+            foreach ($comments as $index => $comment) {
+                $num_comments = ["num_comments" => getEntityNumComments($comment["votable_entity_id"])];
+                $comments[$index] = array_merge($comment, $num_comments);
+            }
+            echo(json_encode($comments));
             http_response_code(200);
-            echo(json_encode(getEntityComments($id)));
         }
     }
 
