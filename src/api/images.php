@@ -91,8 +91,12 @@
         }
     }
 
-    function api_getUserImgJSON($user_id) {
-        $relative_file_path = "/db/images/user" . $user_id;
+    function api_getUserImgJSON($user_id, $size) {
+        if ($size !== "small" && $size !== "big") {
+            return null;
+        }
+
+        $relative_file_path = "/db/images/user" . $user_id . "_" . $size;
         $file_path = $_SERVER["DOCUMENT_ROOT"] . $relative_file_path;
         $isJpeg = file_exists($file_path . ".jpeg");
         $relative_file_path = $relative_file_path . ($isJpeg ? ".jpeg" : ".png");

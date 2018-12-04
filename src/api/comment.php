@@ -131,7 +131,7 @@
         } else {
             $comments = getEntityComments($id);
             foreach($comments as $index => $comment) {
-                $comments[$index] = array_merge($comment, api_getUserImgJSON($comment["user_id"]));
+                $comments[$index] = array_merge($comment, api_getUserImgJSON($comment["user_id"], "small"));
             }
             echo json_encode($comments);
             http_response_code(200);

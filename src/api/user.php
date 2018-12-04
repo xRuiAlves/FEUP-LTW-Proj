@@ -73,7 +73,7 @@
             if (!userExists($id)) {
                 httpNotFound("user with id $id does not exist");
             } else {
-                echo json_encode(array_merge(getUserInfo($id), api_getUserImgJSON($id)));
+                echo json_encode(array_merge(getUserInfo($id), api_getUserImgJSON($id, "big")));
                 http_response_code(200);
             }
         } else if (isset($data["user_username"])) {       // Data by Username
@@ -82,7 +82,7 @@
                 httpNotFound("user with username $user_username does not exist");
             } else {
                 $info = getUserInfoByUsername($user_username);
-                $userImgJSON = api_getUserImgJSON($info["user_id"]);
+                $userImgJSON = api_getUserImgJSON($info["user_id"], "big");
                 echo json_encode(array_merge($info, $userImgJSON));
                 http_response_code(200);
             }
@@ -104,7 +104,7 @@
         } else {
             if (verifyUser($user_username, $user_password)) {
                 $info = getUserInfoByUsername($user_username);
-                $userImgJSON = api_getUserImgJSON($info["user_id"]);
+                $userImgJSON = api_getUserImgJSON($info["user_id"], "big");
                 echo json_encode(array_merge($info, $userImgJSON));
 
                 $_SESSION["username"] = $user_username;
@@ -164,7 +164,7 @@
             if (!api_checkInvalidUsername($user_username) && !api_checkInvalidRealname($user_realname)) {
                 $user_id = createUser($user_username, $user_realname, $user_password, $user_bio);
                 $img_upload = uploadUserImage($img, $user_id);
-                echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id))));
+                echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id, "big"))));
                 http_response_code(201);
             }
         }
