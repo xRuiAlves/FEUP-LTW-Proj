@@ -10,7 +10,8 @@ function showSignUpForm(){
         <input type="text" placeholder="Short Bio" class="bio"/>
         <input type="password" placeholder="Password" class="password"/>
         <input type="password" placeholder="Confirm Password" class="confirmPassword"/>
-        <input type="file" name="pic" accept="image/*"/>
+        <input type="file" name="file" id="file" accept="image/*" class="profilePicFile"/>
+        <label for="file"> Choose a picture</label>
         <button class="submitSignUp">Create Account</button>
         <div class="notification warning"></div>`;
         
