@@ -27,7 +27,7 @@ function showSignUpForm(){
     });
 }
 
-function submitSignUp(form, resolve){
+async function submitSignUp(form, resolve){
     let usernameDOM = form.querySelector('input[type="text"].Username');
     let nameDOM = form.querySelector('input[type="text"].Name');
     let passwordDOM = form.querySelector('input[type="password"]');
@@ -39,22 +39,22 @@ function submitSignUp(form, resolve){
     formData.append('user_realname', nameDOM.value);
     formData.append('user_password', passwordDOM.value);
     formData.append('user_bio', bioDOM.value);
-    formData.append('user_img', profilePicDOM.files[0]);
+    formData.append('user_img', profilePicDOM.files[0]); 
     
-    fetch('api/user/create', 
-            {method: "POST",
-            body: formData})
+    let response = await fetch('api/user/create', {method: "POST", body: formData})
     .then(res => {
-        if(res.status === 201){
+        return {status: res.status, result: res.json()};
+    })
+    .catch((res) => {
+        form.querySelector('.notification').innerText = 'Could not sign up: ' + res.statusText;
+    })
+    
+    response.result.then((data) => {
+        if(response.status == 201){
             ModalHandler.hide();
-            return res.json();
+            resolve();
         }else{
-            form.querySelector('.notification').innerText = 'Could not register your account. \nPlease try again';
+            form.querySelector('.notification').innerText = 'Could not sign up: ' + data.error;
         }
     })
-    /* .then((data) => {
-        console.log(data)
-        document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
-        resolve();
-    })*/    
 }
