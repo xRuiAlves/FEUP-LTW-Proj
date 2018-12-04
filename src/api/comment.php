@@ -65,12 +65,12 @@
     }
 
     function api_createComment($data) {
-        if(!verifyRequestParameters($data, ["user_id", "date", "parent_entity_id", "comment_content"])) {
+        if(!verifyRequestParameters($data, ["user_id", "parent_entity_id", "comment_content"])) {
             return;
         }
 
         $user_id = $data["user_id"];
-        $date = $data["date"];
+        $date = time();
         $parent_entity_id = $data["parent_entity_id"];
         $comment_content = $data["comment_content"];
 
@@ -129,8 +129,12 @@
         if(!commentExists($id)) {
             httpNotFound("comment with id $id does not exist");
         } else {
+            $comments = getEntityComments($id);
+            foreach($comments as $index => $comment) {
+                $comments[$index] = array_merge($comment, api_getUserImgJSON($comment["user_id"]));
+            }
+            echo json_encode($comments);
             http_response_code(200);
-            echo json_encode(getEntityComments($id));
         }
     }
 

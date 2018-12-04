@@ -76,12 +76,12 @@
     }
 
     function api_createStory($data) {
-        if(!verifyRequestParameters($data, ["user_id", "date", "story_title", "story_content"])) {
+        if(!verifyRequestParameters($data, ["user_id", "story_title", "story_content"])) {
             return;
         }
 
         $user_id = $data["user_id"];
-        $date = $data["date"];
+        $date = time();
         $story_title = $data["story_title"];
         $story_content = $data["story_content"];
 
@@ -209,8 +209,14 @@
         if(!storyExists($id)) {
             httpNotFound("story with id $id does not exist");
         } else {
+            $comments = getEntityComments($id);
+            foreach ($comments as $index => $comment) {
+                $num_comments = ["num_comments" => getEntityNumComments($comment["votable_entity_id"])];
+                $creator_img = api_getUserImgJSON($comment["user_id"]);
+                $comments[$index] = array_merge($comment, $num_comments, $creator_img);
+            }
+            echo(json_encode($comments));
             http_response_code(200);
-            echo(json_encode(getEntityComments($id)));
         }
     }
 
