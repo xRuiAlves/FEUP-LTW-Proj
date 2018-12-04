@@ -408,7 +408,7 @@
     }
 
     function api_getStoryPreview($story_content) {
-        $story_content_max_size = 15;
+        $story_content_max_size = 200;
 
         if (strlen($story_content) > $story_content_max_size) {
             $story_content = substr($story_content, 0, $story_content_max_size) . "...";

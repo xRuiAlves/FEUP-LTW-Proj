@@ -1,0 +1,16 @@
+:root{
+    --main-color:#4BCAB1;
+    --main-color-dark:#30A68F;
+    --color-grey-dark:#888;
+    --color-grey:#aaaaaa;
+    --color-grey-light:#ddd;
+    --background-color: #efefef;
+
+    --text-color: #333;
+    --text-color-light: #ffffff;
+
+    --color-warning-background: #f2b8b8;
+    --color-warning-text: #752d2d;
+
+    --button-highlight-color: #dceeea;
+}

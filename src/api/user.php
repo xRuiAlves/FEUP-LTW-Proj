@@ -100,7 +100,7 @@
         $user_password = $data["user_password"];
 
         if (!usernameExists($user_username)){
-            httpNotFound("user with username $user_username does not exist");
+            httpBadRequest("user with username $user_username does not exist");
         } else {
             if (verifyUser($user_username, $user_password)) {
                 $info = getUserInfoByUsername($user_username);
