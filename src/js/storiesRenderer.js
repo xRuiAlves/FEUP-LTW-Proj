@@ -151,7 +151,7 @@ export default class StoriesRenderer{
             <textarea placeholder="Write a comment!"></textarea>
             <button>Submit!</button>
         `
-        elem.querySelector('button').addEventListener(() => {
+        elem.querySelector('button').addEventListener('click', () => {
             //send comment creation request with storyId
         });
         return elem;
