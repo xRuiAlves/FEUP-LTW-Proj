@@ -131,8 +131,12 @@
         if(!commentExists($id)) {
             httpNotFound("comment with id $id does not exist");
         } else {
+            $comments = getEntityComments($id);
+            foreach($comments as $index => $comment) {
+                $comments[$index] = array_merge($comment, api_getUserImgJSON($comment["user_id"]));
+            }
+            echo json_encode($comments);
             http_response_code(200);
-            echo json_encode(getEntityComments($id));
         }
     }
 

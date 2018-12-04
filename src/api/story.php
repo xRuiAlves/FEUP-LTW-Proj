@@ -212,7 +212,8 @@
             $comments = getEntityComments($id);
             foreach ($comments as $index => $comment) {
                 $num_comments = ["num_comments" => getEntityNumComments($comment["votable_entity_id"])];
-                $comments[$index] = array_merge($comment, $num_comments);
+                $creator_img = api_getUserImgJSON($comment["user_id"]);
+                $comments[$index] = array_merge($comment, $num_comments, $creator_img);
             }
             echo(json_encode($comments));
             http_response_code(200);
