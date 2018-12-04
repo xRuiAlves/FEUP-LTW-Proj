@@ -1,0 +1,207 @@
+:root{
+    --slider-width: 11em;
+    --slider-text-height: 2em;
+    --slider-image-size: 2.6em;
+    --top-bar-height: 3.5em;
+
+    --slider-animation-duration: 0.3s;
+    --side-menu-width: 16em;
+    --side-menu-font-size: 1em;
+    --side-menu-shadow-size: 0.5em;
+
+    --hamburguer-bar-width: 1.4em;
+    --hamburguer-bar-height: 0.15em;
+    --hamburguer-spacing: 0.5em;
+    --hamburguer-padding: 1.2em;
+}
+
+#topbar {
+    color: var(--text-color-light);
+    width: 100%;
+    height: var(--top-bar-height);
+    background-color: var(--main-color);
+    box-shadow: 0px -1px 14px black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+}
+
+#topbar .nav-bar-right-section{
+    display: flex;
+    align-items: center;
+}
+
+#topbar .logo{
+    display: flex;
+    flex-direction: row;
+}
+
+#topbar .logo, #topbar .logo img{
+    height: 100%;
+}
+
+#topbar .logo h1{
+    margin: 0;
+    align-self: center;
+}
+@media only screen and (max-width: 500px){
+
+    #topbar .logo h1{
+        display: none;
+    }
+}
+
+#topbar #login_slider{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: var(--slider-width);
+    padding: 1em;
+}
+
+#topbar #login_slider > .slider_text{
+    display: inline-block;
+    position:relative;
+    background-color: var(--main-color-dark);
+    border-radius: Calc(var(--slider-text-height) / 2);
+    overflow: hidden;
+    min-width: 100%;
+    height: var(--slider-text-height);
+}
+
+#topbar #login_slider > .slider_text div{
+    transform: translate(-100%, 0%);
+    position: absolute;
+    line-height: var(--slider-text-height);
+    text-align: center;
+    width:100%;
+    display: inline-block;
+    transition: transform var(--slider-animation-duration) ease-in-out;
+    cursor: pointer;
+}
+
+#topbar #login_slider > .slider_text div.right{
+    transform: translate(0%,0%);
+}
+#topbar #login_slider.active > .slider_text div.right{
+    transform: translate(100%,0%);
+}
+
+#topbar #login_slider.active > .slider_text div.left{
+    transform: translate(0%,0%);
+}
+
+#topbar #login_slider > img{
+    display: inline-block;
+    transform: translate(Calc(-50% - var(--slider-width)), 0);
+    transition: transform var(--slider-animation-duration) ease-in-out;
+    width: var(--slider-image-size);
+    height: var(--slider-image-size);
+    border-radius: 100%;
+    z-index: 2;
+}
+
+#topbar #login_slider.active > img{
+    transform: translate(-50%, 0);
+}
+
+#topbar ul.page-side-menu{
+    right: 0;
+    margin: 0;
+    padding: 0;
+    height: Calc(100% - var(--top-bar-height));
+    width: var(--side-menu-width);
+    top: var(--top-bar-height);
+    position: fixed;
+    background-color: white;
+    color: var(--main-color-dark);
+    box-shadow: 0 0 var(--side-menu-shadow-size) var(--main-color-light);
+    border-radius: 0em 0 0.5em 0.5em;
+    list-style-type: none;
+    transform: translate(Calc(100% + var(--side-menu-shadow-size)*2), 0%);
+    text-align: right;
+    transition: transform var(--slider-animation-duration) ease-in-out;
+}
+
+#topbar ul.page-side-menu.active{
+    transform: translate(var(--scroll-bar-width), 0%);
+}
+
+#topbar ul.page-side-menu *{
+    font-size: var(--side-menu-font-size);
+    padding: 0.8em 1em 0em;
+    transform: scale(1,1);
+    transform-origin: 100% 75%;
+    transition: transform 0.1s linear;
+    cursor: pointer;
+}
+
+#topbar ul.page-side-menu li:hover{
+    transform: scale(1.1,1.1);
+}
+
+
+/***********************************************************/
+/*********************** HAMBURGUER ************************/
+/***********************************************************/
+
+
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: space-around;
+    height: var(--slider-image-size);
+    padding: var(--hamburguer-padding);
+    pointer-events: none;
+}
+
+#topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer{
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar,
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar:after,
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar:before{
+    height: var(--hamburguer-bar-height);
+    width: var(--hamburguer-bar-width);
+    background-color: white;
+    content: "";
+    position: relative;
+    transform: translate(Calc(100% + var(--hamburguer-padding)),0%);
+    transition: transform var(--slider-animation-duration) ease-out, background-color var(--slider-animation-duration) ease-out;
+}
+
+#topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer .side-menu-hamburguer-bar,
+#topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer .side-menu-hamburguer-bar:after,
+#topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer .side-menu-hamburguer-bar:before{
+    transform: translate(0%, 0%);
+}
+
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar:after{
+    top: var(--hamburguer-spacing);
+    position: absolute;
+}
+
+#topbar .nav-bar-right-section #login_slider ~ #side-menu-hamburguer .side-menu-hamburguer-bar:before{
+    bottom: var(--hamburguer-spacing);
+    position: absolute;
+}
+
+#topbar .page-side-menu.active ~ .nav-bar-right-section #login_slider ~  #side-menu-hamburguer .side-menu-hamburguer-bar{
+    background-color: transparent;
+}
+
+#topbar .page-side-menu.active ~ .nav-bar-right-section #login_slider ~  #side-menu-hamburguer .side-menu-hamburguer-bar:after{
+    transform: translate(0%, Calc(0em - var(--hamburguer-spacing))) rotate(45deg);
+}
+
+#topbar .page-side-menu.active ~ .nav-bar-right-section #login_slider ~  #side-menu-hamburguer .side-menu-hamburguer-bar:before{
+    transform: translate(0%, var(--hamburguer-spacing)) rotate(-45deg);
+}

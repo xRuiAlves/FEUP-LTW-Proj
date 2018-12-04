@@ -2,6 +2,8 @@
     include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/authentication.php");
+
 
     function handleUserRequest($request, $method) {
         if ($method === "POST") {
@@ -10,6 +12,8 @@
             handleUserGetRequest($request);
         } else if ($method === "PUT") {
             handleUserPutRequest($request);
+        } else if ($method === "DELETE") {
+            handleUserDeleteRequest($request);
         } else {
             httpNotFound("request not found");
         }
@@ -19,14 +23,11 @@
         $req = array_shift($request);
 
         if ($req === "create") {
-            api_createUser($_POST["user_username"], 
-                           $_POST["user_realname"], 
-                           $_POST["user_password"], 
-                           $_POST["user_bio"]);
+            api_createUser($_POST);
         } else if ($req === "login") {
-            api_logUser($_POST["user_username"], $_POST["user_password"]);
+            api_logUser($_POST);
         } else if ($req === "updateimage") {
-            api_userUpdateImage($_POST["user_id"]);
+            api_userUpdateImage($_POST);
         } else {
             httpNotFound("request not found");
         }
@@ -35,10 +36,10 @@
     function handleUserGetRequest($request) {
         $req = array_shift($request);
 
-        if ($req === "info" && isset($_GET["id"])) {
-            api_getUserInfo($_GET["id"]);
-        } else if ($req === "points" && isset($_GET["id"])) {
-            api_getUserPoints($_GET["id"]);
+        if ($req === "info") {
+            api_getUserInfo($_GET);
+        } else if ($req === "points") {
+            api_getUserPoints($_GET);
         } else {
             httpNotFound("request not found");
         }
@@ -49,45 +50,91 @@
         $data = json_decode(file_get_contents("php://input"), true);
         
         if ($req === "updatebio") {
-            api_userUpdateBio($data["user_id"], $data["user_bio"]);
+            api_userUpdateBio($data);
         } else if ($req === "updatepassword") {
-            api_userUpdatePassword($data["user_id"], $data["user_password"]);
+            api_userUpdatePassword($data);
         } else {
             httpNotFound("request not found");
         }
     }
 
-    function api_getUserInfo($user_id) {
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-        } else {
-            http_response_code(200);
-            echo json_encode(getUserInfo($user_id));
+    function handleUserDeleteRequest($request) {
+        $req = array_shift($request);  
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($req === "logout") {
+            api_logoutUser();
         }
     }
 
-    function api_logUser($user_username, $user_password) {
+    function api_getUserInfo($data) {
+        if(!verifyRequestParameters($data, ["id"])) {
+            return;
+        }
+
+        $id = $data["id"];
+
+        if (!userExists($id)) {
+            httpNotFound("user with id $id does not exist");
+        } else {
+            http_response_code(200);
+            echo json_encode(getUserInfo($id));
+        }
+    }
+
+    function api_logUser($data) {
+        if(!verifyRequestParameters($data, ["user_username", "user_password"])) {
+            return;
+        }
+
+        $user_username = $data["user_username"];
+        $user_password = $data["user_password"];
+
         if (!usernameExists($user_username)){
-            httpNotFound("user with username $user_username does not exist");
+            httpBadRequest("user with username $user_username does not exist");
         } else {
             if (verifyUser($user_username, $user_password)) {
+                echo json_encode(getUserInfoByUsername($user_username));
+
+                $_SESSION["username"] = $user_username;
+
                 http_response_code(200);
             } else {
-                httpBadRequest("invalid password");
+                httpUnauthorizedRequest("invalid password");
             }
         }
     }
 
-    function api_getUserPoints($user_id) {
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
+    function api_logoutUser() {
+        session_unset($_SESSION['username']);
+        session_destroy();
+    }
+
+    function api_getUserPoints($id) {
+        if(!verifyRequestParameters($data, ["id"])) {
+            return;
+        }
+
+        $id = $data["id"];
+
+        if (!userExists($id)) {
+            httpNotFound("user with id $id does not exist");
         } else {
             http_response_code(200);
-            echo json_encode(getUserPoints($user_id));
+            echo json_encode(getUserPoints($id));
         }
     }
 
-    function api_createUser($user_username, $user_realname, $user_password, $user_bio) {
+    function api_createUser($data) {
+        if(!verifyRequestParameters($data, ["user_username", "user_realname", "user_password", "user_bio"])) {
+            return;
+        }
+
+        $user_username = $data["user_username"];
+        $user_realname = $data["user_realname"];
+        $user_password = $data["user_password"];
+        $user_bio = $data["user_bio"];
+
         if (usernameExists($user_username)){
             httpBadRequest("username already exists");
         } else {
@@ -116,28 +163,69 @@
         }
     }
 
-    function api_userUpdateBio($user_id, $user_bio) {
+    function api_userUpdateBio($data) {
+        if(!verifyRequestParameters($data, ["user_id", "user_bio"])) {
+            return;
+        }
+        
+        $user_id = $data["user_id"];
+        $user_bio = $data["user_bio"];
+
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
+            return;
+        }
+
+        $user_username = getUserUsername($user_id);
+        if(!verifyAuthentication($user_username)) {
+            httpUnauthorizedRequest("invalid permissions");
         } else {
             updateUserBio($user_id, $user_bio);
             http_response_code(200);
         }
     }
 
-    function api_userUpdatePassword($user_id, $user_password) {
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
+    function api_userUpdatePassword($data) {
+        if(!verifyRequestParameters($data, ["user_username", "user_old_password", "user_new_password"])) {
+            return;
+        }
+        
+        $user_username = $data["user_username"];
+        $user_old_password = $data["user_old_password"];
+        $user_new_password = $data["user_new_password"];
+
+        if (!usernameExists($user_username)) {
+            httpNotFound("user with id $user_username does not exist");
+            return;
+        }
+
+        if (!verifyUser($user_username, $user_old_password)) {
+            httpUnauthorizedRequest("invalid password");
         } else {
-            updateUserPassword($user_id, $user_password);
+            updateUserPassword($user_username, $user_new_password);
             http_response_code(200);
         }
     }
 
-    function api_userUpdateImage($user_id) {
+    function api_userUpdateImage($data) {
+        if(!verifyRequestParameters($data, ["user_id"])) {
+            return;
+        }
+
+        $user_id = $data["user_id"];
+
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
-        } else if (isset($_FILES["user_img"])) {
+            return;
+        } 
+        
+        $user_username = getUserUsername($user_id);
+        if(!verifyAuthentication($user_username)) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+        
+        if (isset($_FILES["user_img"])) {
             $img = $_FILES["user_img"];
             $img_validation = validateImage($img);
             if ($img_validation !== "valid") {
