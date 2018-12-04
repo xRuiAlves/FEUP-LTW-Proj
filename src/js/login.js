@@ -8,6 +8,7 @@ function showLoginForm(){
         <input type="text" placeholder="Username"/>
         <input type="password" placeholder="Password"/>
         <button>Login</button>
+        <button class="Register">Register</button>
         <div class="notification warning"></div>`;
         
         let passwordDOM = form.querySelector('input[type="password"]');
@@ -18,6 +19,7 @@ function showLoginForm(){
         });
         
         form.querySelector('button').addEventListener('click', () => submitLogin(form, resolve));
+        form.querySelector('button.Register').addEventListener('click', () => showSignUpForm());
 
         ModalHandler.show(form);
 

@@ -1,4 +1,4 @@
-.card-container{
+.card{
     display: inline-block;
     background-color: white;
     box-shadow: 0px 1px 1px var(--main-color-light);
@@ -7,18 +7,18 @@
     margin: 1em;
 }
 
-.card-container > img.banner{
+.card > img.banner{
     width: 100%;
 }
 
-.card-container .content{
+.card .content{
     padding: 0em 1em 1em 1em;
 }
 
 
 /******************* Card Inside Modal *************/
 
-body #modal-container .card-container{
+body #modal-container .card{
     box-shadow: 0px 0px 2em #000;
     text-align: left;
     max-width: 50em;
