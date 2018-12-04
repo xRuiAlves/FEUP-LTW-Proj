@@ -8,7 +8,7 @@
 <div class="card profile-info">
     <img src="https://static1.squarespace.com/static/54f74f23e4b0952b4e0011c0/t/5ad5431e88251baeaac75f49/1523925845937/chris+hanna+bb.jpg">
     <p class="name">John Doe</p>
-    <p>My motto is live life one whore at a time</p>
+    <p>My motto is live life travelling</p>
 </div>
 
 <div class="profile-content">
