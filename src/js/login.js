@@ -85,12 +85,10 @@ function submitLogOut(resolve, reject){
     fetch('api/user/logout', 
             {method: "DELETE"})
     .then(res => {
+        ModalHandler.hide();
         if(res.status === 200){
-            ModalHandler.hide();
             document.getElementById('login_slider').classList.remove('active');
             document.querySelector('#topbar .page-side-menu').classList.remove('active');
-        }else{
-            ModalHandler.hide();
         }
     })
     .catch(() => {

@@ -110,14 +110,16 @@ export default class StoriesRenderer{
     appendCommentsDiv(story, elem){
         fetch('api/story/comments?id=' + story.votable_entity_id)
         .then(res => res.json()).then(comments => {
-            if(comments.length < 1) return;
-            let commentsWrapper = document.createElement('DIV');
-            commentsWrapper.classList.add('comments');
-            commentsWrapper.innerHTML = 'Comments';
-            for(let comment of comments){
-                commentsWrapper.appendChild(this.generateCommentElement(comment));
+            if(comments.length > 0){
+                let commentsWrapper = document.createElement('DIV');
+                commentsWrapper.classList.add('comments');
+                commentsWrapper.innerHTML = 'Comments';
+                for(let comment of comments){
+                    commentsWrapper.appendChild(this.generateCommentElement(comment));
+                }
+                elem.appendChild(commentsWrapper);
             }
-            elem.appendChild(commentsWrapper);
+            elem.appendChild(this.generateCommentCreator());
         })
         .catch(info => console.error(info));
     }
@@ -125,7 +127,6 @@ export default class StoriesRenderer{
     generateCommentElement(comment){
         let commentContainer = document.createElement('DIV');
         commentContainer.classList.add('comment-container');
-        console.log(comment);
         commentContainer.innerHTML = `
             <img src="">
             <div class="comment">
@@ -133,17 +134,27 @@ export default class StoriesRenderer{
                 <p class="content"></p>
             </div>
             <div class="reactions">
-                <span class="reaction-amount">${comment.num_comments || 0}</span>
-                <span class="reaction-name">replies</i></span>
-                <span class="reaction-amount">${comment.upvotes || 0}</span>
-                <span class="reaction-name"><i class="fas fa-arrow-up"></i></i></span>
-                <span class="reaction-amount">${comment.downvotes || 0}</span>
-                <span class="reaction-name"><i class="fas fa-arrow-down"></i></span>
+                <span class="n-replies">${comment.num_comments || 0} replies</span>
+                <span class="n-upvotes">${comment.upvotes || 0}<i class="fas fa-arrow-up"></i></span>
+                <span class="n-downvotes">${comment.downvotes || 0}<i class="fas fa-arrow-down"></i></span>
             </div>
         `;
         commentContainer.querySelector('.username').textContent = comment.user_username;
         commentContainer.querySelector('.content').textContent = comment.comment_content;
         return commentContainer;
+    }
+
+    generateCommentCreator(storyId){
+        let elem = document.createElement('DIV');
+        elem.classList.add('comment-creator');
+        elem.innerHTML = `
+            <textarea placeholder="Write a comment!"></textarea>
+            <button>Submit!</button>
+        `
+        elem.querySelector('button').addEventListener(() => {
+            //send comment creation request with storyId
+        });
+        return elem;
     }
 
     showFullStory(story){
