@@ -65,12 +65,14 @@
     }
 
     function api_createComment($data) {
-        if(!verifyRequestParameters($data, ["user_id", "date", "parent_entity_id", "comment_content"])) {
+        if(!verifyRequestParameters($data, ["user_id", "parent_entity_id", "comment_content"])) {
             return;
         }
 
         $user_id = $data["user_id"];
-        $date = $data["date"];
+        $date = time();
+        print_r(time());
+        return;
         $parent_entity_id = $data["parent_entity_id"];
         $comment_content = $data["comment_content"];
 
