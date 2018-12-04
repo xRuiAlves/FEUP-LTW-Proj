@@ -68,7 +68,7 @@ export default class StoriesRenderer{
 
     generateStoryElem(story){
         var storyContainer = document.createElement('DIV');
-        storyContainer.className = 'card-container story-container';
+        storyContainer.className = 'card story-container';
         storyContainer.innerHTML = `
             
             ${story.story_img ? `<img class="banner" src="${story.story_img}"/> ` : ''}

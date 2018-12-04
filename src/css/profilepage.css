@@ -1,0 +1,40 @@
+#page-content{
+    display: flex;
+    align-items: flex-start;
+}
+
+.profile-content{
+    width: 100%;
+}
+
+.profile-info > .name {
+    font-weight: bold;
+    color: var(--main-color-dark);
+}
+
+.profile-info{
+    min-width: 20em;
+    max-width: 20em;
+}
+
+.profile-info > img{
+    width: 100%;
+}
+
+.profile-info > p{
+    padding: 0em 1em;
+}
+
+.profile-content{
+    text-align: center;
+}
+
+@media only screen and (max-width: 800px) {
+    #page-content{
+        flex-direction: column;
+    }
+    .profile-info{
+        display: inline-block;
+        margin: 0 auto;
+    }
+}
