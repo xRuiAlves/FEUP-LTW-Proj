@@ -110,12 +110,20 @@
         
         if (file_exists($file_path . ".jpeg")) {
             $relative_file_path = $relative_file_path . ".jpeg";
+            $file_path = $file_path . ".jpeg";
         } else if (file_exists($file_path . ".png")) {
             $relative_file_path = $relative_file_path . ".png";
+            $file_path = $file_path . ".png";
         } else {
             return null;
         }
+
+        list($img_width, $img_height) = getimagesize($file_path);
         
-        return ["story_img" => $relative_file_path];
+        return [
+            "story_img" => $relative_file_path,
+            "story_img_width" => $img_width,
+            "story_img_height" => $img_height
+        ];
     }
 ?>
