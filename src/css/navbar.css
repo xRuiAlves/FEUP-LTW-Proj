@@ -120,7 +120,7 @@
     position: fixed;
     background-color: white;
     color: var(--main-color-dark);
-    box-shadow: 0 0 var(--side-menu-shadow-size) var(--main-color-light);
+    box-shadow: 0 0 var(--side-menu-shadow-size) var(--color-grey);
     border-radius: 0em 0 0.5em 0.5em;
     list-style-type: none;
     transform: translate(Calc(100% + var(--side-menu-shadow-size)*2), 0%);

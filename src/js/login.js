@@ -25,7 +25,8 @@ function showLoginForm(){
     });
 }
 
-function submitLogin(form, resolve){
+async function submitLogin(form, resolve){
+
     let usernameDOM = form.querySelector('input[type="text"]');
     let passwordDOM = form.querySelector('input[type="password"]');
 
@@ -33,25 +34,24 @@ function submitLogin(form, resolve){
     formData.append('user_username', usernameDOM.value);
     formData.append('user_password', passwordDOM.value);
     
-    fetch('api/user/login', 
-            {method: "POST",
-            body: formData})
+    let response = await fetch('api/user/login', {method: "POST", body: formData})
     .then(res => {
-        if(res.status === 200){
-            ModalHandler.hide();
-            return res.json();
-        }else{
-            form.querySelector('.notification').innerText = 'Could not login. Check your credentials and try again';
-        }
-    })
-    .then((data) => {
-        console.log(data)
-        document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
-        resolve();
+        return {status: res.status, result: res.json()};
     })
     .catch((res) => {
         form.querySelector('.notification').innerText = 'Could not login: ' + res.statusText;
-    })    
+    })
+    
+    response.result.then((data) => {
+        if(response.status == 200){
+            ModalHandler.hide();
+            document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
+            resolve();
+        }else{
+            form.querySelector('.notification').innerText = 'Could not login: ' + data.error;
+        }
+    })
+        
 }
 
 function showLogOutModal(){

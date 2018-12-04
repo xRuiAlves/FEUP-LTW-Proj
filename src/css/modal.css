@@ -23,7 +23,7 @@ body.modal-open #modal-container{
 }
 
 .modal-box{
-    color: var(--main-color-light);
+    color: var(--color-grey);
     transition: width 0.3s ease;
     display: inline-block;
     background-color: white;

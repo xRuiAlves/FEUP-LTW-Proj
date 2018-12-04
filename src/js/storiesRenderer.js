@@ -95,11 +95,55 @@ export default class StoriesRenderer{
     }
 
     generateFullStoryElem(story){
-        return this.generateStoryElem(story); //Delete this line when implementing full story
+        let elem = this.generateStoryElem(story);
 
-        //1 - Draw story preview
-        //2 - Fetch full story
-            //2.1 - Then change the preview text to the full text and render comments
+        fetch('api/story/info?id=' + story.votable_entity_id)
+        .then(res => res.json()).then(fullStory => {
+            elem.querySelector('p.text').textContent = fullStory.story_content;
+            this.appendCommentsDiv(fullStory, elem);
+        })
+        .catch(info => console.error(info));
+
+        return elem;
+    }
+
+    appendCommentsDiv(story, elem){
+        fetch('api/story/comments?id=' + story.votable_entity_id)
+        .then(res => res.json()).then(comments => {
+            if(comments.length < 1) return;
+            let commentsWrapper = document.createElement('DIV');
+            commentsWrapper.classList.add('comments');
+            commentsWrapper.innerHTML = 'Comments';
+            for(let comment of comments){
+                commentsWrapper.appendChild(this.generateCommentElement(comment));
+            }
+            elem.appendChild(commentsWrapper);
+        })
+        .catch(info => console.error(info));
+    }
+
+    generateCommentElement(comment){
+        let commentContainer = document.createElement('DIV');
+        commentContainer.classList.add('comment-container');
+        console.log(comment);
+        commentContainer.innerHTML = `
+            <img src="">
+            <div class="comment">
+                <p class="username"></p>
+                <p class="content"></p>
+            </div>
+            <div class="reactions">
+                <span class="reaction-amount">${comment.num_comments || 0}</span>
+                <span class="reaction-name">replies</i></span>
+                <span class="reaction-amount">${comment.upvotes || 0}</span>
+                <span class="reaction-name"><i class="fas fa-arrow-up"></i></i></span>
+                <span class="reaction-amount">${comment.downvotes || 0}</span>
+                <span class="reaction-name"><i class="fas fa-arrow-down"></i></span>
+            </div>
+        `;
+        commentContainer.querySelector('.username').textContent = comment.user_username;
+        commentContainer.querySelector('.content').textContent = comment.comment_content;
+        return commentContainer;
     }
 
     showFullStory(story){
