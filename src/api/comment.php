@@ -71,8 +71,6 @@
 
         $user_id = $data["user_id"];
         $date = time();
-        print_r(time());
-        return;
         $parent_entity_id = $data["parent_entity_id"];
         $comment_content = $data["comment_content"];
 
