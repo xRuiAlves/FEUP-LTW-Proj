@@ -106,7 +106,7 @@
                     return;
                 }
                 
-                $img_upload = uploadImage($img, "story" . $story_id);
+                $img_upload = uploadStoryImage($img, $story_id);
                 if ($img_upload !== "uploaded") {
                     httpInternalError($img_upload);
                     return;

@@ -163,11 +163,7 @@
 
             if (!api_checkInvalidUsername($user_username) && !api_checkInvalidRealname($user_realname)) {
                 $user_id = createUser($user_username, $user_realname, $user_password, $user_bio);
-                $img_upload = uploadImage($img, "user" . $user_id);
-                if ($img_upload !== "uploaded") {
-                    httpInternalError($img_upload);
-                    return;
-                }
+                $img_upload = uploadUserImage($img, $user_id);
                 echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id))));
                 http_response_code(201);
             }
@@ -244,12 +240,8 @@
                 return;
             }
 
-            $img_upload = uploadImage($img, "user" . $user_id);
-            if ($img_upload !== "uploaded") {
-                httpInternalError($img_upload);
-            } else {
-                http_response_code(200);
-            }
+            $img_upload = uploadUserImage($img, $user_id);
+            http_response_code(200);
         } else {
             httpBadRequest("image missing");
         }
