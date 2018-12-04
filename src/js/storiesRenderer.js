@@ -153,8 +153,19 @@ export default class StoriesRenderer{
         `
         elem.querySelector('button').addEventListener('click', () => {
             //send comment creation request with storyId
+            this.submitComment(storyId, elem.querySelector('textarea').value);
         });
         return elem;
+    }
+
+    submitComment(parentId, content){
+        let formdata = new FormData();
+        formdata.append('parent_entity_id', parentId);
+        formdata.append('comment_content', content);
+
+        fetch('api/comment/create', {method:'POST', body: formdata}).then(
+            () => {}
+        )
     }
 
     showFullStory(story){

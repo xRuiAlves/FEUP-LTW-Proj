@@ -14,10 +14,6 @@ function showSignUpForm(){
         <div class="notification warning"></div>`;
         
         let nameDOM = form.querySelector('input[type="text"].Name');
-        let usernameDOM = form.querySelector('input[type="text"].UserName');
-        let bioDOM = form.querySelector('input[type="text"].Bio');
-        let passwordDOM = form.querySelector('input[type="password"]');
-        let profilePicDOM = form.querySelector('input[type="file"]');
         
         form.querySelector('button').addEventListener('click', () => submitSignUp(form, resolve));
 
@@ -45,13 +41,11 @@ async function submitSignUp(form, resolve){
     .then(res => {
         return {status: res.status, result: res.json()};
     })
-    .catch((res) => {
-        form.querySelector('.notification').innerText = 'Could not sign up: ' + res.statusText;
-    })
     
     response.result.then((data) => {
         if(response.status == 201){
             ModalHandler.hide();
+            userLoggedIn(data);
             resolve();
         }else{
             form.querySelector('.notification').innerText = 'Could not sign up: ' + data.error;

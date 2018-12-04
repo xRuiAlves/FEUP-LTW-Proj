@@ -8,9 +8,7 @@ window.addEventListener('load', function() {
         if(login_slider.classList.contains('active')){
             //GO TO PROFILE PAGE
         }else{
-            showLoginForm().then(() => {
-                login_slider.classList.add('active');
-            });
+            showLoginForm();
         }
         
     });
@@ -21,3 +19,7 @@ window.addEventListener('load', function() {
         side_menu.classList.remove('active')
     );
 })
+
+function openUserProfile(){
+    window.location.href="profile.php";
+}
