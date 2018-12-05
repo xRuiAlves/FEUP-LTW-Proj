@@ -119,7 +119,9 @@ export default class StoriesRenderer{
                 }
                 elem.appendChild(commentsWrapper);
             }
-            elem.appendChild(this.generateCommentCreator());
+            if(g_appState.username){
+                elem.appendChild(this.generateCommentCreator(story.votable_entity_id));
+            }
         })
         .catch(info => console.error(info));
     }
@@ -161,6 +163,7 @@ export default class StoriesRenderer{
     submitComment(parentId, content){
         let formdata = new FormData();
         formdata.append('parent_entity_id', parentId);
+        formdata.append('user_id', g_appState.userId);
         formdata.append('comment_content', content);
 
         fetch('api/comment/create', {method:'POST', body: formdata}).then(

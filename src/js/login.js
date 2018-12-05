@@ -6,8 +6,8 @@ function showLoginForm(){
     <h1>Login</h1> 
     <input type="text" placeholder="Username"/>
     <input type="password" placeholder="Password"/>
-    <button>Login</button>
-    <button class="Register">Register</button>
+    <button class="login">Login</button>
+    <button class="register">Register</button>
     <div class="notification warning"></div>`;
     
     let passwordDOM = form.querySelector('input[type="password"]');
@@ -17,8 +17,8 @@ function showLoginForm(){
         if (e.keyCode === 13) submitLogin(form);
     });
     
-    form.querySelector('button').addEventListener('click', () => submitLogin(form, resolve));
-    form.querySelector('button.Register').addEventListener('click', () => showSignUpForm());
+    form.querySelector('button.login').addEventListener('click', () => submitLogin(form));
+    form.querySelector('button.register').addEventListener('click', () => showSignUpForm());
 
     ModalHandler.show(form);
 
