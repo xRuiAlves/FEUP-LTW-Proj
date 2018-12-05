@@ -106,7 +106,7 @@
                     return;
                 }
                 
-                $img_upload = uploadImage($img, "story" . $story_id);
+                $img_upload = uploadStoryImage($img, $story_id);
                 if ($img_upload !== "uploaded") {
                     httpInternalError($img_upload);
                     return;
@@ -125,7 +125,7 @@
                 $story_info = array_merge($story_info, $img);
             }
 
-            $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"]));
+            $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
             unset($story_info["user_id"]);
 
             echo(json_encode(array_merge($story_info, $story_extra_info)));
@@ -161,7 +161,7 @@
                 $story_info = array_merge($story_info, $img);
             }
 
-            $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"]));
+            $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
             unset($story_info["user_id"]);
 
             echo(json_encode(array_merge($story_info, $story_extra_info)));
@@ -212,7 +212,7 @@
             $comments = getEntityComments($id);
             foreach ($comments as $index => $comment) {
                 $num_comments = ["num_comments" => getEntityNumComments($comment["votable_entity_id"])];
-                $creator_img = api_getUserImgJSON($comment["user_id"]);
+                $creator_img = api_getUserImgJSON($comment["user_id"], "small");
                 $comments[$index] = array_merge($comment, $num_comments, $creator_img);
             }
             echo(json_encode($comments));
@@ -401,7 +401,7 @@
         }
 
         // Story creator user image
-        $story = array_merge($story, api_getUserImgJSON($story["user_id"]));
+        $story = array_merge($story, api_getUserImgJSON($story["user_id"], "small"));
         unset($story["user_id"]);        
         
         return $story;
