@@ -27,7 +27,7 @@
         } else if ($req === "login") {
             api_logUser($_POST);
         } else if ($req === "updateimage") {
-            api_userUpdateImage($_POST);
+            api_userUpdateImage();
         } else {
             httpNotFound("request not found");
         }
