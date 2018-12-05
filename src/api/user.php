@@ -2,7 +2,6 @@
     include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/authentication.php");
 
 
     function handleUserRequest($request, $method) {
