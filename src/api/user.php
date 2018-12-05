@@ -108,6 +108,7 @@
                 echo json_encode(array_merge($info, $userImgJSON));
 
                 $_SESSION["username"] = $user_username;
+                $_SESSION["user_id"] = $info["user_id"];
 
                 http_response_code(200);
             } else {
@@ -118,6 +119,7 @@
 
     function api_logoutUser() {
         session_unset($_SESSION['username']);
+        session_unset($_SESSION['user_id']);
         session_destroy();
     }
 
@@ -171,25 +173,20 @@
     }
 
     function api_userUpdateBio($data) {
-        if(!verifyRequestParameters($data, ["user_id", "user_bio"])) {
+        if(!verifyRequestParameters($data, ["user_bio"])) {
             return;
         }
-        
-        $user_id = $data["user_id"];
+
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $user_bio = $data["user_bio"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        }
-
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-        } else {
-            updateUserBio($user_id, $user_bio);
-            http_response_code(200);
-        }
+        updateUserBio($user_id, $user_bio);
+        http_response_code(200);
     }
 
     function api_userUpdatePassword($data) {
@@ -214,23 +211,13 @@
         }
     }
 
-    function api_userUpdateImage($data) {
-        if(!verifyRequestParameters($data, ["user_id"])) {
-            return;
-        }
-
-        $user_id = $data["user_id"];
-
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } 
-        
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
+    function api_userUpdateImage() {
+        if(!isset($_SESSION['user_id'])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
+
+        $user_id = $_SESSION['user_id'];
         
         if (isset($_FILES["user_img"])) {
             $img = $_FILES["user_img"];
