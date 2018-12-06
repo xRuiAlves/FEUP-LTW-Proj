@@ -120,6 +120,11 @@
     }
 
     function api_logoutUser($data) {
+        if(!isset($_SESSION["user_id"])) {
+            httpBadRequest("user not logged in");
+            return;
+        }
+
         if(!verifyRequestParameters($data, ["csrf_token"])) {
             return;
         }
