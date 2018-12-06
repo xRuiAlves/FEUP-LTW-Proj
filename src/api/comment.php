@@ -65,28 +65,23 @@
     }
 
     function api_createComment($data) {
-        if(!verifyRequestParameters($data, ["user_id", "parent_entity_id", "comment_content"])) {
+        if(!verifyRequestParameters($data, ["parent_entity_id", "comment_content"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $date = time();
         $parent_entity_id = $data["parent_entity_id"];
         $comment_content = $data["comment_content"];
-
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } 
         
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-        } else {
-            $comment_id = createUserComment($user_id, $date, $parent_entity_id, $comment_content);
-            echo(json_encode(getComment($comment_id)));
-            http_response_code(201);
-        }
+        $comment_id = createUserComment($user_id, $date, $parent_entity_id, $comment_content);
+        echo(json_encode(getComment($comment_id)));
+        http_response_code(201);
     }
 
     function api_getCommentUpVotes($data) {
@@ -139,24 +134,20 @@
     }
 
     function api_userCommentUpvote($data) {
-        if(!verifyRequestParameters($data, ["user_id", "comment_id"])) {
+        if(!verifyRequestParameters($data, ["comment_id"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $comment_id = $data["comment_id"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } else if (!commentExists($comment_id)) {
+        if (!commentExists($comment_id)) {
             httpNotFound("comment with id $comment_id does not exist");
-            return;
-        }
-
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
@@ -170,24 +161,20 @@
     }
 
     function api_userCommentDownvote($data) {
-        if(!verifyRequestParameters($data, ["user_id", "comment_id"])) {
+        if(!verifyRequestParameters($data, ["comment_id"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $comment_id = $data["comment_id"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } else if (!commentExists($comment_id)) {
+        if (!commentExists($comment_id)) {
             httpNotFound("comment with id $comment_id does not exist");
-            return;
-        }
-
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
@@ -201,27 +188,24 @@
     }
 
     function api_userCommentUnvote($data) {
-        if(!verifyRequestParameters($data, ["user_id", "comment_id"])) {
+        if(!verifyRequestParameters($data, ["comment_id"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $comment_id = $data["comment_id"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } else if (!commentExists($comment_id)) {
+        if (!commentExists($comment_id)) {
             httpNotFound("comment with id $comment_id does not exist");
             return;
         } 
         
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-        } else {
-            removeUserEntityVote($user_id, $comment_id);
-            http_response_code(200);
-        }
+        removeUserEntityVote($user_id, $comment_id);
+        http_response_code(200);
     }
 ?>
