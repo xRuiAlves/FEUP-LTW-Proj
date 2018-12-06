@@ -26,7 +26,7 @@
         } else if ($req === "login") {
             api_logUser($_POST);
         } else if ($req === "updateimage") {
-            api_userUpdateImage();
+            api_userUpdateImage($_POST);
         } else {
             httpNotFound("request not found");
         }
@@ -62,7 +62,7 @@
         $data = json_decode(file_get_contents("php://input"), true);
 
         if ($req === "logout") {
-            api_logoutUser();
+            api_logoutUser($data);
         }
     }
 
@@ -119,7 +119,17 @@
         }
     }
 
-    function api_logoutUser() {
+    function api_logoutUser($data) {
+        if(!verifyRequestParameters($data, ["csrf_token"])) {
+            return;
+        }
+
+        $request_csrf_token = $data["csrf_token"];
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
+            return;
+        }
+
         session_unset($_SESSION["username"]);
         session_unset($_SESSION["user_id"]);
         session_unset($_SESSION["csrf_token"]);
@@ -176,17 +186,23 @@
     }
 
     function api_userUpdateBio($data) {
-        if(!verifyRequestParameters($data, ["user_bio"])) {
-            return;
-        }
-
         if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
+        if(!verifyRequestParameters($data, ["csrf_token", "user_bio"])) {
+            return;
+        }
+
         $user_id = $_SESSION["user_id"];
+        $request_csrf_token = $data["csrf_token"];
         $user_bio = $data["user_bio"];
+
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
+            return;
+        }
 
         updateUserBio($user_id, $user_bio);
         http_response_code(200);
@@ -214,13 +230,23 @@
         }
     }
 
-    function api_userUpdateImage() {
+    function api_userUpdateImage($data) {
         if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
+        if(!verifyRequestParameters($data, ["csrf_token"])) {
+            return;
+        }
+
         $user_id = $_SESSION["user_id"];
+        $request_csrf_token = $data["csrf_token"];
+
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
+            return;
+        }
         
         if (isset($_FILES["user_img"])) {
             $img = $_FILES["user_img"];
