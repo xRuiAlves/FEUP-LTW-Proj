@@ -65,12 +65,18 @@
     }
 
     function api_createComment($data) {
-        if(!verifyRequestParameters($data, ["parent_entity_id", "comment_content"])) {
+        if(!isset($_SESSION["user_id"])) {
+            httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        if(!isset($_SESSION["user_id"])) {
-            httpUnauthorizedRequest("invalid permissions");
+        if(!verifyRequestParameters($data, ["parent_entity_id", "comment_content", "csrf_token"])) {
+            return;
+        }
+
+        $request_csrf_token = $data["csrf_token"];
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
             return;
         }
 
@@ -134,12 +140,18 @@
     }
 
     function api_userCommentUpvote($data) {
-        if(!verifyRequestParameters($data, ["comment_id"])) {
+        if(!isset($_SESSION["user_id"])) {
+            httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        if(!isset($_SESSION["user_id"])) {
-            httpUnauthorizedRequest("invalid permissions");
+        if(!verifyRequestParameters($data, ["comment_id", "csrf_token"])) {
+            return;
+        }
+
+        $request_csrf_token = $data["csrf_token"];
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
             return;
         }
 
@@ -161,12 +173,18 @@
     }
 
     function api_userCommentDownvote($data) {
-        if(!verifyRequestParameters($data, ["comment_id"])) {
+        if(!isset($_SESSION["user_id"])) {
+            httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        if(!isset($_SESSION["user_id"])) {
-            httpUnauthorizedRequest("invalid permissions");
+        if(!verifyRequestParameters($data, ["comment_id", "csrf_token"])) {
+            return;
+        }
+
+        $request_csrf_token = $data["csrf_token"];
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
             return;
         }
 
@@ -188,12 +206,18 @@
     }
 
     function api_userCommentUnvote($data) {
-        if(!verifyRequestParameters($data, ["comment_id"])) {
+        if(!isset($_SESSION["user_id"])) {
+            httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        if(!isset($_SESSION["user_id"])) {
-            httpUnauthorizedRequest("invalid permissions");
+        if(!verifyRequestParameters($data, ["comment_id", "csrf_token"])) {
+            return;
+        }
+
+        $request_csrf_token = $data["csrf_token"];
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
             return;
         }
 
