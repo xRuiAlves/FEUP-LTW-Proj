@@ -2,7 +2,7 @@
     include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
-
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/auth.php");
 
     function handleUserRequest($request, $method) {
         if ($method === "POST") {
@@ -104,11 +104,14 @@
             if (verifyUser($user_username, $user_password)) {
                 $info = getUserInfoByUsername($user_username);
                 $userImgJSON = api_getUserImgJSON($info["user_id"], "big");
-                echo json_encode(array_merge($info, $userImgJSON));
+                $csrf_token = generate_csrf_token();
+                $csrf_info = ["csrf_token" => $csrf_token];
 
                 $_SESSION["username"] = $user_username;
                 $_SESSION["user_id"] = $info["user_id"];
-
+                $_SESSION["csrf_token"] = $csrf_token;
+                echo json_encode(array_merge($info, $userImgJSON, $csrf_info));
+                
                 http_response_code(200);
             } else {
                 httpUnauthorizedRequest("invalid password");
@@ -117,8 +120,9 @@
     }
 
     function api_logoutUser() {
-        session_unset($_SESSION['username']);
-        session_unset($_SESSION['user_id']);
+        session_unset($_SESSION["username"]);
+        session_unset($_SESSION["user_id"]);
+        session_unset($_SESSION["csrf_token"]);
         session_destroy();
     }
 
@@ -176,12 +180,12 @@
             return;
         }
 
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         $user_bio = $data["user_bio"];
 
         updateUserBio($user_id, $user_bio);
@@ -211,12 +215,12 @@
     }
 
     function api_userUpdateImage() {
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         
         if (isset($_FILES["user_img"])) {
             $img = $_FILES["user_img"];

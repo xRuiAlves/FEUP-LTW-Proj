@@ -1,6 +1,6 @@
 <?php 
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/db/db_selectors.php');
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/api/http_responses.php');
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
 
     function handleCommentRequest($request, $method) {
         if ($method === "POST") {
@@ -12,7 +12,7 @@
         } else if ($method === "DELETE") {
             handleCommentDeleteRequest($request);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -22,7 +22,7 @@
         if ($req === "create") {
             api_createComment($_POST);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -36,7 +36,7 @@
         } else if ($req === "comments") {
             api_getCommentComments($_GET);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -49,7 +49,7 @@
         } else if ($req === "downvote") {
             api_userCommentDownvote($data);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -60,7 +60,7 @@
         if ($req === "unvote") {
            api_userCommentUnvote($data);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -69,12 +69,12 @@
             return;
         }
 
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         $date = time();
         $parent_entity_id = $data["parent_entity_id"];
         $comment_content = $data["comment_content"];
@@ -138,12 +138,12 @@
             return;
         }
 
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         $comment_id = $data["comment_id"];
 
         if (!commentExists($comment_id)) {
@@ -165,12 +165,12 @@
             return;
         }
 
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         $comment_id = $data["comment_id"];
 
         if (!commentExists($comment_id)) {
@@ -192,12 +192,12 @@
             return;
         }
 
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         $comment_id = $data["comment_id"];
 
         if (!commentExists($comment_id)) {

@@ -1,6 +1,6 @@
 <?php 
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/db/db_selectors.php');
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/api/http_responses.php');
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
 
     function handleStoryRequest($request, $method) {
@@ -13,7 +13,7 @@
         } else if ($method === "DELETE") {
             handleStoryDeleteRequest($request);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -23,7 +23,7 @@
         if ($req === "create") {
             api_createStory($_POST);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -47,7 +47,7 @@
         } else if ($req === "mostupvoteduser") {
             api_getUserMostUpvotedStories($_GET);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -60,7 +60,7 @@
         } else if ($req === "downvote") {
             api_userStoryDownvote($data);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -71,7 +71,7 @@
         if ($req === "unvote") {
             api_userStoryUnvote($data);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -80,12 +80,12 @@
             return;
         }
 
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         $date = time();
         $story_title = $data["story_title"];
         $story_content = $data["story_content"];
@@ -109,9 +109,9 @@
         }
         $story_info = getStory($story_id);
         $story_extra_info = [
-            'upvotes' => 0,
-            'downvotes' => 0,
-            'num_comments' => 0
+            "upvotes" => 0,
+            "downvotes" => 0,
+            "num_comments" => 0
         ];
 
         // Story image (if existant) and creator image
@@ -144,9 +144,9 @@
 
             // Votes / Commetns extra info
             $story_extra_info = [
-                'upvotes' => $upvotes,
-                'downvotes' => $downvotes,
-                'num_comments' => $num_comments
+                "upvotes" => $upvotes,
+                "downvotes" => $downvotes,
+                "num_comments" => $num_comments
             ];
 
             // Story image (if existant) and creator image
@@ -219,12 +219,12 @@
             return;
         }
 
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         $story_id = $data["story_id"];
 
         if (!storyExists($story_id)) {
@@ -246,12 +246,12 @@
             return;
         }
 
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         $story_id = $data["story_id"];
 
         if (!storyExists($story_id)) {
@@ -273,12 +273,12 @@
             return;
         }
 
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION["user_id"];
         $story_id = $data["story_id"];
 
         if (!storyExists($story_id)) {
