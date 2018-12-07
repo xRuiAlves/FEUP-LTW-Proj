@@ -97,14 +97,15 @@ function submitLogOut(resolve, reject){
 function userLoggedIn(data){
     document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
     document.getElementById('login_slider').classList.add('active');
-    g_appState.username = data.user_username;
-    g_appState.userId = data.user_id;
+    g_appState = {...g_appState, ...data};
+    document.querySelector('#login_slider > img').setAttribute('src', data.user_img_small);
 }
 
 function userLoggedOut(){
     document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = '';
     document.getElementById('login_slider').classList.remove('active');
     document.querySelector('#topbar .page-side-menu').classList.remove('active');
-    g_appState.username = undefined;
-    g_appState.userId = undefined;
+    document.querySelector('#login_slider > img').setAttribute('src', '/images/default_profile.png');
+    g_appState.user_username = undefined;
+    g_appState.user_id = undefined;
 }

@@ -71,13 +71,13 @@ export default class StoriesRenderer{
         storyContainer.className = 'card story-container';
         storyContainer.innerHTML = `
             
-            ${story.story_img ? `<img class="banner" src="${story.story_img}"/> ` : ''}
+            ${story.story_img ? `<img class="banner" src="${story.story_img}" width="${story.story_img_width}" height="${story.story_img_height}"/> ` : ''}
             <div class="content">
                 <p class="title">${story.story_title}<p>
                 <p class="text">${story.story_content}<p>
                 <footer class="story-details">
                     <div class="author">
-                        <img class="profile-image" src="${story.user_img}"/>
+                        <img class="profile-image" src="${story.user_img_small}"/>
                         <span class="author-name">${story.user_username}</span>
                     </div>
                     <div class="reactions">
@@ -110,8 +110,8 @@ export default class StoriesRenderer{
     appendCommentsDiv(story, elem){
         fetch('api/story/comments?id=' + story.votable_entity_id)
         .then(res => res.json()).then(comments => {
+            let commentsWrapper = document.createElement('DIV');
             if(comments.length > 0){
-                let commentsWrapper = document.createElement('DIV');
                 commentsWrapper.classList.add('comments');
                 commentsWrapper.innerHTML = 'Comments';
                 for(let comment of comments){
@@ -120,7 +120,7 @@ export default class StoriesRenderer{
                 elem.appendChild(commentsWrapper);
             }
             if(g_appState.username){
-                elem.appendChild(this.generateCommentCreator(story.votable_entity_id));
+                elem.appendChild(this.generateCommentCreator(story.votable_entity_id, commentsWrapper));
             }
         })
         .catch(info => console.error(info));
@@ -146,7 +146,7 @@ export default class StoriesRenderer{
         return commentContainer;
     }
 
-    generateCommentCreator(storyId){
+    generateCommentCreator(storyId, commentsWrapperDiv){
         let elem = document.createElement('DIV');
         elem.classList.add('comment-creator');
         elem.innerHTML = `
@@ -154,21 +154,19 @@ export default class StoriesRenderer{
             <button>Submit!</button>
         `
         elem.querySelector('button').addEventListener('click', () => {
-            //send comment creation request with storyId
-            this.submitComment(storyId, elem.querySelector('textarea').value);
+            this.submitComment(storyId, elem.querySelector('textarea').value, commentsWrapperDiv);
         });
         return elem;
     }
 
-    submitComment(parentId, content){
+    submitComment(parentId, content, commentsWrapperDiv){
         let formdata = new FormData();
         formdata.append('parent_entity_id', parentId);
-        formdata.append('user_id', g_appState.userId);
         formdata.append('comment_content', content);
 
         fetch('api/comment/create', {method:'POST', body: formdata}).then(
-            () => {}
-        )
+            res => {res.status == 201 && res.json()}
+        ).then(data => commentsWrapperDiv.appendChild(this.generateCommentElement(data)));
     }
 
     showFullStory(story){
