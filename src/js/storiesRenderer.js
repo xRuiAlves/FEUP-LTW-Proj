@@ -1,6 +1,6 @@
 export default class StoriesRenderer{
 
-    get STORY_TARGET_WIDTH() { return 650 }
+    get STORY_TARGET_WIDTH() { return 620 }
     
     constructor(){
         this.DOMColumns = {};
@@ -81,12 +81,9 @@ export default class StoriesRenderer{
                         <span class="author-name">${story.user_username}</span>
                     </div>
                     <div class="reactions">
-                        <span class="reaction-amount">${story.num_comments || 0}</span>
-                        <span class="reaction-name"><i class="fas fa-comment"></i></span>
-                        <span class="reaction-amount">${story.upvotes || 0}</span>
-                        <span class="reaction-name"><i class="fas fa-arrow-up"></i></i></span>
-                        <span class="reaction-amount">${story.downvotes || 0}</span>
-                        <span class="reaction-name"><i class="fas fa-arrow-down"></i></span>
+                        <span class="n-replies">${story.num_comments || 0} replies</span>
+                        <span class="n-upvotes">${story.upvotes || 0}<i class="fas fa-arrow-up"></i></span>
+                        <span class="n-downvotes">${story.downvotes || 0}<i class="fas fa-arrow-down"></i></span>
                     </div>
                 </footer>
             </div>`
@@ -111,16 +108,16 @@ export default class StoriesRenderer{
         fetch('api/story/comments?id=' + story.votable_entity_id)
         .then(res => res.json()).then(comments => {
             let commentsWrapper = document.createElement('DIV');
+            commentsWrapper.classList.add('comments');
+            commentsWrapper.innerHTML = 'Comments';
             if(comments.length > 0){
-                commentsWrapper.classList.add('comments');
-                commentsWrapper.innerHTML = 'Comments';
                 for(let comment of comments){
                     commentsWrapper.appendChild(this.generateCommentElement(comment));
                 }
-                elem.appendChild(commentsWrapper);
             }
+            elem.appendChild(commentsWrapper);
             if(g_appState.user_username){
-                elem.appendChild(this.generateCommentCreator(story.votable_entity_id, commentsWrapper));
+                elem.appendChild(this.generateCommentCreator(story.votable_entity_id, elem));
             }
         })
         .catch(info => console.error(info));
@@ -146,7 +143,7 @@ export default class StoriesRenderer{
         return commentContainer;
     }
 
-    generateCommentCreator(storyId, commentsWrapperDiv){
+    generateCommentCreator(storyId, storyDiv){
         let elem = document.createElement('DIV');
         elem.classList.add('comment-creator');
         elem.innerHTML = `
@@ -154,12 +151,12 @@ export default class StoriesRenderer{
             <button>Submit!</button>
         `
         elem.querySelector('button').addEventListener('click', () => {
-            this.submitComment(storyId, elem.querySelector('textarea').value, commentsWrapperDiv);
+            this.submitComment(storyId, elem.querySelector('textarea').value, storyDiv);
         });
         return elem;
     }
 
-    async submitComment(parentId, content, commentsWrapperDiv){
+    async submitComment(parentId, content, storyDiv){
         let formdata = new FormData();
         formdata.append('parent_entity_id', parentId);
         formdata.append('comment_content', content);
@@ -168,7 +165,8 @@ export default class StoriesRenderer{
             res => ({code: res.status == 201, result: res.json()})
         )
         response.result.then(data => {
-            commentsWrapperDiv.appendChild(this.generateCommentElement(data))
+            storyDiv.querySelector('.comments').appendChild(this.generateCommentElement(data));
+            storyDiv.querySelector('.comment-creator textarea').value = '';
         });
     }
 
