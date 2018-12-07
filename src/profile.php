@@ -9,6 +9,7 @@
     <img class="pic">
     <p class="name"></p>
     <p class="bio"></p>
+    <p class="points"></p>
 </div>
 
 <div class="profile-content">

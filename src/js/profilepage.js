@@ -12,6 +12,7 @@ g_appState.addEventListener('load', (data) => {
     document.querySelector('.card.profile-info .pic').setAttribute('src', data.user_img_big);
     document.querySelector('.card.profile-info .name').textContent = data.user_username;
     document.querySelector('.card.profile-info .bio').textContent = data.user_bio;
+    document.querySelector('.card.profile-info .points').textContent = data.points;
 })
 
 generic_story_fetch('latest-stories', 'api/story/recent');

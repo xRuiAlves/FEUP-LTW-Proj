@@ -9,6 +9,7 @@
 
 .profile-info > .name {
     font-weight: bold;
+    font-size: 1.2em;
     color: var(--main-color-dark);
 }
 
