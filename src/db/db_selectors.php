@@ -428,9 +428,7 @@
         ');
         $stmt->execute(array($user_id));
 
-        $result = $stmt->fetch(); 
-        
-        return $result['points'] ? $result['points'] : "0"; 
+        return $stmt->fetch(); 
     }
 
      function createUserStory($user_id, $date, $story_title, $story_content) {
