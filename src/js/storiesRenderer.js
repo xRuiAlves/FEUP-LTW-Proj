@@ -119,7 +119,7 @@ export default class StoriesRenderer{
                 }
                 elem.appendChild(commentsWrapper);
             }
-            if(g_appState.username){
+            if(g_appState.user_username){
                 elem.appendChild(this.generateCommentCreator(story.votable_entity_id, commentsWrapper));
             }
         })
