@@ -130,7 +130,7 @@ export default class StoriesRenderer{
         let commentContainer = document.createElement('DIV');
         commentContainer.classList.add('comment-container');
         commentContainer.innerHTML = `
-            <img src="">
+            <img src="${comment.user_img_small}">
             <div class="comment">
                 <p class="username"></p>
                 <p class="content"></p>
@@ -159,14 +159,17 @@ export default class StoriesRenderer{
         return elem;
     }
 
-    submitComment(parentId, content, commentsWrapperDiv){
+    async submitComment(parentId, content, commentsWrapperDiv){
         let formdata = new FormData();
         formdata.append('parent_entity_id', parentId);
         formdata.append('comment_content', content);
 
-        fetch('api/comment/create', {method:'POST', body: formdata}).then(
-            res => {res.status == 201 && res.json()}
-        ).then(data => commentsWrapperDiv.appendChild(this.generateCommentElement(data)));
+        let response = await fetch('api/comment/create', {method:'POST', body: formdata}).then(
+            res => ({code: res.status == 201, result: res.json()})
+        )
+        response.result.then(data => {
+            commentsWrapperDiv.appendChild(this.generateCommentElement(data))
+        });
     }
 
     showFullStory(story){
