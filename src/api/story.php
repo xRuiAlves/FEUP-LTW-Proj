@@ -76,61 +76,55 @@
     }
 
     function api_createStory($data) {
-        if(!verifyRequestParameters($data, ["user_id", "story_title", "story_content"])) {
+        if(!verifyRequestParameters($data, ["story_title", "story_content"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $date = time();
         $story_title = $data["story_title"];
         $story_content = $data["story_content"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } 
+        $story_id = createUserStory($user_id, $date, $story_title, $story_content);
 
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-            return;
-        } else {
-            $story_id = createUserStory($user_id, $date, $story_title, $story_content);
+        if (isset($_FILES["story_img"])) {
+            $img = $_FILES["story_img"];
 
-            if (isset($_FILES["story_img"])) {
-                $img = $_FILES["story_img"];
-
-                $img_validation = validateImage($img);
-                if ($img_validation !== "valid") {
-                    httpBadRequest($img_validation);
-                    return;
-                }
-                
-                $img_upload = uploadStoryImage($img, $story_id);
-                if ($img_upload !== "uploaded") {
-                    httpInternalError($img_upload);
-                    return;
-                }
+            $img_validation = validateImage($img);
+            if ($img_validation !== "valid") {
+                httpBadRequest($img_validation);
+                return;
             }
-            $story_info = getStory($story_id);
-            $story_extra_info = [
-                'upvotes' => 0,
-                'downvotes' => 0,
-                'num_comments' => 0
-            ];
-
-            // Story image (if existant) and creator image
-            $img = api_getStoryImgJSON($story_id);
-            if ($img !== null) {
-                $story_info = array_merge($story_info, $img);
+            
+            $img_upload = uploadStoryImage($img, $story_id);
+            if ($img_upload !== "uploaded") {
+                httpInternalError($img_upload);
+                return;
             }
-
-            $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
-            unset($story_info["user_id"]);
-
-            echo(json_encode(array_merge($story_info, $story_extra_info)));
-            http_response_code(201);
         }
+        $story_info = getStory($story_id);
+        $story_extra_info = [
+            'upvotes' => 0,
+            'downvotes' => 0,
+            'num_comments' => 0
+        ];
+
+        // Story image (if existant) and creator image
+        $img = api_getStoryImgJSON($story_id);
+        if ($img !== null) {
+            $story_info = array_merge($story_info, $img);
+        }
+
+        $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
+        unset($story_info["user_id"]);
+
+        echo(json_encode(array_merge($story_info, $story_extra_info)));
+        http_response_code(201);
     }
 
     function api_getStoryInfo($data) {
@@ -221,26 +215,22 @@
     }
 
     function api_userStoryUpvote($data) {
-        if(!verifyRequestParameters($data, ["user_id", "story_id"])) {
+        if(!verifyRequestParameters($data, ["story_id"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
-        $story_id = $data["story_id"];
-
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } else if (!storyExists($story_id)) {
-            httpNotFound("story with id $story_id does not exist");
-            return;
-        }  
-
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
+        if(!isset($_SESSION['user_id'])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
-        } 
+        }
+
+        $user_id = $_SESSION['user_id'];
+        $story_id = $data["story_id"];
+
+        if (!storyExists($story_id)) {
+            httpNotFound("story with id $story_id does not exist");
+            return;
+        }
 
         if(voteExists($user_id, $story_id)) {
             updateUserEntityVote($user_id, $story_id, 1);
@@ -252,27 +242,23 @@
     }
 
     function api_userStoryDownvote($data) {
-        if(!verifyRequestParameters($data, ["user_id", "story_id"])) {
+        if(!verifyRequestParameters($data, ["story_id"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $story_id = $data["story_id"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } else if (!storyExists($story_id)) {
+        if (!storyExists($story_id)) {
             httpNotFound("story with id $story_id does not exist");
             return;
         } 
 
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-            return;
-        } 
-        
         if(voteExists($user_id, $story_id)) {
             updateUserEntityVote($user_id, $story_id, -1);
             http_response_code(200);
@@ -283,28 +269,25 @@
     }
 
     function api_userStoryUnvote($data) {
-        if(!verifyRequestParameters($data, ["user_id", "story_id"])) {
+        if(!verifyRequestParameters($data, ["story_id"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $story_id = $data["story_id"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } else if (!storyExists($story_id)) {
+        if (!storyExists($story_id)) {
             httpNotFound("story with id $story_id does not exist");
             return;
         } 
 
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-        } else {
-            removeUserEntityVote($user_id, $story_id);
-            http_response_code(200);
-        }
+        removeUserEntityVote($user_id, $story_id);
+        http_response_code(200);
     }
 
     function api_getRecentStories($data) {
