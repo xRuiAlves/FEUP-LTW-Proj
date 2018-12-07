@@ -5,7 +5,7 @@
 
     $sideMenuEntries = [
         (object) ['text' => 'Add new story', 'icon' => 'fa-plus', 'onclick' => '#'],
-        (object) ['text' => 'Profile', 'icon' => 'fa-user', 'onclick' => '#'],
+        (object) ['text' => 'Profile', 'icon' => 'fa-user', 'onclick' => 'openUserProfile()'],
         (object) ['text' => 'Settings', 'icon' => 'fa-cog', 'onclick' => '#'],
         (object) ['text' => 'Log out', 'icon' => 'fa-sign-out-alt', 'onclick' => 'showLogOutModal()']
     ]
@@ -17,9 +17,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Maven+Pro" rel="stylesheet">
-    <!--link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"-->
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/appstate.js" ></script>
     <script src="js/navbar.js" defer></script>
     <script src="js/modal.js" defer></script>
     <script src="js/login.js" defer></script>
@@ -30,7 +31,7 @@
 <body>
     <div id="modal-container"></div>
     <nav id="topbar">
-        <div class="logo">
+        <div class="logo" onclick="window.location.href='/'">
             <img src="images/logo_simple.png" />
             <h1><?=$_env_website_name?></h1>
         </div>
@@ -45,7 +46,7 @@
                     <div class="left"><?=$_SESSION['username']?></div>
                     <div class="right"><?=$_env_login?></div>
                 </div>
-                <img src="<?=$_env_default_profile_img ?>"/>
+                <img src="/images/default_profile.png"/>
             </div>
             <div id="side-menu-hamburguer">
                 <div class="side-menu-hamburguer-bar"></div>

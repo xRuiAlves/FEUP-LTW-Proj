@@ -63,7 +63,7 @@ body > footer{
     text-align: center;
     position: sticky;
     top: Calc(100vh - var(--top-bar-height));
-    color: var(--main-color-light);
+    color: var(--color-grey);
     padding: 2em;
     z-index: -1;
 }

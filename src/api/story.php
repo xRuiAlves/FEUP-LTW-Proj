@@ -76,46 +76,55 @@
     }
 
     function api_createStory($data) {
-        if(!verifyRequestParameters($data, ["user_id", "date", "story_title", "story_content"])) {
+        if(!verifyRequestParameters($data, ["story_title", "story_content"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
-        $date = $data["date"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
+        $date = time();
         $story_title = $data["story_title"];
         $story_content = $data["story_content"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } 
+        $story_id = createUserStory($user_id, $date, $story_title, $story_content);
 
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-            return;
-        } else {
-            $story_id = createUserStory($user_id, $date, $story_title, $story_content);
+        if (isset($_FILES["story_img"])) {
+            $img = $_FILES["story_img"];
 
-            if (isset($_FILES["story_img"])) {
-                $img = $_FILES["story_img"];
-
-                $img_validation = validateImage($img);
-                if ($img_validation !== "valid") {
-                    httpBadRequest($img_validation);
-                    return;
-                }
-                
-                $img_upload = uploadImage($img, "story" . $story_id);
-                if ($img_upload !== "uploaded") {
-                    httpInternalError($img_upload);
-                    return;
-                }
+            $img_validation = validateImage($img);
+            if ($img_validation !== "valid") {
+                httpBadRequest($img_validation);
+                return;
             }
-
-            echo(json_encode(getStory($story_id)));
-            http_response_code(201);
+            
+            $img_upload = uploadStoryImage($img, $story_id);
+            if ($img_upload !== "uploaded") {
+                httpInternalError($img_upload);
+                return;
+            }
         }
+        $story_info = getStory($story_id);
+        $story_extra_info = [
+            'upvotes' => 0,
+            'downvotes' => 0,
+            'num_comments' => 0
+        ];
+
+        // Story image (if existant) and creator image
+        $img = api_getStoryImgJSON($story_id);
+        if ($img !== null) {
+            $story_info = array_merge($story_info, $img);
+        }
+
+        $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
+        unset($story_info["user_id"]);
+
+        echo(json_encode(array_merge($story_info, $story_extra_info)));
+        http_response_code(201);
     }
 
     function api_getStoryInfo($data) {
@@ -130,12 +139,26 @@
         } else {
             $upvotes = getEntityNumUpVotes($id);
             $downvotes = getEntityNumDownVotes($id);
+            $num_comments = getEntityNumComments($id);
             $story_info = getStory($id);
-            $story_votes = [
+
+            // Votes / Commetns extra info
+            $story_extra_info = [
                 'upvotes' => $upvotes,
-                'downvotes' => $downvotes
+                'downvotes' => $downvotes,
+                'num_comments' => $num_comments
             ];
-            echo(json_encode(array_merge($story_info, $story_votes)));
+
+            // Story image (if existant) and creator image
+            $img = api_getStoryImgJSON($id);
+            if ($img !== null) {
+                $story_info = array_merge($story_info, $img);
+            }
+
+            $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
+            unset($story_info["user_id"]);
+
+            echo(json_encode(array_merge($story_info, $story_extra_info)));
             http_response_code(200);
         }
     }
@@ -180,32 +203,34 @@
         if(!storyExists($id)) {
             httpNotFound("story with id $id does not exist");
         } else {
+            $comments = getEntityComments($id);
+            foreach ($comments as $index => $comment) {
+                $num_comments = ["num_comments" => getEntityNumComments($comment["votable_entity_id"])];
+                $creator_img = api_getUserImgJSON($comment["user_id"], "small");
+                $comments[$index] = array_merge($comment, $num_comments, $creator_img);
+            }
+            echo(json_encode($comments));
             http_response_code(200);
-            echo(json_encode(getEntityComments($id)));
         }
     }
 
     function api_userStoryUpvote($data) {
-        if(!verifyRequestParameters($data, ["user_id", "story_id"])) {
+        if(!verifyRequestParameters($data, ["story_id"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
-        $story_id = $data["story_id"];
-
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } else if (!storyExists($story_id)) {
-            httpNotFound("story with id $story_id does not exist");
-            return;
-        }  
-
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
+        if(!isset($_SESSION['user_id'])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
-        } 
+        }
+
+        $user_id = $_SESSION['user_id'];
+        $story_id = $data["story_id"];
+
+        if (!storyExists($story_id)) {
+            httpNotFound("story with id $story_id does not exist");
+            return;
+        }
 
         if(voteExists($user_id, $story_id)) {
             updateUserEntityVote($user_id, $story_id, 1);
@@ -217,27 +242,23 @@
     }
 
     function api_userStoryDownvote($data) {
-        if(!verifyRequestParameters($data, ["user_id", "story_id"])) {
+        if(!verifyRequestParameters($data, ["story_id"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $story_id = $data["story_id"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } else if (!storyExists($story_id)) {
+        if (!storyExists($story_id)) {
             httpNotFound("story with id $story_id does not exist");
             return;
         } 
 
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-            return;
-        } 
-        
         if(voteExists($user_id, $story_id)) {
             updateUserEntityVote($user_id, $story_id, -1);
             http_response_code(200);
@@ -248,28 +269,25 @@
     }
 
     function api_userStoryUnvote($data) {
-        if(!verifyRequestParameters($data, ["user_id", "story_id"])) {
+        if(!verifyRequestParameters($data, ["story_id"])) {
             return;
         }
 
-        $user_id = $data["user_id"];
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $story_id = $data["story_id"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } else if (!storyExists($story_id)) {
+        if (!storyExists($story_id)) {
             httpNotFound("story with id $story_id does not exist");
             return;
         } 
 
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-        } else {
-            removeUserEntityVote($user_id, $story_id);
-            http_response_code(200);
-        }
+        removeUserEntityVote($user_id, $story_id);
+        http_response_code(200);
     }
 
     function api_getRecentStories($data) {
@@ -280,7 +298,13 @@
         $offset = $data["offset"];
         $num_stories = $data["num_stories"];
 
-        echo(json_encode(getRecentStories($offset, $num_stories)));
+        $stories = getRecentStories($offset, $num_stories);
+        foreach ($stories as $index => $story) {
+            $stories[$index] = api_addStoryExtraInfo($story);
+            $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);
+        }
+        
+        echo(json_encode($stories));
         http_response_code(200);
     }
 
@@ -296,7 +320,13 @@
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
         } else {
-            echo(json_encode(getUserRecentStories($user_id, $offset, $num_stories)));
+            $stories = getUserRecentStories($user_id, $offset, $num_stories);
+            foreach ($stories as $index => $story) {
+                $stories[$index] = api_addStoryExtraInfo($story);
+                $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);
+            }
+
+            echo(json_encode($stories));
             http_response_code(200);
         }
     }
@@ -309,7 +339,13 @@
         $offset = $data["offset"];
         $num_stories = $data["num_stories"];
 
-        echo(json_encode(getMostUpvotedStories($offset, $num_stories)));
+        $stories = getMostUpvotedStories($offset, $num_stories);
+        foreach ($stories as $index => $story) {
+            $stories[$index] = api_addStoryExtraInfo($story);
+            $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);
+        }
+
+        echo(json_encode($stories));
         http_response_code(200);
     }
 
@@ -325,8 +361,42 @@
         if (!userExists($user_id)) {
             httpNotFound("user with id $user_id does not exist");
         } else {
-            echo(json_encode(getUserMostUpvotedStories($user_id, $offset, $num_stories)));
+            $stories = getUserMostUpvotedStories($user_id, $offset, $num_stories);
+            foreach ($stories as $index => $story) {
+                $stories[$index] = api_addStoryExtraInfo($story);
+                $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);
+            }
+
+            echo(json_encode($stories));
             http_response_code(200);
         }
+    }
+
+    function api_addStoryExtraInfo($story) {
+        // Number of story comments
+        $num_comments = ["num_comments" => getEntityNumComments($story["votable_entity_id"])];
+        $story = array_merge($story, $num_comments);
+        
+        // Story image
+        $img = api_getStoryImgJSON($story["votable_entity_id"]);
+        if ($img !== null) {
+            $story = array_merge($story, $img);
+        }
+
+        // Story creator user image
+        $story = array_merge($story, api_getUserImgJSON($story["user_id"], "small"));
+        unset($story["user_id"]);        
+        
+        return $story;
+    }
+
+    function api_getStoryPreview($story_content) {
+        $story_content_max_size = 200;
+
+        if (strlen($story_content) > $story_content_max_size) {
+            $story_content = substr($story_content, 0, $story_content_max_size) . "...";
+        }
+
+        return $story_content;
     }
 ?>

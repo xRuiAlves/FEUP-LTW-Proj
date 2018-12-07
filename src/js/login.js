@@ -1,33 +1,32 @@
-function showLoginForm(){
-    return new Promise((resolve, reject) => {   
-        let form = document.createElement('DIV');
-        form.classList.add('modal-box');
-        form.innerHTML = 
-        `
-        <h1>Login</h1> 
-        <input type="text" placeholder="Username"/>
-        <input type="password" placeholder="Password"/>
-        <button>Login</button>
-        <button class="Register">Register</button>
-        <div class="notification warning"></div>`;
-        
-        let passwordDOM = form.querySelector('input[type="password"]');
-        let usernameDOM = form.querySelector('input[type="text"]');
+function showLoginForm(){  
+    let form = document.createElement('DIV');
+    form.classList.add('modal-box');
+    form.innerHTML = 
+    `
+    <h1>Login</h1> 
+    <input type="text" placeholder="Username"/>
+    <input type="password" placeholder="Password"/>
+    <button class="login">Login</button>
+    <button class="register">Register</button>
+    <div class="notification warning"></div>`;
+    
+    let passwordDOM = form.querySelector('input[type="password"]');
+    let usernameDOM = form.querySelector('input[type="text"]');
 
-        passwordDOM.addEventListener('keydown', (e) => {
-            if (e.keyCode === 13) submitLogin(form, resolve);
-        });
-        
-        form.querySelector('button').addEventListener('click', () => submitLogin(form, resolve));
-        form.querySelector('button.Register').addEventListener('click', () => showSignUpForm());
-
-        ModalHandler.show(form);
-
-        usernameDOM.focus();
+    passwordDOM.addEventListener('keydown', (e) => {
+        if (e.keyCode === 13) submitLogin(form);
     });
+    
+    form.querySelector('button.login').addEventListener('click', () => submitLogin(form));
+    form.querySelector('button.register').addEventListener('click', () => showSignUpForm());
+
+    ModalHandler.show(form);
+
+    usernameDOM.focus();
 }
 
-function submitLogin(form, resolve){
+async function submitLogin(form){
+
     let usernameDOM = form.querySelector('input[type="text"]');
     let passwordDOM = form.querySelector('input[type="password"]');
 
@@ -35,25 +34,23 @@ function submitLogin(form, resolve){
     formData.append('user_username', usernameDOM.value);
     formData.append('user_password', passwordDOM.value);
     
-    fetch('api/user/login', 
-            {method: "POST",
-            body: formData})
+    let response = await fetch('api/user/login', {method: "POST", body: formData})
     .then(res => {
-        if(res.status === 200){
-            ModalHandler.hide();
-            return res.json();
-        }else{
-            form.querySelector('.notification').innerText = 'Could not login. Check your credentials and try again';
-        }
-    })
-    .then((data) => {
-        console.log(data)
-        document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
-        resolve();
+        return {status: res.status, result: res.json()};
     })
     .catch((res) => {
         form.querySelector('.notification').innerText = 'Could not login: ' + res.statusText;
-    })    
+    })
+    
+    response.result.then((data) => {
+        if(response.status == 200){
+            ModalHandler.hide();
+            userLoggedIn(data);
+        }else{
+            form.querySelector('.notification').innerText = 'Could not login: ' + data.error;
+        }
+    })
+        
 }
 
 function showLogOutModal(){
@@ -87,15 +84,28 @@ function submitLogOut(resolve, reject){
     fetch('api/user/logout', 
             {method: "DELETE"})
     .then(res => {
+        ModalHandler.hide();
         if(res.status === 200){
-            ModalHandler.hide();
-            document.getElementById('login_slider').classList.remove('active');
-            document.querySelector('#topbar .page-side-menu').classList.remove('active');
-        }else{
-            ModalHandler.hide();
+            userLoggedOut();
         }
     })
     .catch(() => {
         ModalHandler.hide();
     })
+}
+
+function userLoggedIn(data){
+    document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
+    document.getElementById('login_slider').classList.add('active');
+    g_appState = {...g_appState, ...data};
+    document.querySelector('#login_slider > img').setAttribute('src', data.user_img_small);
+}
+
+function userLoggedOut(){
+    document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = '';
+    document.getElementById('login_slider').classList.remove('active');
+    document.querySelector('#topbar .page-side-menu').classList.remove('active');
+    document.querySelector('#login_slider > img').setAttribute('src', '/images/default_profile.png');
+    g_appState.user_username = undefined;
+    g_appState.user_id = undefined;
 }

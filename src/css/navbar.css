@@ -38,6 +38,7 @@
 #topbar .logo{
     display: flex;
     flex-direction: row;
+    cursor: pointer;
 }
 
 #topbar .logo, #topbar .logo img{
@@ -100,8 +101,10 @@
     display: inline-block;
     transform: translate(Calc(-50% - var(--slider-width)), 0);
     transition: transform var(--slider-animation-duration) ease-in-out;
-    width: var(--slider-image-size);
-    height: var(--slider-image-size);
+    min-width: var(--slider-image-size);
+    min-height: var(--slider-image-size);
+    max-width: var(--slider-image-size);
+    max-height: var(--slider-image-size);
     border-radius: 100%;
     z-index: 2;
 }
@@ -120,7 +123,7 @@
     position: fixed;
     background-color: white;
     color: var(--main-color-dark);
-    box-shadow: 0 0 var(--side-menu-shadow-size) var(--main-color-light);
+    box-shadow: 0 0 var(--side-menu-shadow-size) var(--color-grey);
     border-radius: 0em 0 0.5em 0.5em;
     list-style-type: none;
     transform: translate(Calc(100% + var(--side-menu-shadow-size)*2), 0%);

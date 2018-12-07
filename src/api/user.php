@@ -2,7 +2,6 @@
     include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/authentication.php");
 
 
     function handleUserRequest($request, $method) {
@@ -27,12 +26,12 @@
         } else if ($req === "login") {
             api_logUser($_POST);
         } else if ($req === "updateimage") {
-            api_userUpdateImage($_POST);
+            api_userUpdateImage();
         } else {
             httpNotFound("request not found");
         }
-    }
 
+    }
     function handleUserGetRequest($request) {
         $req = array_shift($request);
 
@@ -68,17 +67,30 @@
     }
 
     function api_getUserInfo($data) {
-        if(!verifyRequestParameters($data, ["id"])) {
-            return;
-        }
-
-        $id = $data["id"];
-
-        if (!userExists($id)) {
-            httpNotFound("user with id $id does not exist");
-        } else {
+        if (isset($data["id"])) {       // Data by ID
+            $id = $data["id"];
+            if (!userExists($id)) {
+                httpNotFound("user with id $id does not exist");
+            } else {
+                echo json_encode(array_merge(getUserInfo($id), api_getUserImgJSON($id, "big")));
+                http_response_code(200);
+            }
+        } else if (isset($data["user_username"])) {       // Data by Username
+            $user_username = $data["user_username"];
+            if (!usernameExists($user_username)){
+                httpNotFound("user with username $user_username does not exist");
+            } else {
+                $info = getUserInfoByUsername($user_username);
+                $userImgJSON = api_getUserImgJSON($info["user_id"], "big");
+                echo json_encode(array_merge($info, $userImgJSON));
+                http_response_code(200);
+            }
+        } else if (isset($_SESSION['user_id'])) {       // Data by Session
+            $id = $_SESSION['user_id'];
+            echo json_encode(array_merge(getUserInfo($id), api_getUserImgJSON($id, "big"), api_getUserImgJSON($id, "small")));
             http_response_code(200);
-            echo json_encode(getUserInfo($id));
+        } else {
+            httpBadRequest("'id' or 'user_username' request parameter is missing and user is not logged in");
         }
     }
 
@@ -94,9 +106,12 @@
             httpBadRequest("user with username $user_username does not exist");
         } else {
             if (verifyUser($user_username, $user_password)) {
-                echo json_encode(getUserInfoByUsername($user_username));
+                $info = getUserInfoByUsername($user_username);
+                $userImgJSON = api_getUserImgJSON($info["user_id"], "big");
+                echo json_encode(array_merge($info, $userImgJSON, api_getUserImgJSON($info["user_id"], "big"), api_getUserImgJSON($info["user_id"], "small")));
 
                 $_SESSION["username"] = $user_username;
+                $_SESSION["user_id"] = $info["user_id"];
 
                 http_response_code(200);
             } else {
@@ -107,6 +122,7 @@
 
     function api_logoutUser() {
         session_unset($_SESSION['username']);
+        session_unset($_SESSION['user_id']);
         session_destroy();
     }
 
@@ -152,37 +168,28 @@
 
             if (!api_checkInvalidUsername($user_username) && !api_checkInvalidRealname($user_realname)) {
                 $user_id = createUser($user_username, $user_realname, $user_password, $user_bio);
-                $img_upload = uploadImage($img, "user" . $user_id);
-                if ($img_upload !== "uploaded") {
-                    httpInternalError($img_upload);
-                    return;
-                }
-                echo(json_encode(getUserInfo($user_id)));
+                $img_upload = uploadUserImage($img, $user_id);
+                echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id, "big"))));
                 http_response_code(201);
             }
         }
     }
 
     function api_userUpdateBio($data) {
-        if(!verifyRequestParameters($data, ["user_id", "user_bio"])) {
+        if(!verifyRequestParameters($data, ["user_bio"])) {
             return;
         }
-        
-        $user_id = $data["user_id"];
+
+        if(!isset($_SESSION['user_id'])) {
+            httpUnauthorizedRequest("invalid permissions");
+            return;
+        }
+
+        $user_id = $_SESSION['user_id'];
         $user_bio = $data["user_bio"];
 
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        }
-
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
-            httpUnauthorizedRequest("invalid permissions");
-        } else {
-            updateUserBio($user_id, $user_bio);
-            http_response_code(200);
-        }
+        updateUserBio($user_id, $user_bio);
+        http_response_code(200);
     }
 
     function api_userUpdatePassword($data) {
@@ -207,23 +214,13 @@
         }
     }
 
-    function api_userUpdateImage($data) {
-        if(!verifyRequestParameters($data, ["user_id"])) {
-            return;
-        }
-
-        $user_id = $data["user_id"];
-
-        if (!userExists($user_id)) {
-            httpNotFound("user with id $user_id does not exist");
-            return;
-        } 
-        
-        $user_username = getUserUsername($user_id);
-        if(!verifyAuthentication($user_username)) {
+    function api_userUpdateImage() {
+        if(!isset($_SESSION['user_id'])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
+
+        $user_id = $_SESSION['user_id'];
         
         if (isset($_FILES["user_img"])) {
             $img = $_FILES["user_img"];
@@ -233,12 +230,8 @@
                 return;
             }
 
-            $img_upload = uploadImage($img, "user" . $user_id);
-            if ($img_upload !== "uploaded") {
-                httpInternalError($img_upload);
-            } else {
-                http_response_code(200);
-            }
+            $img_upload = uploadUserImage($img, $user_id);
+            http_response_code(200);
         } else {
             httpBadRequest("image missing");
         }

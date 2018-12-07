@@ -21,7 +21,7 @@
 
     function sendJsonErrorMessage($message) {
         echo(json_encode(array(
-            'error:' => $message
+            'error' => $message
         )));
     }
 
