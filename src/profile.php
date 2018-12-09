@@ -9,7 +9,8 @@
     <img class="pic">
     <p class="name"></p>
     <p class="bio"></p>
-    <p class="points"></p>
+    <span class="pointsTitle" title="Sum of the votes in this user's posts">User Points: </span>
+    <span class="points"></span>
 </div>
 
 <div class="profile-content">
