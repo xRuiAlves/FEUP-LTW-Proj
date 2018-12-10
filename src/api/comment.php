@@ -86,7 +86,13 @@
         $comment_content = $data["comment_content"];
         
         $comment_id = createUserComment($user_id, $date, $parent_entity_id, $comment_content);
-        echo(json_encode(getComment($comment_id)));
+        $comment_extra_info = [
+            "upvotes" => 0,
+            "downvotes" => 0,
+            "num_comments" => 0
+        ];
+
+        echo(json_encode(array_merge(getComment($comment_id), $comment_extra_info, api_getUserImgJSON($user_id, "small"))));
         http_response_code(201);
     }
 
