@@ -1,6 +1,6 @@
 <?php 
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/db/db_selectors.php');
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/api/http_responses.php');
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
+    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
     include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
 
     function handleStoryRequest($request, $method) {
@@ -13,7 +13,7 @@
         } else if ($method === "DELETE") {
             handleStoryDeleteRequest($request);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -23,7 +23,7 @@
         if ($req === "create") {
             api_createStory($_POST);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -47,7 +47,7 @@
         } else if ($req === "mostupvoteduser") {
             api_getUserMostUpvotedStories($_GET);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -60,7 +60,7 @@
         } else if ($req === "downvote") {
             api_userStoryDownvote($data);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
@@ -71,21 +71,27 @@
         if ($req === "unvote") {
             api_userStoryUnvote($data);
         } else {
-            httpNotFound('request not found');
+            httpNotFound("request not found");
         }
     }
 
     function api_createStory($data) {
-        if(!verifyRequestParameters($data, ["story_title", "story_content"])) {
-            return;
-        }
-
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        if(!verifyRequestParameters($data, ["story_title", "story_content", "csrf_token"])) {
+            return;
+        }
+
+        $request_csrf_token = $data["csrf_token"];
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
+            return;
+        }
+
+        $user_id = $_SESSION["user_id"];
         $date = time();
         $story_title = $data["story_title"];
         $story_content = $data["story_content"];
@@ -111,6 +117,8 @@
         $story_extra_info = [
             'upvotes' => 0,
             'downvotes' => 0,
+            "hasupvoted" => false,
+            "hasdownvoted" => false,
             'num_comments' => 0
         ];
 
@@ -144,9 +152,9 @@
 
             // Votes / Commetns extra info
             $story_extra_info = [
-                'upvotes' => $upvotes,
-                'downvotes' => $downvotes,
-                'num_comments' => $num_comments
+                "upvotes" => $upvotes,
+                "downvotes" => $downvotes,
+                "num_comments" => $num_comments
             ];
 
             // Story image (if existant) and creator image
@@ -157,6 +165,16 @@
 
             $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
             unset($story_info["user_id"]);
+
+            $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+            if ($logged_user_id) {
+                $vote_value = getUserEntityVote($logged_user_id, $story_info["votable_entity_id"]);
+
+                $story_info = array_merge($story_info, [
+                    "hasupvoted" => $vote_value === "1",
+                    "hasdownvoted" => $vote_value === "-1",
+                ]);
+            }  
 
             echo(json_encode(array_merge($story_info, $story_extra_info)));
             http_response_code(200);
@@ -199,6 +217,7 @@
         }
 
         $id = $data["id"];
+        $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
         if(!storyExists($id)) {
             httpNotFound("story with id $id does not exist");
@@ -208,6 +227,13 @@
                 $num_comments = ["num_comments" => getEntityNumComments($comment["votable_entity_id"])];
                 $creator_img = api_getUserImgJSON($comment["user_id"], "small");
                 $comments[$index] = array_merge($comment, $num_comments, $creator_img);
+                if ($logged_user_id) {
+                    $vote_value = getUserEntityVote($logged_user_id, $comment["votable_entity_id"]);
+                    $comments[$index] = array_merge($comments[$index], [
+                        "hasupvoted" => $vote_value === "1",
+                        "hasdownvoted" => $vote_value === "-1",
+                    ]);
+                }  
             }
             echo(json_encode($comments));
             http_response_code(200);
@@ -215,16 +241,22 @@
     }
 
     function api_userStoryUpvote($data) {
-        if(!verifyRequestParameters($data, ["story_id"])) {
-            return;
-        }
-
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        if(!verifyRequestParameters($data, ["story_id", "csrf_token"])) {
+            return;
+        }
+
+        $request_csrf_token = $data["csrf_token"];
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
+            return;
+        }
+
+        $user_id = $_SESSION["user_id"];
         $story_id = $data["story_id"];
 
         if (!storyExists($story_id)) {
@@ -242,16 +274,22 @@
     }
 
     function api_userStoryDownvote($data) {
-        if(!verifyRequestParameters($data, ["story_id"])) {
-            return;
-        }
-
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        if(!verifyRequestParameters($data, ["story_id", "csrf_token"])) {
+            return;
+        }
+
+        $request_csrf_token = $data["csrf_token"];
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
+            return;
+        }
+
+        $user_id = $_SESSION["user_id"];
         $story_id = $data["story_id"];
 
         if (!storyExists($story_id)) {
@@ -269,16 +307,22 @@
     }
 
     function api_userStoryUnvote($data) {
-        if(!verifyRequestParameters($data, ["story_id"])) {
-            return;
-        }
-
-        if(!isset($_SESSION['user_id'])) {
+        if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");
             return;
         }
 
-        $user_id = $_SESSION['user_id'];
+        if(!verifyRequestParameters($data, ["story_id", "csrf_token"])) {
+            return;
+        }
+
+        $request_csrf_token = $data["csrf_token"];
+        if ($request_csrf_token !== $_SESSION["csrf_token"]) {
+            httpUnauthorizedRequest("invalid csrf token");
+            return;
+        }
+
+        $user_id = $_SESSION["user_id"];
         $story_id = $data["story_id"];
 
         if (!storyExists($story_id)) {
@@ -301,7 +345,7 @@
         $stories = getRecentStories($offset, $num_stories);
         foreach ($stories as $index => $story) {
             $stories[$index] = api_addStoryExtraInfo($story);
-            $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);
+            $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);            
         }
         
         echo(json_encode($stories));
@@ -385,7 +429,17 @@
 
         // Story creator user image
         $story = array_merge($story, api_getUserImgJSON($story["user_id"], "small"));
-        unset($story["user_id"]);        
+        unset($story["user_id"]);       
+        
+        $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+        if ($logged_user_id) {
+            $vote_value = getUserEntityVote($logged_user_id, $story["votable_entity_id"]);
+
+            $story = array_merge($story, [
+                "hasupvoted" => $vote_value === "1",
+                "hasdownvoted" => $vote_value === "-1",
+            ]);
+        }  
         
         return $story;
     }

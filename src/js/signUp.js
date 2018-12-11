@@ -5,17 +5,19 @@ function showSignUpForm(){
         form.innerHTML = 
         `
         <h1>Sign Up</h1>
-        <input type="text" placeholder="Name" class="Name"/> 
-        <input type="text" placeholder="Username" class="Username"/>
-        <input type="text" placeholder="Short Bio" class="Bio"/>
-        <input type="password" placeholder="Password"/>
-        <input type="file" name="pic" accept="image/*"/>
-        <button>Create Account</button>
+        <input type="text" placeholder="Name" class="name"/> 
+        <input type="text" placeholder="Username" class="username"/>
+        <input type="text" placeholder="Short Bio" class="bio"/>
+        <input type="password" placeholder="Password" class="password"/>
+        <input type="password" placeholder="Confirm Password" class="confirmPassword"/>
+        <input type="file" name="file" id="file" accept="image/*" class="profilePicFile"/>
+        <label for="file"> Choose a picture</label>
+        <button class="submitSignUp">Create Account</button>
         <div class="notification warning"></div>`;
         
         let nameDOM = form.querySelector('input[type="text"].Name');
         
-        form.querySelector('button').addEventListener('click', () => submitSignUp(form, resolve));
+        form.querySelector('button.submitSignUp').addEventListener('click', () => submitSignUp(form, resolve));
 
         ModalHandler.show(form);
 
@@ -29,6 +31,11 @@ async function submitSignUp(form, resolve){
     let passwordDOM = form.querySelector('input[type="password"]');
     let bioDOM = form.querySelector('input[type="text"].Bio');
     let profilePicDOM = form.querySelector('input[type="file"]');
+
+    if (!(passwordDOM.value == confirmPasswordDOM.value)) {
+        form.querySelector('.notification').innerText = 'Your passwords do not match';
+        return;
+    }
 
     let formData = new FormData();
     formData.append('user_username', usernameDOM.value);

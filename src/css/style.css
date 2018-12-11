@@ -104,3 +104,29 @@ input[type="submit"]:hover, button:hover{
     margin: 2em 0em;
     padding: 0em 1em;
 }
+
+.profilePicFile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.profilePicFile + label {
+    color: var(--main-color-dark);
+    transition: width 0.3s ease;
+    background-color: white;
+    font-size: 1.1em;
+    margin: 0em;
+    padding-top: 1em;
+    height: 2em;
+    display: block;
+    cursor: pointer;
+    border-bottom: 1px var(--main-color) solid;
+}
+
+.profilePicFile + label:hover {
+    background-color: var( --button-highlight-color);
+}

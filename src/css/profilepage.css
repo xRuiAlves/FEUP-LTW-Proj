@@ -9,8 +9,17 @@
 
 .profile-info > .name {
     font-weight: bold;
+    font-size: 1.2em;
     color: var(--main-color-dark);
 }
+
+.profile-info > .pointsTitle {
+    display: inline-block;
+    padding: 1em;
+    font-size: 1em;
+    color: var(--main-color-dark);
+}
+
 
 .profile-info{
     min-width: 20em;

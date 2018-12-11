@@ -288,9 +288,12 @@
             SELECT Comment.votable_entity_id,
                    Comment.comment_content,
                    Comment.parent_entity_id,
-                   VotableEntity.votable_entity_creation_date
+                   VotableEntity.votable_entity_creation_date,
+                   User.user_id,
+                   User.user_username
             FROM Comment
                  NATURAL JOIN VotableEntity
+                 NATURAL JOIN User
             WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($comment_id));
@@ -419,7 +422,7 @@
     function getUserPoints($user_id) {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
-            SELECT sum(vote_value) as points
+            SELECT coalesce(sum(vote_value), 0) as points
             FROM User  
                  NATURAL JOIN VotableEntity
                  NATURAL JOIN Story
@@ -428,9 +431,7 @@
         ');
         $stmt->execute(array($user_id));
 
-        $result = $stmt->fetch(); 
-        
-        return $result['points'] ? $result['points'] : "0"; 
+        return $stmt->fetch(); 
     }
 
      function createUserStory($user_id, $date, $story_title, $story_content) {
