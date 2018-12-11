@@ -99,6 +99,7 @@ function userLoggedIn(data){
     document.getElementById('login_slider').classList.add('active');
     g_appState = {...g_appState, ...data};
     document.querySelector('#login_slider > img').setAttribute('src', data.user_img_small);
+    localStorage.setItem('CSRF-TOKEN', data.csrf_token);
 }
 
 function userLoggedOut(){

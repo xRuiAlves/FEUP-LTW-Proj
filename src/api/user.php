@@ -116,7 +116,6 @@
                 $_SESSION["username"] = $user_username;
                 $_SESSION["user_id"] = $info["user_id"];
                 $_SESSION["csrf_token"] = $csrf_token;
-                setcookie('CSRF-TOKEN', $csrf_token);
                 echo json_encode(array_merge($info, $userImgJSONsmall, $userImgJSONbig, $csrf_info));
                 
                 http_response_code(200);
@@ -197,7 +196,6 @@
                 $_SESSION["username"] = $user_username;
                 $_SESSION["user_id"] = $user_id;
                 $_SESSION["csrf_token"] = $csrf_token;
-                setcookie('CSRF-TOKEN', $csrf_token);
 
                 http_response_code(201);
             }

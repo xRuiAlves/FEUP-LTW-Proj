@@ -203,9 +203,8 @@ export default class StoriesRenderer{
             url = `/api/${entityType}/downvote`;
         }
 
-        fetch(url, {method: method, body: JSON.stringify({[entityType + '_id']: story.votable_entity_id})})
-        .then((res) => {
-            if(res.status == 200 || res.status == 201){
+        request({url: url, method: method, content: {[entityType + '_id']: story.votable_entity_id}})
+        .then(() => {
                 if(unvoting){
                     upvoteElement.classList.remove('active');
                     downvoteElement.classList.remove('active');
@@ -228,10 +227,8 @@ export default class StoriesRenderer{
                         upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)-1;
                     }
                     upvoteElement.classList.remove('active');
-                }
-            }else{
-                console.log('Unable to vote on entity')
-            }
-        })
+                }}
+            )
+        .catch(() => console.log('Could not vote. Please check your connection'))
     }
 }

@@ -9,24 +9,40 @@
 
 function request(properties){
 
-    const csrfToken = getCookie('CSRF-TOKEN');
-    
-    let url = properties.url;
-    let method = properties.method || 'GET';
-    let options = {
-        method: method,
-        headers: {'X-XSRF-TOKEN': csrfToken}
-    };
+    return new Promise(async function(resolve, reject) {
+        const csrfToken = localStorage.getItem('CSRF-TOKEN');
 
-    if(method === 'GET'){
-        url += getGetParams(properties.content);
-    }else if(method === 'PUT' || method === 'DELETE'){
-        options.body = JSON.stringify(properties.content);
-    }else{
-        options.body = getPOSTbody(properties.content);
-    }
+        let url = properties.url;
+        let method = properties.method || 'GET';
+        let content = properties.content || {};
+        let options = {
+            method: method
+        };
 
-    fetch(url, options)
+        content = {...content, csrf_token: csrfToken};
+
+        if(method === 'GET'){
+            url += getGetParams(content);
+        }else if(method === 'PUT' || method === 'DELETE'){
+            options.body = JSON.stringify(content);
+        }else{
+            options.body = getPOSTbody(content);
+        }
+
+        let response = await fetch(url, options)
+        .then(res => {
+            return {status: res.status, result: res.json()};
+        })
+        .catch(reject)
+
+        response.result.then(data => {
+            if(response.status == 200 || response.status == 201){
+                resolve(data);
+            }else{
+                reject(data);
+            }
+        }).catch(() => resolve({})); //json is empty
+    })
 }
 
 
@@ -49,3 +65,18 @@ function getPOSTbody(params){
     });
     return formdata;
 }
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
