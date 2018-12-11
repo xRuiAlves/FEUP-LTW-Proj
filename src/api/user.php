@@ -30,8 +30,8 @@
         } else {
             httpNotFound("request not found");
         }
-    }
 
+    }
     function handleUserGetRequest($request) {
         $req = array_shift($request);
 
@@ -72,7 +72,7 @@
             if (!userExists($id)) {
                 httpNotFound("user with id $id does not exist");
             } else {
-                echo json_encode(array_merge(getUserInfo($id), api_getUserImgJSON($id, "big")));
+                echo json_encode(array_merge(getUserInfo($id), getUserPoints($id), api_getUserImgJSON($id, "big")));
                 http_response_code(200);
             }
         } else if (isset($data["user_username"])) {       // Data by Username
@@ -82,11 +82,15 @@
             } else {
                 $info = getUserInfoByUsername($user_username);
                 $userImgJSON = api_getUserImgJSON($info["user_id"], "big");
-                echo json_encode(array_merge($info, $userImgJSON));
+                echo json_encode(array_merge($info, getUserPoints($info["user_id"]), $userImgJSON));
                 http_response_code(200);
             }
+        } else if (isset($_SESSION['user_id'])) {       // Data by Session
+            $id = $_SESSION['user_id'];
+            echo json_encode(array_merge(getUserInfo($id), getUserPoints($id), api_getUserImgJSON($id, "big"), api_getUserImgJSON($id, "small")));
+            http_response_code(200);
         } else {
-            httpBadRequest("'id' or 'user_username' request parameter is missing");
+            httpBadRequest("'id' or 'user_username' request parameter is missing and user is not logged in");
         }
     }
 
@@ -103,14 +107,16 @@
         } else {
             if (verifyUser($user_username, $user_password)) {
                 $info = getUserInfoByUsername($user_username);
-                $userImgJSON = api_getUserImgJSON($info["user_id"], "big");
+                $userImgJSONbig = api_getUserImgJSON($info["user_id"], "big");
+                $userImgJSONsmall = api_getUserImgJSON($info["user_id"], "small");
+
                 $csrf_token = generate_csrf_token();
                 $csrf_info = ["csrf_token" => $csrf_token];
 
                 $_SESSION["username"] = $user_username;
                 $_SESSION["user_id"] = $info["user_id"];
                 $_SESSION["csrf_token"] = $csrf_token;
-                echo json_encode(array_merge($info, $userImgJSON, $csrf_info));
+                echo json_encode(array_merge($info, $userImgJSONsmall, $userImgJSONbig, $csrf_info));
                 
                 http_response_code(200);
             } else {

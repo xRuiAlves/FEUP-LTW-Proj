@@ -101,7 +101,7 @@
         $isJpeg = file_exists($file_path . ".jpeg");
         $relative_file_path = $relative_file_path . ($isJpeg ? ".jpeg" : ".png");
         
-        return ["user_img" => $relative_file_path];
+        return ["user_img_".$size => $relative_file_path];
     }
 
     function api_getStoryImgJSON($story_id) {

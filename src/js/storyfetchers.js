@@ -22,3 +22,41 @@ export function generic_story_fetch(destinationDOMId, requestPath, loadMoreButto
     })
     .catch(err => console.log('Could not load stories'));
 }
+
+export function user_recent_story_fetch(destinationDOMId, requestPath, user_id, loadMoreButton){
+    let offset;
+    if(storiesRenderer.displayedStories[destinationDOMId]){
+        offset = storiesRenderer.displayedStories[destinationDOMId].length;
+    }else{
+        offset = 0;
+    }
+
+    fetch(`${requestPath}?offset=${offset}&num_stories=${AMOUNT_OF_STORIES_PER_FETCH}&user_id=${user_id}`)
+    .then(res => res.json())
+    .then(data => {
+        storiesRenderer.displayStories(data, destinationDOMId);
+        if(data.length < AMOUNT_OF_STORIES_PER_FETCH){
+            loadMoreButton.parentNode.removeChild(loadMoreButton);
+        }
+    })
+    .catch(err => console.log('Could not load stories'));
+}
+
+export function user_upvoted_story_fetch(destinationDOMId, requestPath, user_id, loadMoreButton){
+    let offset;
+    if(storiesRenderer.displayedStories[destinationDOMId]){
+        offset = storiesRenderer.displayedStories[destinationDOMId].length;
+    }else{
+        offset = 0;
+    }
+
+    fetch(`${requestPath}?offset=${offset}&num_stories=${AMOUNT_OF_STORIES_PER_FETCH}&user_id=${user_id}`)
+    .then(res => res.json())
+    .then(data => {
+        storiesRenderer.displayStories(data, destinationDOMId);
+        if(data.length < AMOUNT_OF_STORIES_PER_FETCH){
+            loadMoreButton.parentNode.removeChild(loadMoreButton);
+        }
+    })
+    .catch(err => console.log('Could not load stories'));
+}

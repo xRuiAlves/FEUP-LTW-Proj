@@ -6,8 +6,8 @@ function showLoginForm(){
     <h1>Login</h1> 
     <input type="text" placeholder="Username"/>
     <input type="password" placeholder="Password"/>
-    <button>Login</button>
-    <button class="Register">Register</button>
+    <button class="login">Login</button>
+    <button class="register">Register</button>
     <div class="notification warning"></div>`;
     
     let passwordDOM = form.querySelector('input[type="password"]');
@@ -17,8 +17,8 @@ function showLoginForm(){
         if (e.keyCode === 13) submitLogin(form);
     });
     
-    form.querySelector('button').addEventListener('click', () => submitLogin(form, resolve));
-    form.querySelector('button.Register').addEventListener('click', () => showSignUpForm());
+    form.querySelector('button.login').addEventListener('click', () => submitLogin(form));
+    form.querySelector('button.register').addEventListener('click', () => showSignUpForm());
 
     ModalHandler.show(form);
 
@@ -97,14 +97,15 @@ function submitLogOut(resolve, reject){
 function userLoggedIn(data){
     document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
     document.getElementById('login_slider').classList.add('active');
-    g_appState.username = data.user_username;
-    g_appState.userId = data.user_id;
+    g_appState = {...g_appState, ...data};
+    document.querySelector('#login_slider > img').setAttribute('src', data.user_img_small);
 }
 
 function userLoggedOut(){
     document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = '';
     document.getElementById('login_slider').classList.remove('active');
     document.querySelector('#topbar .page-side-menu').classList.remove('active');
-    g_appState.username = undefined;
-    g_appState.userId = undefined;
+    document.querySelector('#login_slider > img').setAttribute('src', '/images/default_profile.png');
+    g_appState.user_username = undefined;
+    g_appState.user_id = undefined;
 }

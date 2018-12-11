@@ -6,16 +6,25 @@
 
 
 <div class="card profile-info">
-    <img src="https://static1.squarespace.com/static/54f74f23e4b0952b4e0011c0/t/5ad5431e88251baeaac75f49/1523925845937/chris+hanna+bb.jpg">
-    <p class="name">John Doe</p>
-    <p>My motto is live life one whore at a time</p>
+    <img class="pic">
+    <p class="name"></p>
+    <p class="bio"></p>
+    <span class="pointsTitle" title="Sum of the votes in this user's posts">User Points: </span>
+    <span class="points"></span>
 </div>
 
 <div class="profile-content">
     <div class="page-divider"> Latest stories <hr></div>
     <div id="latest-stories" class="stories-container"></div>
-    <button id="btn-load-latest">Load more stories</div>
-    <!-- stories containers go here -->
+    <button id="btn-load-latest">
+        Load more stories
+    </button>
+    
+    <div class="page-divider"> Most Upvoted stories <hr></div>
+    <div id="upvoted-stories" class="stories-container"></div>
+    <button id="btn-load-upvoted">
+        Load more stories
+    </button>
 </div>
 
 
