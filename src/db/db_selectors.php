@@ -288,9 +288,12 @@
             SELECT Comment.votable_entity_id,
                    Comment.comment_content,
                    Comment.parent_entity_id,
-                   VotableEntity.votable_entity_creation_date
+                   VotableEntity.votable_entity_creation_date,
+                   User.user_id,
+                   User.user_username
             FROM Comment
                  NATURAL JOIN VotableEntity
+                 NATURAL JOIN User
             WHERE votable_entity_id = ?
         ');
         $stmt->execute(array($comment_id));
