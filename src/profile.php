@@ -16,8 +16,15 @@
 <div class="profile-content">
     <div class="page-divider"> Latest stories <hr></div>
     <div id="latest-stories" class="stories-container"></div>
-    <button id="btn-load-latest">Load more stories</div>
-    <!-- stories containers go here -->
+    <button id="btn-load-latest">
+        Load more stories
+    </button>
+    
+    <div class="page-divider"> Most Upvoted stories <hr></div>
+    <div id="upvoted-stories" class="stories-container"></div>
+    <button id="btn-load-upvoted">
+        Load more stories
+    </button>
 </div>
 
 
