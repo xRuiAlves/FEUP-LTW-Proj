@@ -173,11 +173,15 @@ export default class StoriesRenderer{
         formdata.append('comment_content', content);
 
         let response = await fetch('api/comment/create', {method:'POST', body: formdata}).then(
-            res => ({code: res.status == 201, result: res.json()})
+            res => ({code: res.status, result: res.json()})
         )
         response.result.then(data => {
-            storyDiv.querySelector('.comments').appendChild(this.generateCommentElement(data));
-            storyDiv.querySelector('.comment-creator textarea').value = '';
+            if(response.code == 201){
+                storyDiv.querySelector('.comments').appendChild(this.generateCommentElement(data));
+                storyDiv.querySelector('.comment-creator textarea').value = '';
+            }else{
+                console.log('Cannot comment. Please check your connection');
+            }
         });
     }
 
