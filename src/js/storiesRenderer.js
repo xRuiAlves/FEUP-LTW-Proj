@@ -81,13 +81,18 @@ export default class StoriesRenderer{
                         <span class="author-name">${story.user_username}</span>
                     </div>
                     <div class="reactions">
-                        <span class="n-replies">${story.num_comments || 0} <i class="fas fa-comment"></i></span>
-                        <span class="n-upvotes">${story.upvotes || 0}<i class="fas fa-arrow-up"></i></span>
-                        <span class="n-downvotes">${story.downvotes || 0}<i class="fas fa-arrow-down"></i></span>
+                        <span class="n-replies"><span class="counter">${story.num_comments || 0}</span><i class="fas fa-comment"></i></span>
+                        <span class="n-upvotes ${story.hasupvoted ? 'active' : ''}"><span class="counter">${story.upvotes || 0}</span><i class="fas fa-arrow-up"></i></span>
+                        <span class="n-downvotes ${story.hasdownvoted ? 'active' : ''}"><span class="counter">${story.downvotes || 0}</span><i class="fas fa-arrow-down"></i></span>
                     </div>
                 </footer>
             </div>`
 
+        let upvotes = storyContainer.querySelector('.reactions .n-upvotes');
+        let downvotes = storyContainer.querySelector('.reactions .n-downvotes');
+        upvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, true, 'story'));
+        downvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, false, 'story'));
+        
         return storyContainer;
     }
 
@@ -133,13 +138,19 @@ export default class StoriesRenderer{
                 <p class="content"></p>
             </div>
             <div class="reactions">
-                <span class="n-replies">${comment.num_comments || 0} replies</span>
-                <span class="n-upvotes">${comment.upvotes || 0}<i class="fas fa-arrow-up"></i></span>
-                <span class="n-downvotes">${comment.downvotes || 0}<i class="fas fa-arrow-down"></i></span>
+                <span class="n-replies"><span class="counter">${comment.num_comments || 0}</span> replies</span>
+                <span class="n-upvotes ${comment.hasupvoted ? 'active' : ''}"><span class="counter">${comment.upvotes || 0}</span><i class="fas fa-arrow-up"></i></span>
+                <span class="n-downvotes ${comment.hasdownvoted ? 'active' : ''}"><span class="counter">${comment.downvotes || 0}</span><i class="fas fa-arrow-down"></i></span>
             </div>
         `;
         commentContainer.querySelector('.username').textContent = comment.user_username;
         commentContainer.querySelector('.content').textContent = comment.comment_content;
+
+        let upvotes = commentContainer.querySelector('.reactions .n-upvotes');
+        let downvotes = commentContainer.querySelector('.reactions .n-downvotes');
+        upvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, true, 'comment'));
+        downvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, false, 'comment'));
+
         return commentContainer;
     }
 
@@ -172,5 +183,51 @@ export default class StoriesRenderer{
 
     showFullStory(story){
         ModalHandler.show(this.generateFullStoryElem(story));
+    }
+
+    voteEntity(story, upvoteElement, downvoteElement, upvotingBtnBool, entityType){
+        let url;
+        let unvoting = false;
+        let method = 'PUT';
+        if((upvoteElement.classList.contains('active') && upvotingBtnBool) || (downvoteElement.classList.contains('active') && !upvotingBtnBool)){
+            url = `/api/${entityType}/unvote`;
+            method = 'DELETE';
+            unvoting = true;
+        }else if(upvotingBtnBool){
+            url = `/api/${entityType}/upvote`;
+        }else{
+            url = `/api/${entityType}/downvote`;
+        }
+
+        fetch(url, {method: method, body: JSON.stringify({[entityType + '_id']: story.votable_entity_id})})
+        .then((res) => {
+            if(res.status == 200 || res.status == 201){
+                if(unvoting){
+                    upvoteElement.classList.remove('active');
+                    downvoteElement.classList.remove('active');
+                    if(upvotingBtnBool){
+                        upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)-1;
+                    }else{
+                        downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)-1;
+                    }
+                }else if(upvotingBtnBool){
+                    upvoteElement.classList.add('active');
+                    upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)+1;
+                    if(downvoteElement.classList.contains('active')){
+                        downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)-1;
+                    }
+                    downvoteElement.classList.remove('active');
+                }else{
+                    downvoteElement.classList.add('active');
+                    downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)+1;
+                    if(upvoteElement.classList.contains('active')){
+                        upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)-1;
+                    }
+                    upvoteElement.classList.remove('active');
+                }
+            }else{
+                console.log('Unable to vote on entity')
+            }
+        })
     }
 }

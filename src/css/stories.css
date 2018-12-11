@@ -18,6 +18,7 @@
 
 .story-container footer.story-details{
     color: var(--color-grey);
+    user-select: none;
     width: 100%;
     font-size: 0.8em;
     display: flex;
@@ -50,5 +51,10 @@
 }
 
 .story-container .reactions .n-upvotes:hover, .story-container .reactions .n-downvotes:hover{
+    color: var(--main-color-dark);
+    cursor: pointer;
+}
+
+.reactions .n-upvotes.active, .reactions .n-downvotes.active{
     color: var(--main-color-dark);
 }
