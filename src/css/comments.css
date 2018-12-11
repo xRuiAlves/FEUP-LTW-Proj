@@ -36,11 +36,16 @@
 .story-container .comments .comment-container .comment p{
     color: black;
     padding: 0em 1.5em 0em 1em;
-    line-height: 0.4em;
+    /*line-height: 0.4em;*/
 }
 
 .story-container .comments .comment-container .comment .username{
     color: var(--main-color-dark);
+    margin-bottom: 0.4em;
+}
+
+.story-container .comments .comment-container .comment .content{
+    margin-top: 0;
 }
 
 .story-container .comments .comment-container .reactions{
