@@ -81,7 +81,7 @@ export default class StoriesRenderer{
                         <span class="author-name">${story.user_username}</span>
                     </div>
                     <div class="reactions">
-                        <span class="n-replies">${story.num_comments || 0} replies</span>
+                        <span class="n-replies">${story.num_comments || 0} <i class="fas fa-comment"></i></span>
                         <span class="n-upvotes">${story.upvotes || 0}<i class="fas fa-arrow-up"></i></span>
                         <span class="n-downvotes">${story.downvotes || 0}<i class="fas fa-arrow-down"></i></span>
                     </div>

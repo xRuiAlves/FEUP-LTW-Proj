@@ -44,3 +44,11 @@
     font-weight: bold;
     margin-left: 0.5em;
 }
+
+.story-container .reactions i, .story-container .reactions i{
+    padding: 0em 0.4em 0em 0.2em;
+}
+
+.story-container .reactions .n-upvotes:hover, .story-container .reactions .n-downvotes:hover{
+    color: var(--main-color-dark);
+}
