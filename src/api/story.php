@@ -117,8 +117,8 @@
         $story_extra_info = [
             'upvotes' => 0,
             'downvotes' => 0,
-            "hasupvote" => false,
-            "hasdownvote" => false,
+            "hasupvoted" => false,
+            "hasdownvoted" => false,
             'num_comments' => 0
         ];
 
@@ -171,8 +171,8 @@
                 $vote_value = getUserEntityVote($logged_user_id, $story_info["votable_entity_id"]);
 
                 $story_info = array_merge($story_info, [
-                    "hasupvote" => $vote_value === "1",
-                    "hasdownvote" => $vote_value === "-1",
+                    "hasupvoted" => $vote_value === "1",
+                    "hasdownvoted" => $vote_value === "-1",
                 ]);
             }  
 
@@ -217,6 +217,7 @@
         }
 
         $id = $data["id"];
+        $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
         if(!storyExists($id)) {
             httpNotFound("story with id $id does not exist");
@@ -226,6 +227,13 @@
                 $num_comments = ["num_comments" => getEntityNumComments($comment["votable_entity_id"])];
                 $creator_img = api_getUserImgJSON($comment["user_id"], "small");
                 $comments[$index] = array_merge($comment, $num_comments, $creator_img);
+                if ($logged_user_id) {
+                    $vote_value = getUserEntityVote($logged_user_id, $comment["votable_entity_id"]);
+                    $comments[$index] = array_merge($comments[$index], [
+                        "hasupvoted" => $vote_value === "1",
+                        "hasdownvoted" => $vote_value === "-1",
+                    ]);
+                }  
             }
             echo(json_encode($comments));
             http_response_code(200);
@@ -428,8 +436,8 @@
             $vote_value = getUserEntityVote($logged_user_id, $story["votable_entity_id"]);
 
             $story = array_merge($story, [
-                "hasupvote" => $vote_value === "1",
-                "hasdownvote" => $vote_value === "-1",
+                "hasupvoted" => $vote_value === "1",
+                "hasdownvoted" => $vote_value === "-1",
             ]);
         }  
         

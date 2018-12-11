@@ -89,7 +89,9 @@
         $comment_extra_info = [
             "upvotes" => 0,
             "downvotes" => 0,
-            "num_comments" => 0
+            "num_comments" => 0,
+            "hasupvoted" => false,
+            "hasdownvoted" => false
         ];
 
         echo(json_encode(array_merge(getComment($comment_id), $comment_extra_info, api_getUserImgJSON($user_id, "small"))));
@@ -132,6 +134,7 @@
         }
 
         $id = $data["id"];
+        $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
         if(!commentExists($id)) {
             httpNotFound("comment with id $id does not exist");
@@ -139,7 +142,15 @@
             $comments = getEntityComments($id);
             foreach($comments as $index => $comment) {
                 $comments[$index] = array_merge($comment, api_getUserImgJSON($comment["user_id"], "small"));
+                if ($logged_user_id) {
+                    $vote_value = getUserEntityVote($logged_user_id, $comment["votable_entity_id"]);
+                    $comments[$index] = array_merge($comments[$index], [
+                        "hasupvoted" => $vote_value === "1",
+                        "hasdownvoted" => $vote_value === "-1",
+                    ]);
+                }  
             }
+            
             echo json_encode($comments);
             http_response_code(200);
         }
