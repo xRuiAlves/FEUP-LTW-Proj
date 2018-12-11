@@ -99,26 +99,24 @@ export default class StoriesRenderer{
     generateFullStoryElem(story){
         let elem = this.generateStoryElem(story);
 
-        fetch('api/story/info?id=' + story.votable_entity_id)
-        .then(res => res.json()).then(fullStory => {
+        request({url:'api/story/info',
+            content: {id: story.votable_entity_id}
+        }).then(fullStory => {
             elem.querySelector('p.text').textContent = fullStory.story_content;
             this.appendCommentsDiv(fullStory, elem);
-        })
-        .catch(info => console.error(info));
+        }).catch(info => console.error(info));
 
         return elem;
     }
 
     appendCommentsDiv(story, elem){
-        fetch('api/story/comments?id=' + story.votable_entity_id)
-        .then(res => res.json()).then(comments => {
+        request({url: 'api/story/comments', content: {id: story.votable_entity_id}})
+        .then(comments => {
             let commentsWrapper = document.createElement('DIV');
             commentsWrapper.classList.add('comments');
             commentsWrapper.innerHTML = 'Comments';
-            if(comments.length > 0){
-                for(let comment of comments){
-                    commentsWrapper.appendChild(this.generateCommentElement(comment));
-                }
+            for(let c = comments.length - 1; c >= 0; c--){
+                commentsWrapper.appendChild(this.generateCommentElement(comments[c]));
             }
             elem.appendChild(commentsWrapper);
             if(g_appState.user_username){
@@ -168,21 +166,20 @@ export default class StoriesRenderer{
     }
 
     async submitComment(parentId, content, storyDiv){
-        let formdata = new FormData();
-        formdata.append('parent_entity_id', parentId);
-        formdata.append('comment_content', content);
+        let body = {
+            ['parent_entity_id']: parentId,
+            ['comment_content']: content
+        }
 
-        let response = await fetch('api/comment/create', {method:'POST', body: formdata}).then(
-            res => ({code: res.status, result: res.json()})
-        )
-        response.result.then(data => {
-            if(response.code == 201){
+        request({url:'api/comment/create',
+                method:'POST',
+                content: body})
+        .then(data => {
                 storyDiv.querySelector('.comments').appendChild(this.generateCommentElement(data));
                 storyDiv.querySelector('.comment-creator textarea').value = '';
-            }else{
-                console.log('Cannot comment. Please check your connection');
-            }
-        });
+            })
+        .catch(() => console.log('Cannot comment. Please check your connection'))
+            
     }
 
     showFullStory(story){
