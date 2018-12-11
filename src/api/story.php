@@ -115,9 +115,11 @@
         }
         $story_info = getStory($story_id);
         $story_extra_info = [
-            "upvotes" => 0,
-            "downvotes" => 0,
-            "num_comments" => 0
+            'upvotes' => 0,
+            'downvotes' => 0,
+            "hasupvote" => false,
+            "hasdownvote" => false,
+            'num_comments' => 0
         ];
 
         // Story image (if existant) and creator image
@@ -163,6 +165,16 @@
 
             $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
             unset($story_info["user_id"]);
+
+            $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+            if ($logged_user_id) {
+                $vote_value = getUserEntityVote($logged_user_id, $story_info["votable_entity_id"]);
+
+                $story_info = array_merge($story_info, [
+                    "hasupvote" => $vote_value === "1",
+                    "hasdownvote" => $vote_value === "-1",
+                ]);
+            }  
 
             echo(json_encode(array_merge($story_info, $story_extra_info)));
             http_response_code(200);
@@ -325,7 +337,7 @@
         $stories = getRecentStories($offset, $num_stories);
         foreach ($stories as $index => $story) {
             $stories[$index] = api_addStoryExtraInfo($story);
-            $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);
+            $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);            
         }
         
         echo(json_encode($stories));
@@ -409,7 +421,17 @@
 
         // Story creator user image
         $story = array_merge($story, api_getUserImgJSON($story["user_id"], "small"));
-        unset($story["user_id"]);        
+        unset($story["user_id"]);       
+        
+        $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+        if ($logged_user_id) {
+            $vote_value = getUserEntityVote($logged_user_id, $story["votable_entity_id"]);
+
+            $story = array_merge($story, [
+                "hasupvote" => $vote_value === "1",
+                "hasdownvote" => $vote_value === "-1",
+            ]);
+        }  
         
         return $story;
     }
