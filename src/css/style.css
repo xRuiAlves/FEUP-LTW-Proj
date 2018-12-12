@@ -104,28 +104,41 @@ input[type="submit"]:hover, button:hover{
     padding: 0em 1em;
 }
 
-.profilePicFile {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+.input-profile-pic-box {
+    position: relative;
 }
 
-.profilePicFile + label {
-    color: var(--main-color-dark);
-    transition: width 0.3s ease;
-    background-color: white;
-    font-size: 1.1em;
-    margin: 0em;
-    padding-top: 1em;
-    height: 2em;
-    display: block;
-    cursor: pointer;
+input.input-profile-pic {
+    display: none;
+}
+
+.container {
+    display: inline-block;
+    width: 100%;
+}
+
+.file-box {
+    display: inline-block;
+    width: 100%;
+    padding-top: 0.8em;
+    box-sizing: border-box;
+    height: 3.0em;
     border-bottom: 1px var(--main-color) solid;
 }
 
-.profilePicFile + label:hover {
-    background-color: var( --button-highlight-color);
+.file-button {
+    color: var(--main-color-dark);
+    background-color: white;
+    margin: 0.4em 0;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    cursor: pointer;
+    padding: 0.4em;
+    border-radius: 0.4em;
+}
+
+
+.file-button:hover {
+    background-color: var(--button-highlight-color);
 }

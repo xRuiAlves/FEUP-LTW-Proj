@@ -10,12 +10,21 @@ function showSignUpForm(){
         <input type="text" placeholder="Short Bio" class="bio"/>
         <input type="password" placeholder="Password" class="password"/>
         <input type="password" placeholder="Confirm Password" class="confirmPassword"/>
-        <input type="file" name="file" id="file" accept="image/*" class="profilePicFile"/>
-        <label for="file"> Choose a picture</label>
+        
+        <div class="input-profile-pic-box">
+            <input type="file" id="file" class="input-profile-pic" onchange='uploadFile(this)'>
+            <label for="file">
+                <span id="file-name" class="file-box"></span>
+                <span class="file-button">
+                    Select File
+                </span>
+            </label>
+        </div>
+
         <button class="submitSignUp">Create Account</button>
         <div class="notification warning"></div>`;
         
-        let nameDOM = form.querySelector('input[type="text"].Name');
+        let nameDOM = form.querySelector('input[type="text"].name');
         
         form.querySelector('button.submitSignUp').addEventListener('click', () => submitSignUp(form, resolve));
 
@@ -23,6 +32,10 @@ function showSignUpForm(){
 
         nameDOM.focus();
     });
+}
+
+function uploadFile(target) {
+    document.getElementById("file-name").innerHTML = target.files[0].name;
 }
 
 async function submitSignUp(form, resolve){
