@@ -9,13 +9,13 @@ export default class StoriesRenderer{
         window.addEventListener('resize', this.rerenderStories.bind(this));
     }
 
-    rerenderStories(){
+    rerenderStories(force){
         for(let targetElementId in this.displayedStories){
-            this.displayStories(this.displayedStories[targetElementId], targetElementId, true);
+            this.displayStories(this.displayedStories[targetElementId], targetElementId, true, force);
         }
     }
 
-    displayStories(stories, targetElementId, rerendering){
+    displayStories(stories, targetElementId, rerendering, forceRerender){
 
         if(this.DOMColumns[targetElementId] === undefined){
             this.DOMColumns[targetElementId] = [];
@@ -29,11 +29,11 @@ export default class StoriesRenderer{
         let targetDOM = document.getElementById(targetElementId);
         let columnAmount = Math.ceil(targetDOM.offsetWidth / this.STORY_TARGET_WIDTH);
 
-        if(rerendering && columnAmount === this.DOMColumns[targetElementId].length){
+        if(rerendering && columnAmount === this.DOMColumns[targetElementId].length && !forceRerender){
             return;
         }
 
-        if(columnAmount !== this.DOMColumns[targetElementId].length){
+        if(columnAmount !== this.DOMColumns[targetElementId].length || forceRerender){
             this.DOMColumns[targetElementId] = [];
             while (targetDOM.firstChild) {
                 targetDOM.removeChild(targetDOM.firstChild);
@@ -93,7 +93,6 @@ export default class StoriesRenderer{
         let downvotes = storyContainer.querySelector('.reactions .n-downvotes');
         upvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, true, 'story'));
         downvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, false, 'story'));
-        
         return storyContainer;
     }
 
@@ -104,40 +103,39 @@ export default class StoriesRenderer{
             content: {id: story.votable_entity_id}
         }).then(fullStory => {
             elem.querySelector('p.text').textContent = fullStory.story_content;
-            this.appendCommentsDiv(fullStory, elem);
+            this.appendCommentsDiv(fullStory, elem, story);
         }).catch(info => console.error(info));
 
         return elem;
     }
 
-    appendCommentsDiv(story, elem){
-        request({url: 'api/story/comments', content: {id: story.votable_entity_id}})
+    appendCommentsDiv(story, elem, storyPreview, isComment){
+        request({url: `api/${isComment ? 'comment' : 'story'}/comments`, content: {id: story.votable_entity_id}})
         .then(comments => {
             let commentsWrapper = document.createElement('DIV');
             commentsWrapper.classList.add('comments');
-            commentsWrapper.innerHTML = 'Comments';
             for(let c = comments.length - 1; c >= 0; c--){
-                commentsWrapper.appendChild(this.generateCommentElement(comments[c]));
+                commentsWrapper.appendChild(this.generateCommentElement(comments[c], isComment));
             }
             elem.appendChild(commentsWrapper);
             if(g_appState.user_username){
-                elem.appendChild(this.generateCommentCreator(story.votable_entity_id, elem));
+                elem.appendChild(this.generateCommentCreator(story.votable_entity_id, elem, storyPreview, isComment));
             }
         })
         .catch(info => console.error(info));
     }
 
-    generateCommentElement(comment){
+    generateCommentElement(comment, hideReplies){
         let commentContainer = document.createElement('DIV');
         commentContainer.classList.add('comment-container');
         commentContainer.innerHTML = `
-            <img src="${comment.user_img_small}">
             <div class="comment">
+                <img src="${comment.user_img_small}">
                 <p class="username"></p>
                 <p class="content"></p>
             </div>
             <div class="reactions">
-                <span class="n-replies"><span class="counter">${comment.num_comments || 0}</span> replies</span>
+                ${hideReplies ? '' : `<span class="n-replies"><span class="counter">${comment.num_comments || 0}</span> replies</span>`}
                 <span class="n-upvotes ${comment.hasupvoted ? 'active' : ''}"><span class="counter">${comment.upvotes || 0}</span><i class="fas fa-arrow-up"></i></span>
                 <span class="n-downvotes ${comment.hasdownvoted ? 'active' : ''}"><span class="counter">${comment.downvotes || 0}</span><i class="fas fa-arrow-down"></i></span>
             </div>
@@ -149,11 +147,15 @@ export default class StoriesRenderer{
         let downvotes = commentContainer.querySelector('.reactions .n-downvotes');
         upvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, true, 'comment'));
         downvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, false, 'comment'));
+        if(!hideReplies) {
+            let replies = commentContainer.querySelector('.reactions .n-replies');
+            replies.addEventListener('click', () => this.appendCommentsDiv(comment, commentContainer, null, true));
+        }
 
         return commentContainer;
     }
 
-    generateCommentCreator(storyId, storyDiv){
+    generateCommentCreator(storyId, storyDiv, storyPreview, hideReplies){
         let elem = document.createElement('DIV');
         elem.classList.add('comment-creator');
         elem.innerHTML = `
@@ -161,12 +163,12 @@ export default class StoriesRenderer{
             <button>Submit!</button>
         `
         elem.querySelector('button').addEventListener('click', () => {
-            this.submitComment(storyId, elem.querySelector('textarea').value, storyDiv);
+            this.submitComment(storyId, elem.querySelector('textarea').value, storyDiv, storyPreview, hideReplies);
         });
         return elem;
     }
 
-    async submitComment(parentId, content, storyDiv){
+    async submitComment(parentId, content, storyDiv, storyPreview, hideReplies){
         let body = {
             ['parent_entity_id']: parentId,
             ['comment_content']: content
@@ -176,8 +178,13 @@ export default class StoriesRenderer{
                 method:'POST',
                 content: body})
         .then(data => {
-                storyDiv.querySelector('.comments').appendChild(this.generateCommentElement(data));
+                storyDiv.querySelector('.comments').appendChild(this.generateCommentElement(data, hideReplies));
                 storyDiv.querySelector('.comment-creator textarea').value = '';
+                storyDiv.querySelector('.reactions .n-replies span.counter').textContent = parseInt(storyDiv.querySelector('.reactions .n-replies span.counter').textContent) + 1;
+                if(storyPreview){
+                    storyPreview.num_comments = parseInt(storyPreview.num_comments) + 1;
+                    this.rerenderStories(true);
+                }
             })
         .catch(() => console.log('Cannot comment. Please check your connection'))
             
@@ -208,25 +215,38 @@ export default class StoriesRenderer{
                     downvoteElement.classList.remove('active');
                     if(upvotingBtnBool){
                         upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)-1;
+                        story.hasupvoted = false;
+                        story.upvotes--;
                     }else{
                         downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)-1;
+                        story.hasdownvoted = false;
+                        story.downvotes--;
                     }
                 }else if(upvotingBtnBool){
                     upvoteElement.classList.add('active');
                     upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)+1;
+                    story.upvotes++;
+                    story.hasupvoted = true;
                     if(downvoteElement.classList.contains('active')){
                         downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)-1;
+                        story.hasdownvoted = false;
+                        story.downvotes--;
                     }
                     downvoteElement.classList.remove('active');
                 }else{
                     downvoteElement.classList.add('active');
                     downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)+1;
+                    story.downvotes++;
+                    story.hasdownvoted = true;
                     if(upvoteElement.classList.contains('active')){
                         upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)-1;
+                        story.upvotes--
+                        story.hasupvoted = false;
                     }
                     upvoteElement.classList.remove('active');
-                }}
-            )
+                }
+                this.rerenderStories(true);
+            })
         .catch(() => console.log('Could not vote. Please check your connection'))
     }
 }

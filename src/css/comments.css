@@ -7,7 +7,6 @@
     display: flex;
     border-top: 1px solid var(--color-grey-light);
     margin: 1em 1em;
-    padding-top: 1em;
     flex-direction: column;
     align-items: flex-start;
 }
@@ -17,20 +16,29 @@
     width: 100%;
     position: relative;
 }
+
+.story-container .comments .comment-container .comments, .story-container .comments .comment-container .comment-creator{
+    margin-left: 4em;
+}
+
 .story-container .comments .comment-container .comment{
     display: inline-block;
     background-color: var(--background-color);
     border-radius: 3em 3em 3em 0em;
     margin: 1em 2em 0.5em 0em;
     margin-left: Calc(var(--comment-user-img-size) + 0.5em);
+    max-width: Calc(100% - (1.5em + var(--comment-user-img-size)));
+    word-wrap: break-word;
+    position: relative;
 }
 
-.story-container .comments .comment-container > img{
+.story-container .comments .comment-container > .comment img{
     width: var(--comment-user-img-size);
     height: var(--comment-user-img-size);
     border-radius: var(--comment-user-img-size);
+    transform: translate(-120%, 0%);
     position:absolute;
-    bottom: 1.5em;
+    bottom: 0;
 }
 
 .story-container .comments .comment-container .comment p{
@@ -54,6 +62,7 @@
     color: var(--color-grey);
     padding-left: 0.5em;
     margin-left: Calc(var(--comment-user-img-size) + 0.5em);
+    user-select: none;
 }
 
 .story-container .comments .comment-container .reactions i{
