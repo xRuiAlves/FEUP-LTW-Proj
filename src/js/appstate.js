@@ -13,4 +13,5 @@ window.addEventListener('load', () =>
             callback(g_appState);
         }
     })
+    .catch(() => {})
 );
