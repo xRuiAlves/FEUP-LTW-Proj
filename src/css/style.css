@@ -4,6 +4,7 @@
 @import url("card.css");
 @import url("palette.css");
 @import url("modal.css");
+@import url("storyCreator.css");
 
 :root{
     --scroll-bar-width: 15px;
@@ -69,7 +70,7 @@ body > footer{
     z-index: -1;
 }
 
-input, button{
+input, button, textarea{
     background-color: transparent;
     outline: none;
     border: none;
@@ -77,6 +78,11 @@ input, button{
     border-bottom: 1px var(--main-color) solid;
     height: 2.5em;
     padding-top: 0.8em;
+}
+
+textarea{
+    font-family: inherit;
+    border: 1px solid var(--color-grey);
 }
 
 input[type="submit"], button{
@@ -105,11 +111,11 @@ input[type="submit"]:hover, button:hover{
     padding: 0em 1em;
 }
 
-.input-profile-pic-box {
+.input-pic-box {
     position: relative;
 }
 
-input.input-profile-pic {
+input.input-pic {
     display: none;
 }
 

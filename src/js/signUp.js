@@ -11,15 +11,7 @@ function showSignUpForm(){
         <input type="password" placeholder="Password" class="password"/>
         <input type="password" placeholder="Confirm Password" class="confirmPassword"/>
         
-        <div class="input-profile-pic-box">
-            <input type="file" id="file" class="input-profile-pic" onchange='uploadFile(this)'>
-            <label for="file">
-                <span id="file-name" class="file-box"></span>
-                <span class="file-button">
-                    Select File
-                </span>
-            </label>
-        </div>
+        ${getFileUploaderHTML()}
 
         <button class="submitSignUp">Create Account</button>
         <div class="notification warning"></div>`;
@@ -61,4 +53,17 @@ async function submitSignUp(form, resolve){
         userLoggedIn(data);
         resolve();
     }).catch(data => form.querySelector('.notification').innerText = 'Could not sign up: ' + data.error)
+}
+
+function getFileUploaderHTML(){
+    return `
+    <div class="input-pic-box">
+        <input type="file" id="file" class="input-pic" onchange='uploadFile(this)'>
+            <label for="file">
+                <span id="file-name" class="file-box"></span>
+                <span class="file-button">
+                    Upload an image
+            </span>
+        </label>
+    </div>`
 }

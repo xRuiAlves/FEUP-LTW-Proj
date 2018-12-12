@@ -1,0 +1,37 @@
+.story-creator.card textarea, .story-creator.card input, .story-creator.card .input-pic-box{
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+    font-size: 1.3em;
+    font-family: inherit;
+    resize: none;
+}
+
+.story-creator.card button{
+    float: right;
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-right: 1em;
+}
+
+.story-creator.card input.title{
+    font-size: 1.5em;
+}
+
+.story-creator.card label #file-name{
+    border: 0;
+}
+
+.story-creator.card label{
+    padding-left: 9em;
+}
+
+.story-creator.card input.input-pic{
+    display: none;
+}
+
+.story-creator.card textarea{
+    min-height: 50vh;
+    border: 0;
+    border-bottom: 1px solid var(--main-color);
+}
