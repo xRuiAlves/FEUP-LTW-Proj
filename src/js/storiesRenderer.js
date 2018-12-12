@@ -51,6 +51,7 @@ export default class StoriesRenderer{
             let elem = this.generateStoryElem(story);
             elem.addEventListener('click', () => this.showFullStory(story));
             this.getMinimumSizedDOMColumn(this.DOMColumns[targetElementId]).appendChild(elem);
+            elem.querySelector('img.banner').style.height = elem.querySelector('img.banner').offsetWidth * (story.story_img_height/story.story_img_width) + "px";
         }
     }
 
@@ -71,7 +72,7 @@ export default class StoriesRenderer{
         storyContainer.className = 'card story-container';
         storyContainer.innerHTML = `
             
-            ${story.story_img ? `<img class="banner" src="${story.story_img}" width="${story.story_img_width}" height="${story.story_img_height}"/> ` : ''}
+            ${story.story_img ? `<img class="banner" src="${story.story_img}"/> ` : ''}
             <div class="content">
                 <p class="title">${story.story_title}<p>
                 <p class="text">${story.story_content}<p>
