@@ -9,9 +9,13 @@ window.addEventListener('load', () =>
     request({url: 'api/user/info'})
     .then(data => {
         g_appState = {...g_appState, ...data};
-        for(let callback of g_appState.onload){
-            callback(g_appState);
-        }
+        g_appState.triggerOnLoads();
     })
     .catch(() => {})
 );
+
+g_appState.triggerOnLoads = () => {
+    for(let callback of g_appState.onload){
+        callback(g_appState);
+    }
+}
