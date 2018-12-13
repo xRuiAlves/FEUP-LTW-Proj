@@ -96,6 +96,14 @@
         $story_title = $data["story_title"];
         $story_content = $data["story_content"];
 
+        if (empty($story_title)) {
+            httpBadRequest("Story title can not be empty");
+            return;
+        } else if (empty($story_content)) {
+            httpBadRequest("Story content can not be empty");
+            return;
+        }
+
         $story_id = createUserStory($user_id, $date, $story_title, $story_content);
 
         if (isset($_FILES["story_img"])) {
