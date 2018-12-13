@@ -208,6 +208,12 @@ export default class StoriesRenderer{
     }
 
     voteEntity(story, upvoteElement, downvoteElement, upvotingBtnBool, entityType){
+
+        if(!g_appState.user_username){
+            showLoginForm();
+            return;
+        }
+
         let url;
         let unvoting = false;
         let method = 'PUT';
