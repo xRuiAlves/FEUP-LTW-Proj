@@ -1,4 +1,6 @@
-document.getElementById('floatingActionButton').addEventListener('click', () => {
+document.getElementById('floatingActionButton').addEventListener('click', createNewStory);
+
+function createNewStory(){
     let container = document.createElement('DIV');
     container.classList.add('story-creator');
     container.classList.add('card');
@@ -18,7 +20,7 @@ document.getElementById('floatingActionButton').addEventListener('click', () => 
     });
 
     ModalHandler.show(container);
-});
+}
 
 function submitNewStory(title, content, file){
     let body = {story_title: title, story_content: content};

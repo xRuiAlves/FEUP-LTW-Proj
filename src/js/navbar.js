@@ -4,7 +4,7 @@ let side_menu = document.querySelector('#topbar .page-side-menu');
 let page_content = document.getElementById('page-content');
 login_slider.addEventListener("click", () => {
     if(login_slider.classList.contains('active')){
-        //GO TO PROFILE PAGE
+        openUserProfile();
     }else{
         showLoginForm();
     }
