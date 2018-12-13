@@ -95,8 +95,10 @@ export default class StoriesRenderer{
 
         let upvotes = storyContainer.querySelector('.reactions .n-upvotes');
         let downvotes = storyContainer.querySelector('.reactions .n-downvotes');
+        let author = storyContainer.querySelector('.story-details .author');
         upvotes.addEventListener('click', (e) => {e.stopPropagation(); this.voteEntity(story, upvotes, downvotes, true, 'story')});
         downvotes.addEventListener('click', (e) => {e.stopPropagation(); this.voteEntity(story, upvotes, downvotes, false, 'story')});
+        author.addEventListener('click', (e) => {e.stopPropagation(); openUserProfile(story.user_id)});
         return storyContainer;
     }
 
@@ -149,8 +151,12 @@ export default class StoriesRenderer{
 
         let upvotes = commentContainer.querySelector('.reactions .n-upvotes');
         let downvotes = commentContainer.querySelector('.reactions .n-downvotes');
+        let authorImg = commentContainer.querySelector('.comment img');
+        let authorUsername = commentContainer.querySelector('.comment .username');
         upvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, true, 'comment'));
         downvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, false, 'comment'));
+        authorImg.addEventListener('click', () => openUserProfile(comment.user_id));
+        authorUsername.addEventListener('click', () => openUserProfile(comment.user_id));
         if(!hideReplies) {
             let replies = commentContainer.querySelector('.reactions .n-replies');
             replies.addEventListener('click', () => this.appendCommentsDiv(comment, commentContainer, null, true));

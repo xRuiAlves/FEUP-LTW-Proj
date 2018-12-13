@@ -24,8 +24,12 @@ g_appState.addEventListener('load', (state) => {
     }
 });
 
-function openUserProfile(){
-    window.location.href="profile.php";
+function openUserProfile(id){
+    if(!id){
+        window.location.href="profile.php";
+    }else{
+        window.location.href="profile.php?id=" + id;
+    }
 }
 
 function openHomePage(){
