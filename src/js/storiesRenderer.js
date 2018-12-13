@@ -51,7 +51,11 @@ export default class StoriesRenderer{
             let elem = this.generateStoryElem(story);
             elem.addEventListener('click', () => this.showFullStory(story));
             this.getMinimumSizedDOMColumn(this.DOMColumns[targetElementId]).appendChild(elem);
-            elem.querySelector('img.banner').style.height = elem.querySelector('img.banner').offsetWidth * (story.story_img_height/story.story_img_width) + "px";
+
+            let banner;
+            if(banner = elem.querySelector('img.banner')){
+                banner.style.height = banner.offsetWidth * (story.story_img_height/story.story_img_width) + "px";
+            }    
         }
     }
 

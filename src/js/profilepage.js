@@ -4,7 +4,6 @@ let url = new URL(window.location.href);
 url.searchParams.get("username");
 
 g_appState.addEventListener('load', (data) => {
-    console.log(data);
     if(!data.user_username) {
         window.location.href = '/';
         return;
