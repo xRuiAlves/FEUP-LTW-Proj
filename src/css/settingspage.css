@@ -1,0 +1,28 @@
+.change-settings {
+    width: 100%;
+    max-width: 95%;
+    padding: 0.8em;
+    color: var(--main-color-dark);
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.change-password .change-password-title {
+    color: var(--main-color-dark);
+    padding: 0.8em;
+}
+
+.change-password .change-password-button {
+    display: flex;
+    align-self: center;
+}
+
+.change-bio .change-bio-title {
+    color: var(--main-color-dark);
+    padding: 0.8em;
+}
+
+input#change-bio.bio{
+    border-bottom: 0;
+    padding: 0.8em;
+}
