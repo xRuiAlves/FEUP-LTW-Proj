@@ -37,6 +37,23 @@
     text-align: center;
 }
 
+.invisible {
+    display: none;
+}
+
+.edit-picture {
+    position: relative;
+}
+
+.edit-picture-icon {
+    cursor: pointer;
+    font-size: 1.2em;
+    position: absolute;
+    right: 0.4em;
+    bottom: 0.7em;
+    color: white;
+}
+
 .user-points-div .pointsTitle {
     color: var(--main-color-dark);
 }

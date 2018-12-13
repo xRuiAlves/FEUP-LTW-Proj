@@ -9,7 +9,7 @@ g_appState.addEventListener('load', (data) => {
         return;
     }
 
-    if(!externalProfileId){
+    if(!externalProfileId || externalProfileId === data.user_id){
         document.querySelector('.card.profile-info .pic').setAttribute('src', data.user_img_big);
         document.querySelector('.card.profile-info .name').textContent = data.user_username;
         document.querySelector('.card.profile-info .bio').textContent = data.user_bio;
@@ -20,6 +20,8 @@ g_appState.addEventListener('load', (data) => {
             document.querySelector('.card.profile-info .name').textContent = data.user_username;
             document.querySelector('.card.profile-info .bio').textContent = data.user_bio;
             document.querySelector('.card.profile-info .points').textContent = data.points;
+            document.querySelector('.card.profile-info .edit-picture').classList.add('invisible');
+            document.querySelector('.card.profile-info .cog-wheel').classList.add('invisible');
         }).catch(openHomePage);
     }
 
