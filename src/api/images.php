@@ -1,6 +1,6 @@
 <?php 
     function validateImage($img) {
-        $img_max_size = 5e6;  // in bytes
+        $img_max_size = 50e6;  // in bytes
         $img_size = $img["size"];
         $img_type = $img["type"];
         

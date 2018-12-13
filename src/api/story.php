@@ -104,8 +104,7 @@
             return;
         }
 
-        $story_id = createUserStory($user_id, $date, $story_title, $story_content);
-
+        // Validate story image
         if (isset($_FILES["story_img"])) {
             $img = $_FILES["story_img"];
 
@@ -114,13 +113,18 @@
                 httpBadRequest($img_validation);
                 return;
             }
-            
+        }
+
+        $story_id = createUserStory($user_id, $date, $story_title, $story_content);
+
+        if (isset($_FILES["story_img"])) {            
             $img_upload = uploadStoryImage($img, $story_id);
             if ($img_upload !== "uploaded") {
                 httpInternalError($img_upload);
                 return;
             }
         }
+        
         $story_info = getStory($story_id);
         $story_extra_info = [
             'upvotes' => 0,
