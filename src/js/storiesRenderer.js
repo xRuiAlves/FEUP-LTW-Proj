@@ -78,8 +78,8 @@ export default class StoriesRenderer{
             
             ${story.story_img ? `<img class="banner" src="${story.story_img}"/> ` : ''}
             <div class="content">
-                <p class="title">${story.story_title}<p>
-                <p class="text">${story.story_content}<p>
+                <p class="title"><p>
+                <p class="text"><p>
                 <footer class="story-details">
                     <div class="author">
                         <img class="profile-image" src="${story.user_img_small}"/>
@@ -92,6 +92,9 @@ export default class StoriesRenderer{
                     </div>
                 </footer>
             </div>`
+
+        storyContainer.querySelector('.title').textContent = story.story_title;
+        storyContainer.querySelector('.text').textContent = story.story_content;
 
         let upvotes = storyContainer.querySelector('.reactions .n-upvotes');
         let downvotes = storyContainer.querySelector('.reactions .n-downvotes');
