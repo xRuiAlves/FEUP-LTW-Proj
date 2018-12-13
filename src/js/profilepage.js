@@ -4,7 +4,7 @@ let url = new URL(window.location.href);
 let externalProfileId = url.searchParams.get("id");
 
 g_appState.addEventListener('load', (data) => {
-    if(!data.user_username) {
+    if(!data.user_username && !externalProfileId) {
         openHomePage();
         return;
     }
