@@ -11,7 +11,7 @@ window.addEventListener('load', () =>
         g_appState = {...g_appState, ...data};
         g_appState.triggerOnLoads();
     })
-    .catch(() => {})
+    .catch(g_appState.triggerOnLoads)
 );
 
 g_appState.triggerOnLoads = () => {

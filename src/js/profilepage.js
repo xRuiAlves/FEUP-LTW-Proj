@@ -5,7 +5,7 @@ url.searchParams.get("username");
 
 g_appState.addEventListener('load', (data) => {
     if(!data.user_username) {
-        window.location.href = '/';
+        window.location.href = 'index.php';
         return;
     }
 
