@@ -4,7 +4,7 @@ let side_menu = document.querySelector('#topbar .page-side-menu');
 let page_content = document.getElementById('page-content');
 login_slider.addEventListener("click", () => {
     if(login_slider.classList.contains('active')){
-        //GO TO PROFILE PAGE
+        openUserProfile();
     }else{
         showLoginForm();
     }
@@ -24,6 +24,14 @@ g_appState.addEventListener('load', (state) => {
     }
 });
 
-function openUserProfile(){
-    window.location.href='profile.php';
+function openUserProfile(id){
+    if(!id){
+        window.location.href="profile.php";
+    }else{
+        window.location.href="profile.php?id=" + id;
+    }
+}
+
+function openHomePage(){
+    window.location.href="index.php";
 }

@@ -99,6 +99,7 @@
 }
 
 #topbar #login_slider > img{
+    cursor: pointer;
     display: inline-block;
     transform: translate(Calc(-50% - var(--slider-width)), 0);
     transition: transform var(--slider-animation-duration) ease-in-out;

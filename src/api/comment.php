@@ -84,6 +84,11 @@
         $date = time();
         $parent_entity_id = $data["parent_entity_id"];
         $comment_content = $data["comment_content"];
+
+        if (empty($comment_content)) {
+            httpBadRequest("Comment content can not be empty");
+            return;
+        }
         
         $comment_id = createUserComment($user_id, $date, $parent_entity_id, $comment_content);
         $comment_extra_info = [

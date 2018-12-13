@@ -4,7 +4,7 @@
     include_once($_SERVER['DOCUMENT_ROOT'] . '/templates/env.php');
 
     $sideMenuEntries = [
-        (object) ['text' => 'Add new story', 'icon' => 'fa-plus', 'onclick' => '#'],
+        (object) ['text' => 'Add new story', 'icon' => 'fa-plus', 'onclick' => 'createNewStory()'],
         (object) ['text' => 'Profile', 'icon' => 'fa-user', 'onclick' => 'openUserProfile()'],
         (object) ['text' => 'Log out', 'icon' => 'fa-sign-out-alt', 'onclick' => 'showLogOutModal()']
     ]
@@ -27,11 +27,10 @@
     <script src="js/signUp.js" defer></script>
     <script src="js/passwordChange.js" defer></script>
     <script src="js/storyfetchers.js" type="module"></script>
-    <script src="js/storyCreator.js" type="module"></script>
+    <script src="js/storyCreator.js" defer></script>
     <title><?=$_env_website_name?></title>
 </head>
 <body>
-    <div id="floatingActionButton" class="hidden"><span>&#43;</span></div>
     <div id="modal-container"></div>
     <nav id="topbar">
         <div class="logo" onclick="window.location.href='/'">

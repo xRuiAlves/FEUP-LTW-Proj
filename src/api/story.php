@@ -96,8 +96,15 @@
         $story_title = $data["story_title"];
         $story_content = $data["story_content"];
 
-        $story_id = createUserStory($user_id, $date, $story_title, $story_content);
+        if (empty($story_title)) {
+            httpBadRequest("Story title can not be empty");
+            return;
+        } else if (empty($story_content)) {
+            httpBadRequest("Story content can not be empty");
+            return;
+        }
 
+        // Validate story image
         if (isset($_FILES["story_img"])) {
             $img = $_FILES["story_img"];
 
@@ -106,13 +113,18 @@
                 httpBadRequest($img_validation);
                 return;
             }
-            
+        }
+
+        $story_id = createUserStory($user_id, $date, $story_title, $story_content);
+
+        if (isset($_FILES["story_img"])) {            
             $img_upload = uploadStoryImage($img, $story_id);
             if ($img_upload !== "uploaded") {
                 httpInternalError($img_upload);
                 return;
             }
         }
+        
         $story_info = getStory($story_id);
         $story_extra_info = [
             'upvotes' => 0,
@@ -129,7 +141,6 @@
         }
 
         $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
-        unset($story_info["user_id"]);
 
         echo(json_encode(array_merge($story_info, $story_extra_info)));
         http_response_code(201);
@@ -164,7 +175,6 @@
             }
 
             $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
-            unset($story_info["user_id"]);
 
             $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             if ($logged_user_id) {
@@ -429,7 +439,6 @@
 
         // Story creator user image
         $story = array_merge($story, api_getUserImgJSON($story["user_id"], "small"));
-        unset($story["user_id"]);       
         
         $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         if ($logged_user_id) {

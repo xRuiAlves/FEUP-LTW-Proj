@@ -49,9 +49,13 @@ export default class StoriesRenderer{
 
         for(let story of stories){
             let elem = this.generateStoryElem(story);
-            elem.addEventListener('click', () => this.showFullStory(story));
+            elem.addEventListener('click', (e) => {this.showFullStory(story)});
             this.getMinimumSizedDOMColumn(this.DOMColumns[targetElementId]).appendChild(elem);
-            elem.querySelector('img.banner').style.height = elem.querySelector('img.banner').offsetWidth * (story.story_img_height/story.story_img_width) + "px";
+
+            let banner;
+            if(banner = elem.querySelector('img.banner')){
+                banner.style.height = banner.offsetWidth * (story.story_img_height/story.story_img_width) + "px";
+            }    
         }
     }
 
@@ -74,8 +78,8 @@ export default class StoriesRenderer{
             
             ${story.story_img ? `<img class="banner" src="${story.story_img}"/> ` : ''}
             <div class="content">
-                <p class="title">${story.story_title}<p>
-                <p class="text">${story.story_content}<p>
+                <p class="title"><p>
+                <p class="text"><p>
                 <footer class="story-details">
                     <div class="author">
                         <img class="profile-image" src="${story.user_img_small}"/>
@@ -89,10 +93,15 @@ export default class StoriesRenderer{
                 </footer>
             </div>`
 
+        storyContainer.querySelector('.title').textContent = story.story_title;
+        storyContainer.querySelector('.text').textContent = story.story_content;
+
         let upvotes = storyContainer.querySelector('.reactions .n-upvotes');
         let downvotes = storyContainer.querySelector('.reactions .n-downvotes');
-        upvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, true, 'story'));
-        downvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, false, 'story'));
+        let author = storyContainer.querySelector('.story-details .author');
+        upvotes.addEventListener('click', (e) => {e.stopPropagation(); this.voteEntity(story, upvotes, downvotes, true, 'story')});
+        downvotes.addEventListener('click', (e) => {e.stopPropagation(); this.voteEntity(story, upvotes, downvotes, false, 'story')});
+        author.addEventListener('click', (e) => {e.stopPropagation(); openUserProfile(story.user_id)});
         return storyContainer;
     }
 
@@ -145,8 +154,12 @@ export default class StoriesRenderer{
 
         let upvotes = commentContainer.querySelector('.reactions .n-upvotes');
         let downvotes = commentContainer.querySelector('.reactions .n-downvotes');
+        let authorImg = commentContainer.querySelector('.comment img');
+        let authorUsername = commentContainer.querySelector('.comment .username');
         upvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, true, 'comment'));
         downvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, false, 'comment'));
+        authorImg.addEventListener('click', () => openUserProfile(comment.user_id));
+        authorUsername.addEventListener('click', () => openUserProfile(comment.user_id));
         if(!hideReplies) {
             let replies = commentContainer.querySelector('.reactions .n-replies');
             replies.addEventListener('click', () => this.appendCommentsDiv(comment, commentContainer, null, true));
@@ -195,6 +208,12 @@ export default class StoriesRenderer{
     }
 
     voteEntity(story, upvoteElement, downvoteElement, upvotingBtnBool, entityType){
+
+        if(!g_appState.user_username){
+            showLoginForm();
+            return;
+        }
+
         let url;
         let unvoting = false;
         let method = 'PUT';
