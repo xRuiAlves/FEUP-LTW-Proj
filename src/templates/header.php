@@ -31,7 +31,7 @@
     <title><?=$_env_website_name?></title>
 </head>
 <body>
-        <div id="floatingActionButton" class="hidden"><span>&#43;</span></div>
+    <div id="floatingActionButton" class="hidden"><span>&#43;</span></div>
     <div id="modal-container"></div>
     <nav id="topbar">
         <div class="logo" onclick="window.location.href='/'">
