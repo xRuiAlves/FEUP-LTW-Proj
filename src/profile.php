@@ -4,7 +4,7 @@
 
 <script src="js/profilepage.js" defer type="module"></script>
 
-
+<div id="floatingActionButton" class="hidden"><span>&#43;</span></div>
 <div class="card profile-info">
     <img class="pic">
     <p class="name"></p>
