@@ -161,6 +161,7 @@ input.input-pic {
 }
 
 #floatingActionButton{
+    display: inline-block;
     position: fixed;
     cursor: pointer;
     user-select: none;
@@ -173,4 +174,8 @@ input.input-pic {
     border-radius: 5em;
     color: white;
     text-align: center;
+}
+
+#floatingActionButton:active{
+    transform: scale(0.9);
 }
