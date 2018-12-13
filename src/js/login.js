@@ -29,28 +29,18 @@ async function submitLogin(form){
 
     let usernameDOM = form.querySelector('input[type="text"]');
     let passwordDOM = form.querySelector('input[type="password"]');
-
-    let formData = new FormData();
-    formData.append('user_username', usernameDOM.value);
-    formData.append('user_password', passwordDOM.value);
     
-    let response = await fetch('api/user/login', {method: "POST", body: formData})
-    .then(res => {
-        return {status: res.status, result: res.json()};
+    request({url: 'api/user/login',
+            method: "POST",
+            content: {user_username: usernameDOM.value,
+                      user_password: passwordDOM.value}})
+    .then(data => {
+        ModalHandler.hide();
+        userLoggedIn(data);
     })
-    .catch((res) => {
-        form.querySelector('.notification').innerText = 'Could not login: ' + res.statusText;
+    .catch((data) => {
+        form.querySelector('.notification').innerText = 'Could not login: ' + data.error;
     })
-    
-    response.result.then((data) => {
-        if(response.status == 200){
-            ModalHandler.hide();
-            userLoggedIn(data);
-        }else{
-            form.querySelector('.notification').innerText = 'Could not login: ' + data.error;
-        }
-    })
-        
 }
 
 function showLogOutModal(){
@@ -81,13 +71,11 @@ function showLogOutModal(){
 }
 
 function submitLogOut(resolve, reject){
-    fetch('api/user/logout', 
-            {method: "DELETE"})
-    .then(res => {
+    request({url: 'api/user/logout', 
+            method: "DELETE"})
+    .then(data => {
         ModalHandler.hide();
-        if(res.status === 200){
             userLoggedOut();
-        }
     })
     .catch(() => {
         ModalHandler.hide();
@@ -98,7 +86,9 @@ function userLoggedIn(data){
     document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
     document.getElementById('login_slider').classList.add('active');
     g_appState = {...g_appState, ...data};
+    g_appState.triggerOnLoads();
     document.querySelector('#login_slider > img').setAttribute('src', data.user_img_small);
+    localStorage.setItem('CSRF-TOKEN', data.csrf_token);
 }
 
 function userLoggedOut(){

@@ -116,7 +116,6 @@
                 $_SESSION["username"] = $user_username;
                 $_SESSION["user_id"] = $info["user_id"];
                 $_SESSION["csrf_token"] = $csrf_token;
-                setcookie('CSRF-TOKEN', $csrf_token);
                 echo json_encode(array_merge($info, $userImgJSONsmall, $userImgJSONbig, $csrf_info));
                 
                 http_response_code(200);
@@ -190,15 +189,15 @@
             if (!api_checkInvalidUsername($user_username) && !api_checkInvalidRealname($user_realname)) {
                 $user_id = createUser($user_username, $user_realname, $user_password, $user_bio);
                 $img_upload = uploadUserImage($img, $user_id);
-                echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id, "big"))));
-
+                
                 // log user
                 $csrf_token = generate_csrf_token();
+                $csrf_info = ["csrf_token" => $csrf_token];
                 $_SESSION["username"] = $user_username;
                 $_SESSION["user_id"] = $user_id;
                 $_SESSION["csrf_token"] = $csrf_token;
-                setcookie('CSRF-TOKEN', $csrf_token);
-
+                
+                echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id, "big"), $csrf_info)));
                 http_response_code(201);
             }
         }

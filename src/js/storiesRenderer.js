@@ -1,6 +1,6 @@
 export default class StoriesRenderer{
 
-    get STORY_TARGET_WIDTH() { return 650 }
+    get STORY_TARGET_WIDTH() { return 620 }
     
     constructor(){
         this.DOMColumns = {};
@@ -9,13 +9,13 @@ export default class StoriesRenderer{
         window.addEventListener('resize', this.rerenderStories.bind(this));
     }
 
-    rerenderStories(){
+    rerenderStories(force){
         for(let targetElementId in this.displayedStories){
-            this.displayStories(this.displayedStories[targetElementId], targetElementId, true);
+            this.displayStories(this.displayedStories[targetElementId], targetElementId, true, force);
         }
     }
 
-    displayStories(stories, targetElementId, rerendering){
+    displayStories(stories, targetElementId, rerendering, forceRerender){
 
         if(this.DOMColumns[targetElementId] === undefined){
             this.DOMColumns[targetElementId] = [];
@@ -29,11 +29,11 @@ export default class StoriesRenderer{
         let targetDOM = document.getElementById(targetElementId);
         let columnAmount = Math.ceil(targetDOM.offsetWidth / this.STORY_TARGET_WIDTH);
 
-        if(rerendering && columnAmount === this.DOMColumns[targetElementId].length){
+        if(rerendering && columnAmount === this.DOMColumns[targetElementId].length && !forceRerender){
             return;
         }
 
-        if(columnAmount !== this.DOMColumns[targetElementId].length){
+        if(columnAmount !== this.DOMColumns[targetElementId].length || forceRerender){
             this.DOMColumns[targetElementId] = [];
             while (targetDOM.firstChild) {
                 targetDOM.removeChild(targetDOM.firstChild);
@@ -51,6 +51,7 @@ export default class StoriesRenderer{
             let elem = this.generateStoryElem(story);
             elem.addEventListener('click', () => this.showFullStory(story));
             this.getMinimumSizedDOMColumn(this.DOMColumns[targetElementId]).appendChild(elem);
+            elem.querySelector('img.banner').style.height = elem.querySelector('img.banner').offsetWidth * (story.story_img_height/story.story_img_width) + "px";
         }
     }
 
@@ -71,7 +72,7 @@ export default class StoriesRenderer{
         storyContainer.className = 'card story-container';
         storyContainer.innerHTML = `
             
-            ${story.story_img ? `<img class="banner" src="${story.story_img}" width="${story.story_img_width}" height="${story.story_img_height}"/> ` : ''}
+            ${story.story_img ? `<img class="banner" src="${story.story_img}"/> ` : ''}
             <div class="content">
                 <p class="title">${story.story_title}<p>
                 <p class="text">${story.story_content}<p>
@@ -81,72 +82,80 @@ export default class StoriesRenderer{
                         <span class="author-name">${story.user_username}</span>
                     </div>
                     <div class="reactions">
-                        <span class="reaction-amount">${story.num_comments || 0}</span>
-                        <span class="reaction-name"><i class="fas fa-comment"></i></span>
-                        <span class="reaction-amount">${story.upvotes || 0}</span>
-                        <span class="reaction-name"><i class="fas fa-arrow-up"></i></i></span>
-                        <span class="reaction-amount">${story.downvotes || 0}</span>
-                        <span class="reaction-name"><i class="fas fa-arrow-down"></i></span>
+                        <span class="n-replies"><span class="counter">${story.num_comments || 0}</span><i class="fas fa-comment"></i></span>
+                        <span class="n-upvotes ${story.hasupvoted ? 'active' : ''}"><span class="counter">${story.upvotes || 0}</span><i class="fas fa-arrow-up"></i></span>
+                        <span class="n-downvotes ${story.hasdownvoted ? 'active' : ''}"><span class="counter">${story.downvotes || 0}</span><i class="fas fa-arrow-down"></i></span>
                     </div>
                 </footer>
             </div>`
 
+        let upvotes = storyContainer.querySelector('.reactions .n-upvotes');
+        let downvotes = storyContainer.querySelector('.reactions .n-downvotes');
+        upvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, true, 'story'));
+        downvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, false, 'story'));
         return storyContainer;
     }
 
     generateFullStoryElem(story){
         let elem = this.generateStoryElem(story);
 
-        fetch('api/story/info?id=' + story.votable_entity_id)
-        .then(res => res.json()).then(fullStory => {
+        request({url:'api/story/info',
+            content: {id: story.votable_entity_id}
+        }).then(fullStory => {
             elem.querySelector('p.text').textContent = fullStory.story_content;
-            this.appendCommentsDiv(fullStory, elem);
-        })
-        .catch(info => console.error(info));
+            this.appendCommentsDiv(fullStory, elem, story);
+        }).catch(info => console.error(info));
 
         return elem;
     }
 
-    appendCommentsDiv(story, elem){
-        fetch('api/story/comments?id=' + story.votable_entity_id)
-        .then(res => res.json()).then(comments => {
+    appendCommentsDiv(story, elem, storyPreview, isComment){
+        request({url: `api/${isComment ? 'comment' : 'story'}/comments`, content: {id: story.votable_entity_id}})
+        .then(comments => {
             let commentsWrapper = document.createElement('DIV');
-            if(comments.length > 0){
-                commentsWrapper.classList.add('comments');
-                commentsWrapper.innerHTML = 'Comments';
-                for(let comment of comments){
-                    commentsWrapper.appendChild(this.generateCommentElement(comment));
-                }
-                elem.appendChild(commentsWrapper);
+            commentsWrapper.classList.add('comments');
+            for(let c = comments.length - 1; c >= 0; c--){
+                commentsWrapper.appendChild(this.generateCommentElement(comments[c], isComment));
             }
-            if(g_appState.username){
-                elem.appendChild(this.generateCommentCreator(story.votable_entity_id, commentsWrapper));
+            elem.appendChild(commentsWrapper);
+            if(g_appState.user_username){
+                elem.appendChild(this.generateCommentCreator(story.votable_entity_id, elem, storyPreview, isComment));
             }
         })
         .catch(info => console.error(info));
     }
 
-    generateCommentElement(comment){
+    generateCommentElement(comment, hideReplies){
         let commentContainer = document.createElement('DIV');
         commentContainer.classList.add('comment-container');
         commentContainer.innerHTML = `
-            <img src="">
             <div class="comment">
+                <img src="${comment.user_img_small}">
                 <p class="username"></p>
                 <p class="content"></p>
             </div>
             <div class="reactions">
-                <span class="n-replies">${comment.num_comments || 0} replies</span>
-                <span class="n-upvotes">${comment.upvotes || 0}<i class="fas fa-arrow-up"></i></span>
-                <span class="n-downvotes">${comment.downvotes || 0}<i class="fas fa-arrow-down"></i></span>
+                ${hideReplies ? '' : `<span class="n-replies"><span class="counter">${comment.num_comments || 0}</span> replies</span>`}
+                <span class="n-upvotes ${comment.hasupvoted ? 'active' : ''}"><span class="counter">${comment.upvotes || 0}</span><i class="fas fa-arrow-up"></i></span>
+                <span class="n-downvotes ${comment.hasdownvoted ? 'active' : ''}"><span class="counter">${comment.downvotes || 0}</span><i class="fas fa-arrow-down"></i></span>
             </div>
         `;
         commentContainer.querySelector('.username').textContent = comment.user_username;
         commentContainer.querySelector('.content').textContent = comment.comment_content;
+
+        let upvotes = commentContainer.querySelector('.reactions .n-upvotes');
+        let downvotes = commentContainer.querySelector('.reactions .n-downvotes');
+        upvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, true, 'comment'));
+        downvotes.addEventListener('click', () => this.voteEntity(comment, upvotes, downvotes, false, 'comment'));
+        if(!hideReplies) {
+            let replies = commentContainer.querySelector('.reactions .n-replies');
+            replies.addEventListener('click', () => this.appendCommentsDiv(comment, commentContainer, null, true));
+        }
+
         return commentContainer;
     }
 
-    generateCommentCreator(storyId, commentsWrapperDiv){
+    generateCommentCreator(storyId, storyDiv, storyPreview, hideReplies){
         let elem = document.createElement('DIV');
         elem.classList.add('comment-creator');
         elem.innerHTML = `
@@ -154,22 +163,90 @@ export default class StoriesRenderer{
             <button>Submit!</button>
         `
         elem.querySelector('button').addEventListener('click', () => {
-            this.submitComment(storyId, elem.querySelector('textarea').value, commentsWrapperDiv);
+            this.submitComment(storyId, elem.querySelector('textarea').value, storyDiv, storyPreview, hideReplies);
         });
         return elem;
     }
 
-    submitComment(parentId, content, commentsWrapperDiv){
-        let formdata = new FormData();
-        formdata.append('parent_entity_id', parentId);
-        formdata.append('comment_content', content);
+    async submitComment(parentId, content, storyDiv, storyPreview, hideReplies){
+        let body = {
+            ['parent_entity_id']: parentId,
+            ['comment_content']: content
+        }
 
-        fetch('api/comment/create', {method:'POST', body: formdata}).then(
-            res => {res.status == 201 && res.json()}
-        ).then(data => commentsWrapperDiv.appendChild(this.generateCommentElement(data)));
+        request({url:'api/comment/create',
+                method:'POST',
+                content: body})
+        .then(data => {
+                storyDiv.querySelector('.comments').appendChild(this.generateCommentElement(data, hideReplies));
+                storyDiv.querySelector('.comment-creator textarea').value = '';
+                storyDiv.querySelector('.reactions .n-replies span.counter').textContent = parseInt(storyDiv.querySelector('.reactions .n-replies span.counter').textContent) + 1;
+                if(storyPreview){
+                    storyPreview.num_comments = parseInt(storyPreview.num_comments) + 1;
+                    this.rerenderStories(true);
+                }
+            })
+        .catch(() => console.log('Cannot comment. Please check your connection'))
+            
     }
 
     showFullStory(story){
         ModalHandler.show(this.generateFullStoryElem(story));
+    }
+
+    voteEntity(story, upvoteElement, downvoteElement, upvotingBtnBool, entityType){
+        let url;
+        let unvoting = false;
+        let method = 'PUT';
+        if((upvoteElement.classList.contains('active') && upvotingBtnBool) || (downvoteElement.classList.contains('active') && !upvotingBtnBool)){
+            url = `/api/${entityType}/unvote`;
+            method = 'DELETE';
+            unvoting = true;
+        }else if(upvotingBtnBool){
+            url = `/api/${entityType}/upvote`;
+        }else{
+            url = `/api/${entityType}/downvote`;
+        }
+
+        request({url: url, method: method, content: {[entityType + '_id']: story.votable_entity_id}})
+        .then(() => {
+                if(unvoting){
+                    upvoteElement.classList.remove('active');
+                    downvoteElement.classList.remove('active');
+                    if(upvotingBtnBool){
+                        upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)-1;
+                        story.hasupvoted = false;
+                        story.upvotes--;
+                    }else{
+                        downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)-1;
+                        story.hasdownvoted = false;
+                        story.downvotes--;
+                    }
+                }else if(upvotingBtnBool){
+                    upvoteElement.classList.add('active');
+                    upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)+1;
+                    story.upvotes++;
+                    story.hasupvoted = true;
+                    if(downvoteElement.classList.contains('active')){
+                        downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)-1;
+                        story.hasdownvoted = false;
+                        story.downvotes--;
+                    }
+                    downvoteElement.classList.remove('active');
+                }else{
+                    downvoteElement.classList.add('active');
+                    downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)+1;
+                    story.downvotes++;
+                    story.hasdownvoted = true;
+                    if(upvoteElement.classList.contains('active')){
+                        upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)-1;
+                        story.upvotes--
+                        story.hasupvoted = false;
+                    }
+                    upvoteElement.classList.remove('active');
+                }
+                this.rerenderStories(true);
+            })
+        .catch(() => console.log('Could not vote. Please check your connection'))
     }
 }

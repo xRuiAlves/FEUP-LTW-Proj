@@ -20,15 +20,18 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"-->
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/network.js" ></script>
     <script src="js/appstate.js" ></script>
     <script src="js/navbar.js" defer></script>
     <script src="js/modal.js" defer></script>
     <script src="js/login.js" defer></script>
     <script src="js/signUp.js" defer></script>
     <script src="js/storyfetchers.js" type="module"></script>
+    <script src="js/storyCreator.js" type="module"></script>
     <title><?=$_env_website_name?></title>
 </head>
 <body>
+        <div id="floatingActionButton" class="hidden"><span>&#43;</span></div>
     <div id="modal-container"></div>
     <nav id="topbar">
         <div class="logo" onclick="window.location.href='/'">
