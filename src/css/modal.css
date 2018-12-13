@@ -6,6 +6,7 @@ body #modal-container{
     padding-top: Calc(100vh + 4em);
     position: fixed;
     min-width: 100vw;
+    max-width: Calc(100vw - 2em);
     height: 200vh;
     box-sizing: border-box;
     text-align: center;

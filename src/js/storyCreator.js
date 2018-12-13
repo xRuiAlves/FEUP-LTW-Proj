@@ -4,11 +4,13 @@ function createNewStory(){
     let container = document.createElement('DIV');
     container.classList.add('story-creator');
     container.classList.add('card');
+    container.classList.add('modal-box');
 
     container.innerHTML = `
     <input type="text" name="title" class="title" placeholder="Story Title"/>
     <textarea name="content" placeholder="Write your story here!"></textarea>
     ${getFileUploaderHTML()}
+    <div class="notification warning"></div>
     <button>Submit</button>
     `;
 
@@ -16,13 +18,13 @@ function createNewStory(){
         let title = container.querySelector('input.title').value;
         let content = container.querySelector('textarea').value;
         let file = container.querySelector('input[type="file"]').files[0];
-        submitNewStory(title, content, file)
+        submitNewStory(title, content, file, container.querySelector('.notification'))
     });
 
     ModalHandler.show(container);
 }
 
-function submitNewStory(title, content, file){
+function submitNewStory(title, content, file, notificationForm){
     let body = {story_title: title, story_content: content};
     if(file){
         body.story_img = file;
@@ -32,7 +34,7 @@ function submitNewStory(title, content, file){
     .then(() => {
         window.location.href = 'profile.php'
     })
-    .catch(() => {
-        console.log('could not create story');
+    .catch((data) => {
+        notificationForm.innerText = 'Could not create story: ' + data.error;
     })
 }
