@@ -54,7 +54,7 @@ INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "15
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1528747406");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1528746200");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1528746402");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1528739900");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1528748414");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1528748800");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1528748000");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1528748888");
@@ -164,7 +164,7 @@ INSERT INTO Story (votable_entity_id, story_title, story_content) VALUES (9,
     'The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. It is named after the engineer Gustave Eiffel, whose company designed and built the tower. Constructed from 1887–1889 as the entrance to the 1889 Worlds Fair, it was initially criticized by some of Frances leading artists and intellectuals for its design, but it has become a global cultural icon of France and one of the most recognisable structures in the world. The Eiffel Tower is the most-visited paid monument in the world; 6.91 million people ascended it in 2015.'
 );
 INSERT INTO Story (votable_entity_id, story_title, story_content) VALUES (10, 
-    'Empyre State Building', 
+    'Empire State Building', 
     'The Empire State Building is a 102-story Art Deco skyscraper in Midtown Manhattan, New York City. Designed by Shreve, Lamb & Harmon and completed in 1931, the building has a roof height of 1,250 feet (380 m) and stands a total of 1,454 feet (443.2 m) tall, including its antenna. Its name is derived from "Empire State", the nickname of New York, which is of unknown origin. As of 2017 the building is the 5th-tallest completed skyscraper in the United States and the 28th-tallest in the world. It is also the 6th-tallest freestanding structure in the Americas.'
 );
 INSERT INTO Story (votable_entity_id, story_title, story_content) VALUES (11, 
