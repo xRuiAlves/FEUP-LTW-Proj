@@ -25,5 +25,5 @@ g_appState.addEventListener('load', (state) => {
 });
 
 function openUserProfile(){
-    window.location.href="profile.php";
+    window.location.href='profile.php';
 }

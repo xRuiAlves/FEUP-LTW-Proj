@@ -1,5 +1,3 @@
-let changePasswordButton = document.querySelector('.change-password-button');
-
 function showChangePasswordForm(){
     return new Promise((resolve, reject) => {   
         let form = document.createElement('DIV');
@@ -43,21 +41,17 @@ async function submitChanges(form) {
         return;
     }
 
-    let formData = new FormData();
-    formData.append('user_username', g_appState.user_username);
-    formData.append('user_old_password', currentPasswordDOM.value);
-    formData.append('user_new_password', passwordDOM.value);
+    let requestBody = {
+        user_username: g_appState.user_username,
+        user_old_password: form.querySelector('input[type="password"].currentPassword').value,
+        user_new_password: form.querySelector('input[type="password"].password').value
+    }
+    
 
-    let response = await fetch('api/user/updatepassword', {method: "PUT", body: formData})
-    .then(res => {
-        return {status: res.status, result: res.json()};
-    })
-    .catch((res) => {
-        form.querySelector('.notification').innerText = 'Could not login: ' + res.statusText;
-    })
+    request({url: 'api/user/updatepassword', method: "PUT", content: requestBody})
+    .then(data => {
+        ModalHandler.hide();
+        resolve();
+    }).catch(data => form.querySelector('.notification').innerText = 'Could not change password: ' + data.error)
 
 }
-
-changePasswordButton.addEventListener("click", () => 
-    showChangePasswordForm()
-);

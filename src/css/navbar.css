@@ -28,6 +28,7 @@
     overflow: hidden;
     position: sticky;
     top: 0;
+    user-select: none;
 }
 
 #topbar .nav-bar-right-section{

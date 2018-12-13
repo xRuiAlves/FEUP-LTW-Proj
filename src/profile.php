@@ -9,8 +9,13 @@
     <img class="pic">
     <p class="name"></p>
     <p class="bio"></p>
-    <span class="pointsTitle" title="Sum of the votes in this user's posts">User Points: </span>
-    <span class="points"></span>
+    <div class="footer">
+        <div>
+            <span class="pointsTitle" title="Sum of the votes in this user's posts">User Points: </span>
+            <span class="points"></span>
+        </div>
+        <i class="fas fa-cog cog-wheel" onclick="showChangePasswordForm()" title="Change password"></i>
+    </div>
 </div>
 
 <div class="profile-content">
