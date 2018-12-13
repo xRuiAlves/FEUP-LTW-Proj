@@ -137,7 +137,6 @@
         }
 
         $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
-        unset($story_info["user_id"]);
 
         echo(json_encode(array_merge($story_info, $story_extra_info)));
         http_response_code(201);
@@ -172,7 +171,6 @@
             }
 
             $story_info = array_merge($story_info, api_getUserImgJSON($story_info["user_id"], "small"));
-            unset($story_info["user_id"]);
 
             $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             if ($logged_user_id) {
@@ -437,7 +435,6 @@
 
         // Story creator user image
         $story = array_merge($story, api_getUserImgJSON($story["user_id"], "small"));
-        unset($story["user_id"]);       
         
         $logged_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         if ($logged_user_id) {
