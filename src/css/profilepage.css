@@ -38,6 +38,10 @@
     text-align: center;
 }
 
+.user-points-div .pointsTitle {
+    color: var(--main-color-dark);
+}
+
 .cog-wheel {
     color: var(--color-grey);
     transition-property: transform;

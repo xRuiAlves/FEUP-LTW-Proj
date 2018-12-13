@@ -10,7 +10,7 @@
     <p class="name"></p>
     <p class="bio"></p>
     <div class="footer">
-        <div>
+        <div class="user-points-div">
             <span class="pointsTitle" title="Sum of the votes in this user's posts">User Points: </span>
             <span class="points"></span>
         </div>
