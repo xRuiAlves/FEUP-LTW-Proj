@@ -26,8 +26,8 @@ function showSignUpForm(){
     });
 }
 
-function uploadFile(target) {
-    document.getElementById("file-name").innerHTML = target.files[0].name;
+function uploadFile() {
+    document.getElementById("file-name").innerHTML = 'File selected!';
 }
 
 async function submitSignUp(form, resolve){
@@ -58,12 +58,12 @@ async function submitSignUp(form, resolve){
 function getFileUploaderHTML(){
     return `
     <div class="input-pic-box">
-        <input type="file" id="file" class="input-pic" onchange='uploadFile(this)'>
-            <label for="file">
-                <span id="file-name" class="file-box"></span>
-                <span class="file-button">
-                    Upload an image
-            </span>
+        <label for="file">
+            <p class="file-button">
+                Upload an image
+            </p>
+            <p id="file-name" class="file-box">No image selected</span>
         </label>
+        <input type="file" id="file" class="input-pic" onchange='uploadFile()'>
     </div>`
 }

@@ -112,7 +112,7 @@ input[type="submit"]:hover, button:hover{
 }
 
 .input-pic-box {
-    position: relative;
+    border-bottom: 1px var(--main-color) solid;
 }
 
 input.input-pic {
@@ -125,21 +125,15 @@ input.input-pic {
 }
 
 .file-box {
+    margin: 0.5em 0em 1em 0em; 
     display: inline-block;
-    width: 100%;
-    padding-top: 0.8em;
     box-sizing: border-box;
-    height: 3.0em;
-    border-bottom: 1px var(--main-color) solid;
 }
 
 .file-button {
     color: var(--main-color-dark);
     background-color: white;
     margin: 0.4em 0;
-    position: absolute;
-    top: 0px;
-    left: 0px;
     cursor: pointer;
     padding: 0.4em;
     border-radius: 0.4em;
