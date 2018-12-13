@@ -11,6 +11,10 @@
     align-items: stretch;
 }
 
+.stories-container .masonry-col .story-container:hover{
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
 .story-container .title{
     font-weight: bold;
     color: var(--main-color-dark);
@@ -18,6 +22,7 @@
 
 .story-container footer.story-details{
     color: var(--color-grey);
+    user-select: none;
     width: 100%;
     font-size: 0.8em;
     display: flex;
@@ -45,77 +50,15 @@
     margin-left: 0.5em;
 }
 
-.story-container .comments {
-    display: flex;
-    border-top: 1px solid var(--color-grey-light);
-    margin: 0em 1em;
-    padding-top: 1em;
-    flex-direction: column;
-    align-items: flex-start;
+.story-container .reactions i, .story-container .reactions i{
+    padding: 0em 0.4em 0em 0.2em;
 }
 
-
-.story-container .comments .comment-container {
-    width: 100%;
-}
-.story-container .comments .comment-container .comment{
-    display: inline-block;
-    background-color: var(--background-color);
-    border-radius: 3em 3em 3em 0em;
-    margin: 1em 2em 0.5em 0em;
-}
-
-.story-container .comments .comment-container .comment p{
-    color: black;
-    padding: 0em 1.5em 0em 1em;
-    line-height: 0.4em;
-}
-
-.story-container .comments .comment-container .comment .username{
-    color: var(--main-color-dark);
-}
-
-.story-container .comments .comment-container .reactions{
-    text-align: left;
-    font-size: 0.8em;
-    color: var(--color-grey);
-}
-
-.story-container .comments .comment-container .reactions i{
-    padding: 0.2em;
-}
-
-.story-container .comments .comment-container .reactions span{
-    margin: 0.4em;
-    margin-bottom: 0.2em;
-}
-
-.story-container .comments .comment-container .reactions span:hover{
+.story-container .reactions .n-upvotes:hover, .story-container .reactions .n-downvotes:hover{
     color: var(--main-color-dark);
     cursor: pointer;
 }
 
-.story-container .comment-creator {
-    margin: 1em 1em;
-    padding-top: 1em;
-    border-top: 1px solid var(--color-grey-light);
-    display: flex;
-}
-
-.story-container .comment-creator button{
-    background-color: var(--background-color);
-    cursor: pointer;
-}
-
-.story-container .comment-creator button:hover{
-    background-color: var(--button-highlight-color);
-}
-
-.story-container .comment-creator textarea{
-    resize: none;
-    padding: 1em;
-    margin-right: 1em;
-    width: 100%;
-    border-radius: 2em;
-    outline: none;
+.reactions .n-upvotes.active, .reactions .n-downvotes.active{
+    color: var(--main-color-dark);
 }

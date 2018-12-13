@@ -4,7 +4,7 @@
     include_once($_SERVER['DOCUMENT_ROOT'] . '/templates/env.php');
 
     $sideMenuEntries = [
-        (object) ['text' => 'Add new story', 'icon' => 'fa-plus', 'onclick' => '#'],
+        (object) ['text' => 'Add new story', 'icon' => 'fa-plus', 'onclick' => 'createNewStory()'],
         (object) ['text' => 'Profile', 'icon' => 'fa-user', 'onclick' => 'openUserProfile()'],
         (object) ['text' => 'Settings', 'icon' => 'fa-cog', 'onclick' => '#'],
         (object) ['text' => 'Log out', 'icon' => 'fa-sign-out-alt', 'onclick' => 'showLogOutModal()']
@@ -20,12 +20,14 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"-->
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/network.js" ></script>
     <script src="js/appstate.js" ></script>
     <script src="js/navbar.js" defer></script>
     <script src="js/modal.js" defer></script>
     <script src="js/login.js" defer></script>
     <script src="js/signUp.js" defer></script>
     <script src="js/storyfetchers.js" type="module"></script>
+    <script src="js/storyCreator.js" defer></script>
     <title><?=$_env_website_name?></title>
 </head>
 <body>

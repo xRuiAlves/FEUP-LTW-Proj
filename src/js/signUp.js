@@ -11,15 +11,7 @@ function showSignUpForm(){
         <input type="password" placeholder="Password" class="password"/>
         <input type="password" placeholder="Confirm Password" class="confirmPassword"/>
         
-        <div class="input-profile-pic-box">
-            <input type="file" id="file" class="input-profile-pic" onchange='uploadFile(this)'>
-            <label for="file">
-                <span id="file-name" class="file-box"></span>
-                <span class="file-button">
-                    Select File
-                </span>
-            </label>
-        </div>
+        ${getFileUploaderHTML()}
 
         <button class="submitSignUp">Create Account</button>
         <div class="notification warning"></div>`;
@@ -39,36 +31,39 @@ function uploadFile(target) {
 }
 
 async function submitSignUp(form, resolve){
-    let usernameDOM = form.querySelector('input[type="text"].Username');
-    let nameDOM = form.querySelector('input[type="text"].Name');
-    let passwordDOM = form.querySelector('input[type="password"]');
-    let bioDOM = form.querySelector('input[type="text"].Bio');
-    let profilePicDOM = form.querySelector('input[type="file"]');
+    let passwordDOM = form.querySelector('input[type="password"].password');
+    let confirmPasswordDOM = form.querySelector('input[type="password"].confirmPassword');
 
     if (!(passwordDOM.value == confirmPasswordDOM.value)) {
         form.querySelector('.notification').innerText = 'Your passwords do not match';
         return;
     }
 
-    let formData = new FormData();
-    formData.append('user_username', usernameDOM.value);
-    formData.append('user_realname', nameDOM.value);
-    formData.append('user_password', passwordDOM.value);
-    formData.append('user_bio', bioDOM.value);
-    formData.append('user_img', profilePicDOM.files[0]); 
+    let requestBody = {
+        user_username: form.querySelector('input[type="text"].username').value,
+        user_realname: form.querySelector('input[type="text"].name').value,
+        user_password: passwordDOM.value,
+        user_bio: form.querySelector('input[type="text"].Bio'),
+        user_img: form.querySelector('input[type="file"]').files[0]
+    }
     
-    let response = await fetch('api/user/create', {method: "POST", body: formData})
-    .then(res => {
-        return {status: res.status, result: res.json()};
-    })
-    
-    response.result.then((data) => {
-        if(response.status == 201){
-            ModalHandler.hide();
-            userLoggedIn(data);
-            resolve();
-        }else{
-            form.querySelector('.notification').innerText = 'Could not sign up: ' + data.error;
-        }
-    })
+    request({url: 'api/user/create', method: "POST", content: requestBody})
+    .then(data => {
+        ModalHandler.hide();
+        userLoggedIn(data);
+        resolve();
+    }).catch(data => form.querySelector('.notification').innerText = 'Could not sign up: ' + data.error)
+}
+
+function getFileUploaderHTML(){
+    return `
+    <div class="input-pic-box">
+        <input type="file" id="file" class="input-pic" onchange='uploadFile(this)'>
+            <label for="file">
+                <span id="file-name" class="file-box"></span>
+                <span class="file-button">
+                    Upload an image
+            </span>
+        </label>
+    </div>`
 }
