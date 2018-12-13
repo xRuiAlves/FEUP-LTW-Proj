@@ -49,7 +49,7 @@ export default class StoriesRenderer{
 
         for(let story of stories){
             let elem = this.generateStoryElem(story);
-            elem.addEventListener('click', () => this.showFullStory(story));
+            elem.addEventListener('click', (e) => {this.showFullStory(story)});
             this.getMinimumSizedDOMColumn(this.DOMColumns[targetElementId]).appendChild(elem);
 
             let banner;
@@ -95,8 +95,8 @@ export default class StoriesRenderer{
 
         let upvotes = storyContainer.querySelector('.reactions .n-upvotes');
         let downvotes = storyContainer.querySelector('.reactions .n-downvotes');
-        upvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, true, 'story'));
-        downvotes.addEventListener('click', () => this.voteEntity(story, upvotes, downvotes, false, 'story'));
+        upvotes.addEventListener('click', (e) => {e.stopPropagation(); this.voteEntity(story, upvotes, downvotes, true, 'story')});
+        downvotes.addEventListener('click', (e) => {e.stopPropagation(); this.voteEntity(story, upvotes, downvotes, false, 'story')});
         return storyContainer;
     }
 
