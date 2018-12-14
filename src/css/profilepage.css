@@ -37,6 +37,20 @@
     text-align: center;
 }
 
+.profile-info .bio {
+    display: block;
+    border: none;
+    resize: none;
+    box-sizing: border-box;
+    padding: 0 1.44em;
+    height: 6em;
+    width: 100%;
+}
+
+.non-editable {
+    pointer-events: none;
+}
+
 .invisible {
     display: none;
 }

@@ -22,6 +22,7 @@ g_appState.addEventListener('load', (data) => {
             document.querySelector('.card.profile-info .points').textContent = data.points;
             document.querySelector('.card.profile-info .edit-picture').classList.add('invisible');
             document.querySelector('.card.profile-info .cog-wheel').classList.add('invisible');
+            document.querySelector('.card.profile-info .bio').classList.add('non-editable');
         }).catch(openHomePage);
     }
 

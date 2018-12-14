@@ -11,7 +11,7 @@
         <i class="fas fa-edit edit-picture-icon" onclick="showProfilePictureChangeForm()"></i>
     </div>
     <p class="name"></p>
-    <p class="bio"></p>
+    <textarea class="bio"></textarea>
     <div class="footer">
         <div class="user-points-div">
             <span class="pointsTitle" title="Sum of the votes in this user's posts">User Points: </span>
