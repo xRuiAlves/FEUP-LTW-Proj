@@ -49,8 +49,14 @@
 
 .story-container .comments .comment-container .comment .username{
     color: var(--main-color-dark);
-    margin-bottom: 0.4em;
+    margin-bottom: 0;
     cursor: pointer;
+}
+
+.story-container .comments .comment-container .date{
+    color: var(--color-grey);
+    pointer-events: none;
+    cursor: none;
 }
 
 .story-container .comments .comment-container .comment .username:hover{

@@ -105,10 +105,13 @@ input[type="submit"]:hover, button:hover{
 }
 
 .page-divider{
+    position: sticky;
+    top: Calc(var(--top-bar-height) - 0.6em);
+    background-color: var(--background-color);
     text-align: left;
     font-size: 1.2em;
-    margin: 2em 0em;
-    padding: 0em 1em;
+    padding: 1em 1em 0.5em 1em;
+    border-bottom: 1px solid var(--color-grey-dark);
 }
 
 .input-pic-box {
