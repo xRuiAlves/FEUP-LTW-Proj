@@ -9,5 +9,5 @@ function updateBio() {
     request({url: 'api/user/updatebio', method: "PUT", content: requestBody})
     .then(data => {
         resolve();
-    }).catch(data => form.querySelector('.notification').innerText = 'Could not update bio: ' + data.error)
+    }).catch(data => {});
 }
