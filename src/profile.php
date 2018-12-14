@@ -8,7 +8,7 @@
 <div class="card profile-info">
     <img class="pic">
     <div class="edit-picture">
-        <i class="fas fa-edit edit-picture-icon"></i>
+        <i class="fas fa-edit edit-picture-icon" onclick="showProfilePictureChangeForm()"></i>
     </div>
     <p class="name"></p>
     <p class="bio"></p>
