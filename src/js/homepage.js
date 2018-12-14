@@ -8,3 +8,7 @@ generic_story_fetch('most-upvoted-stories', 'api/story/mostupvoted', document.ge
 document.getElementById('btn-load-most-upvoted').addEventListener('click', 
     e => generic_story_fetch('most-upvoted-stories', 'api/story/mostupvoted', e.target));
 
+
+window.addEventListener("scroll", (e) => {
+    document.querySelector('#banner img').style.transformOrigin = '50% ' + (50 - (Math.min((document.documentElement.scrollTop / document.querySelector('#banner').offsetHeight)*300, 300))) + '%';
+});

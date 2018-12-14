@@ -4,7 +4,9 @@
 
 <script src="js/homepage.js" defer type="module"></script>
 
-<img src="images/banner.png" id="banner"/>
+<div id="banner">
+    <img src="images/banner-light.png"/>
+</div>
 <div id="floatingActionButton" class="hidden"><span>&#43;</span></div>
 <div class="page-divider"> Latest stories <hr></div>
 <div id="latest-stories" class="stories-container"></div>

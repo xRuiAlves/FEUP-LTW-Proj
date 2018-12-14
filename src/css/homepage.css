@@ -5,8 +5,15 @@
 }
 
 #banner{
-    width: 100vw;
+    overflow: hidden;
     margin-top: -1em;
+    width: 100vw;
+}
+
+#banner img{
+    width: 100%;
+    transform: scale(1.2, 1.2);
+    transform-origin: 50% 50%;
     height: auto;
 }
 

@@ -28,6 +28,7 @@
     overflow: hidden;
     position: sticky;
     top: 0;
+    z-index: 5;
 }
 
 #topbar .nav-bar-right-section{
