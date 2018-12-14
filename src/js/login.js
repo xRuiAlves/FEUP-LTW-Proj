@@ -86,12 +86,12 @@ function submitLogOut(resolve, reject){
 }
 
 function userLoggedIn(data){
+    localStorage.setItem('CSRF-TOKEN', data.csrf_token);
     document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = data.user_username;
     document.getElementById('login_slider').classList.add('active');
     g_appState = {...g_appState, ...data};
     g_appState.triggerOnLoads();
     document.querySelector('#login_slider > img').setAttribute('src', data.user_img_small);
-    localStorage.setItem('CSRF-TOKEN', data.csrf_token);
 }
 
 function userLoggedOut(){
@@ -101,4 +101,5 @@ function userLoggedOut(){
     document.querySelector('#login_slider > img').setAttribute('src', '/images/default_profile.png');
     g_appState.user_username = undefined;
     g_appState.user_id = undefined;
+    openHomePage();
 }

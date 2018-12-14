@@ -28,7 +28,7 @@
     overflow: hidden;
     position: sticky;
     top: 0;
-    user-select: none;
+    z-index: 5;
 }
 
 #topbar .nav-bar-right-section{
@@ -135,11 +135,12 @@
 
 #topbar ul.page-side-menu.active{
     transform: translate(var(--scroll-bar-width), 0%);
+    padding-top: 1em;
 }
 
 #topbar ul.page-side-menu *{
     font-size: var(--side-menu-font-size);
-    padding: 0.8em 1em 0em;
+    padding: 0.4em 1em 0.4em;
     transform: scale(1,1);
     transform-origin: 100% 75%;
     transition: transform 0.1s linear;

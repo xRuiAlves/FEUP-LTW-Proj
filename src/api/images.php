@@ -1,14 +1,21 @@
-<?php 
+<?php
     function validateImage($img) {
-        $img_max_size = 50e6;  // in bytes
+        $img_max_size = ini_get('upload_max_filesize');
         $img_size = $img["size"];
         $img_type = $img["type"];
+        $img_error = $img["error"];
+
+        if ($img_error == 1) {
+            return "image is too big - max accepted size is $img_max_size bytes";
+        }
+
+        if ($img_error) {
+            return "failed to upload image";
+        }
         
         if ($img_size === 0) {
             return "image is empty";
-        } else if ($img_size > $img_max_size) {
-            return "image is too big - max accepted size is $img_max_size bytes";
-        }
+        } 
 
         if (!isImageTypeValid($img_type)) {
             return "invalid image type - only png and jpeg formats are accepted";

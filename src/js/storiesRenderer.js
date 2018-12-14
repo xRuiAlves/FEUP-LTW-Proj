@@ -72,14 +72,15 @@ export default class StoriesRenderer{
     }
 
     generateStoryElem(story){
-        var storyContainer = document.createElement('DIV');
+        let storyContainer = document.createElement('DIV');
         storyContainer.className = 'card story-container';
         storyContainer.innerHTML = `
             
             ${story.story_img ? `<img class="banner" src="${story.story_img}"/> ` : ''}
             <div class="content">
-                <p class="title"><p>
-                <p class="text"><p>
+                <p class="title"></p>
+                <p class="date">${this.getStringFromDate(story.votable_entity_creation_date)}</p>
+                <p class="text"></p>
                 <footer class="story-details">
                     <div class="author">
                         <img class="profile-image" src="${story.user_img_small}"/>
@@ -147,6 +148,7 @@ export default class StoriesRenderer{
                 ${hideReplies ? '' : `<span class="n-replies"><span class="counter">${comment.num_comments || 0}</span> replies</span>`}
                 <span class="n-upvotes ${comment.hasupvoted ? 'active' : ''}"><span class="counter">${comment.upvotes || 0}</span><i class="fas fa-arrow-up"></i></span>
                 <span class="n-downvotes ${comment.hasdownvoted ? 'active' : ''}"><span class="counter">${comment.downvotes || 0}</span><i class="fas fa-arrow-down"></i></span>
+                <span class="date">${this.getStringFromDate(comment.votable_entity_creation_date)}</span>
             </div>
         `;
         commentContainer.querySelector('.username').textContent = comment.user_username;
@@ -270,5 +272,11 @@ export default class StoriesRenderer{
                 this.rerenderStories(true);
             })
         .catch(() => console.log('Could not vote. Please check your connection'))
+    }
+
+    getStringFromDate(epochTime){
+        let date = new Date(0);
+        date.setUTCSeconds(epochTime);
+        return date.toISOString().substring(0, 16).replace('T', ', ');
     }
 }
