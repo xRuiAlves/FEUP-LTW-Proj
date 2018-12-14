@@ -45,26 +45,27 @@ INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES 
 
 ----------------------
 -- Votable Entities
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528748406");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528747306");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528747606");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528748606");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528748412");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1528748100");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1528747406");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1528746200");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1528746402");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1528748414");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1528748800");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1528748000");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1528748888");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1528747650");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1528747699");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1528750000");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1528749000");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1528749666");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1528749333");
-INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (7, "1528748567");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1527149000"); 
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1527946402"); 
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1527648000");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1527347699");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528448606");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1528647306"); 
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1528147406");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1528046200");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1528547606"); 
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1527848414");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1527748800");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1528348412");  
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1527548888");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1527447650");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1528248100"); 
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1528748406"); 
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1526949333");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1527250000");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1527049666");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (7, "1526848567");
+
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528848406");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528847306");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528848412");
