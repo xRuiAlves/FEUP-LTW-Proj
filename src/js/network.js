@@ -37,7 +37,6 @@ function request(properties){
 
         response.result.then(data => {
             if(response.status == 200 || response.status == 201){
-                console.log(data);
                 resolve(data);
             }else{
                 reject(data);
