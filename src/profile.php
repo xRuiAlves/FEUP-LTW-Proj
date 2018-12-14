@@ -22,7 +22,7 @@
     
     <div class="page-divider"> Most Upvoted stories <hr></div>
     <div id="upvoted-stories" class="stories-container"></div>
-    <button id="btn-load-upvoted">
+    <button id="btn-load-most-upvoted">
         Load more stories
     </button>
 </div>

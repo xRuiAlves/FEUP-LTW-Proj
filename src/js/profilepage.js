@@ -23,11 +23,11 @@ g_appState.addEventListener('load', (data) => {
         }).catch(openHomePage);
     }
 
-    user_story_fetch('latest-stories', 'api/story/recentuser', externalProfileId || data.user_id);
+    user_story_fetch('latest-stories', 'api/story/recentuser', externalProfileId || data.user_id, document.getElementById('btn-load-latest'));
     document.getElementById('btn-load-latest').addEventListener('click', 
     e => user_story_fetch('latest-stories', 'api/story/recentuser', data.user_id, e.target));
 
-    user_story_fetch('upvoted-stories', 'api/story/mostupvoteduser', externalProfileId || data.user_id);
-    document.getElementById('btn-load-upvoted').addEventListener('click', 
+    user_story_fetch('upvoted-stories', 'api/story/mostupvoteduser', externalProfileId || data.user_id, document.getElementById('btn-load-most-upvoted'));
+    document.getElementById('btn-load-most-upvoted').addEventListener('click', 
     e => user_story_fetch('upvoted-stories', 'api/story/mostupvoteduser', data.user_id, e.target));
 })
