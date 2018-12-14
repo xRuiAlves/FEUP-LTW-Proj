@@ -39,7 +39,7 @@ async function submitSignUp(form, resolve){
         user_username: form.querySelector('input[type="text"].username').value,
         user_realname: form.querySelector('input[type="text"].name').value,
         user_password: passwordDOM.value,
-        user_bio: form.querySelector('input[type="text"].Bio'),
+        user_bio: form.querySelector('input[type="text"].bio').value,
         user_img: form.querySelector('input[type="file"]').files[0]
     }
     

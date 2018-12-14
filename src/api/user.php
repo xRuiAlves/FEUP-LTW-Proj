@@ -197,7 +197,7 @@
                 $_SESSION["user_id"] = $user_id;
                 $_SESSION["csrf_token"] = $csrf_token;
                 
-                echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id, "big"), $csrf_info)));
+                echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id, "big"), api_getUserImgJSON($user_id, "small"), $csrf_info)));
                 http_response_code(201);
             }
         }
