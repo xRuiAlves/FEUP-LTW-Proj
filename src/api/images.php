@@ -75,10 +75,26 @@
             $crop_size, $crop_size
         );
 
-        $target_small_file = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id . "_small." . $extension;
-        $target_big_file = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id . "_big." . $extension;
+        $small_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id . "_small";
+        $big_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id . "_big";
+        $target_small_file = $small_path . "." . $extension;
+        $target_big_file = $big_path . "." . $extension;
 
-        if ($extension ==="jpeg") {
+        // delete old files if existant
+        if (file_exists($small_path . ".jpeg")) {
+            unlink($small_path . ".jpeg");
+        }
+        if (file_exists($small_path . ".png")) {
+            unlink($small_path . ".png");
+        }
+        if (file_exists($big_path . ".jpeg")) {
+            unlink($big_path . ".jpeg");
+        }
+        if (file_exists($big_path . ".png")) {
+            unlink($big_path . ".png");
+        }
+
+        if ($extension === "jpeg") {
             imagejpeg($small_image, $target_small_file);
             imagejpeg($big_image, $target_big_file);
         } else if ($extension === "png") {

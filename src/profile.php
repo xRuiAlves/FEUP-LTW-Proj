@@ -7,10 +7,18 @@
 <div id="floatingActionButton" class="hidden"><span>+</span><i class="fas fa-pen"></i></div>
 <div class="card profile-info">
     <img class="pic">
+    <div class="edit-picture">
+        <i class="fas fa-edit edit-picture-icon" onclick="showProfilePictureChangeForm()"></i>
+    </div>
     <p class="name"></p>
-    <p class="bio"></p>
-    <span class="pointsTitle" title="Sum of the votes in this user's posts">User Points: </span>
-    <span class="points"></span>
+    <textarea class="bio" onchange="updateBio()"></textarea>
+    <div class="footer">
+        <div class="user-points-div">
+            <span class="pointsTitle" title="Sum of the votes in this user's posts">User Points: </span>
+            <span class="points"></span>
+        </div>
+        <i class="fas fa-cog cog-wheel" onclick="showChangePasswordForm()" title="Change password"></i>
+    </div>
 </div>
 
 <div class="profile-content">

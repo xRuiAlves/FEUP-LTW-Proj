@@ -75,7 +75,10 @@ function submitLogOut(resolve, reject){
             method: "DELETE"})
     .then(data => {
         ModalHandler.hide();
-            userLoggedOut();
+        userLoggedOut();
+        if (window.location.pathname === "/profile.php") {
+            window.location.href = "index.php";
+        }
     })
     .catch(() => {
         ModalHandler.hide();

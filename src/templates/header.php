@@ -6,7 +6,6 @@
     $sideMenuEntries = [
         (object) ['text' => 'Add new story', 'icon' => 'fa-plus', 'onclick' => 'createNewStory()'],
         (object) ['text' => 'Profile', 'icon' => 'fa-user', 'onclick' => 'openUserProfile()'],
-        (object) ['text' => 'Settings', 'icon' => 'fa-cog', 'onclick' => '#'],
         (object) ['text' => 'Log out', 'icon' => 'fa-sign-out-alt', 'onclick' => 'showLogOutModal()']
     ]
 ?>
@@ -27,6 +26,9 @@
     <script src="js/modal.js" defer></script>
     <script src="js/login.js" defer></script>
     <script src="js/signUp.js" defer></script>
+    <script src="js/passwordChange.js" defer></script>
+    <script src="js/profilePictureChange.js" defer></script>
+    <script src="js/updateBio.js" defer></script>
     <script src="js/storyfetchers.js" type="module"></script>
     <script src="js/storyCreator.js" defer></script>
     <title><?=$_env_website_name?></title>
