@@ -178,6 +178,7 @@
                 httpBadRequest("image missing");
                 return;
             }
+            
             $img = $_FILES["user_img"];
 
             $img_validation = validateImage($img);
