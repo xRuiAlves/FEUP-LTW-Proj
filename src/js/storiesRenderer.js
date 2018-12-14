@@ -162,7 +162,10 @@ export default class StoriesRenderer{
         authorUsername.addEventListener('click', () => openUserProfile(comment.user_id));
         if(!hideReplies) {
             let replies = commentContainer.querySelector('.reactions .n-replies');
-            replies.addEventListener('click', () => this.appendCommentsDiv(comment, commentContainer, null, true));
+            replies.addEventListener('click', () => {
+                replies.style.pointerEvents = 'none';
+                this.appendCommentsDiv(comment, commentContainer, null, true);
+            });
         }
 
         return commentContainer;
