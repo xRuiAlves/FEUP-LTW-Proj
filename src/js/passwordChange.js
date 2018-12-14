@@ -6,8 +6,8 @@ function showChangePasswordForm(){
         `
         <h1>Change Password</h1>
         <input type="password" placeholder="Password" class="currentPassword"/>
-        <input type="password" placeholder="Password" class="password"/>
-        <input type="password" placeholder="Confirm Password" class="confirmPassword"/>
+        <input type="password" placeholder="New Password" class="password"/>
+        <input type="password" placeholder="Confirm New Password" class="confirmPassword"/>
         <button class="submitChange">Submit Changes</button>
         <button class="cancel">Cancel</button>
         <div class="notification warning"></div>`;
