@@ -1,10 +1,24 @@
 .story-creator.card textarea, .story-creator.card input, .story-creator.card .input-pic-box{
+    display: block;
     width: 90%;
     margin: 0 auto;
     font-size: 1.3em;
     font-family: inherit;
     resize: none;
     text-align: left;
+}
+
+.story-creator .input-pic-box > label{
+    width: auto;
+    max-width: 100%;
+    word-wrap: break-word;
+    display: flex;
+}
+
+.story-creator .input-pic-box > label p.file-box{
+    align-self: center;
+    padding-left: 1em;
+    margin: 0;
 }
 
 .story-creator.card button{
@@ -20,12 +34,6 @@
 
 .story-creator.card label #file-name{
     border: 0;
-}
-
-.story-creator.card label{
-    padding-left: 9em;
-    max-width: 100%;
-    word-wrap: break-word;
 }
 
 .story-creator.card input.input-pic{

@@ -26,10 +26,6 @@ function showSignUpForm(){
     });
 }
 
-function uploadFile(target) {
-    document.getElementById("file-name").innerHTML = target.files[0].name;
-}
-
 async function submitSignUp(form, resolve){
     let passwordDOM = form.querySelector('input[type="password"].password');
     let confirmPasswordDOM = form.querySelector('input[type="password"].confirmPassword');
@@ -43,7 +39,7 @@ async function submitSignUp(form, resolve){
         user_username: form.querySelector('input[type="text"].username').value,
         user_realname: form.querySelector('input[type="text"].name').value,
         user_password: passwordDOM.value,
-        user_bio: form.querySelector('input[type="text"].Bio'),
+        user_bio: form.querySelector('input[type="text"].bio').value,
         user_img: form.querySelector('input[type="file"]').files[0]
     }
     
@@ -53,17 +49,4 @@ async function submitSignUp(form, resolve){
         userLoggedIn(data);
         resolve();
     }).catch(data => form.querySelector('.notification').innerText = 'Could not sign up: ' + data.error)
-}
-
-function getFileUploaderHTML(){
-    return `
-    <div class="input-pic-box">
-        <input type="file" id="file" class="input-pic" onchange='uploadFile(this)'>
-            <label for="file">
-                <span id="file-name" class="file-box"></span>
-                <span class="file-button">
-                    Upload an image
-            </span>
-        </label>
-    </div>`
 }

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="js/network.js" ></script>
     <script src="js/appstate.js" ></script>
+    <script src="js/widgets.js" ></script>
     <script src="js/navbar.js" defer></script>
     <script src="js/modal.js" defer></script>
     <script src="js/login.js" defer></script>
