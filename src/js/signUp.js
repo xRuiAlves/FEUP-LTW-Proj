@@ -26,10 +26,6 @@ function showSignUpForm(){
     });
 }
 
-function uploadFile() {
-    document.getElementById("file-name").innerHTML = 'File selected!';
-}
-
 async function submitSignUp(form, resolve){
     let passwordDOM = form.querySelector('input[type="password"].password');
     let confirmPasswordDOM = form.querySelector('input[type="password"].confirmPassword');
@@ -53,17 +49,4 @@ async function submitSignUp(form, resolve){
         userLoggedIn(data);
         resolve();
     }).catch(data => form.querySelector('.notification').innerText = 'Could not sign up: ' + data.error)
-}
-
-function getFileUploaderHTML(){
-    return `
-    <div class="input-pic-box">
-        <label for="file">
-            <p class="file-button">
-                Upload an image
-            </p>
-            <p id="file-name" class="file-box">No image selected</span>
-        </label>
-        <input type="file" id="file" class="input-pic" onchange='uploadFile()'>
-    </div>`
 }
