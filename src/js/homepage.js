@@ -12,3 +12,11 @@ document.getElementById('btn-load-most-upvoted').addEventListener('click',
 window.addEventListener("scroll", (e) => {
     document.querySelector('#banner img').style.transformOrigin = '50% ' + (50 - (Math.min((document.documentElement.scrollTop / document.querySelector('#banner').offsetHeight)*300, 300))) + '%';
 });
+
+document.querySelectorAll('.page-divider i').forEach(
+    elem => elem.addEventListener('click', 
+    () => document.querySelector('#search-bar').scrollIntoView(
+        {behavior: "smooth", block: "center", inline: "nearest"}
+        )
+    )
+);
