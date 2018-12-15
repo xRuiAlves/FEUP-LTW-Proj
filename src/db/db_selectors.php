@@ -52,43 +52,7 @@
         return $stmt->fetch(); 
     }
 
-    function getRecentStories($offset, $num_stories) {
-        $db = Database::getInstance()->getDB();
-        $stmt = $db->prepare('
-            SELECT votable_entity_id, user_username, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
-            FROM
-                (SELECT votable_entity_id, COUNT(*) as num_up_votes
-                FROM Vote 
-                    NATURAL JOIN Story
-                WHERE vote_value = 1
-                GROUP BY votable_entity_id
-                UNION
-                SELECT votable_entity_id, 0
-                FROM Story)
-            
-                NATURAL JOIN
-                (SELECT votable_entity_id, COUNT(*) as num_down_votes
-                FROM Vote 
-                    NATURAL JOIN Story
-                WHERE vote_value = -1
-                GROUP BY votable_entity_id
-                UNION
-                SELECT votable_entity_id, 0
-                FROM Story)
-                
-                NATURAL JOIN VotableEntity
-                NATURAL JOIN Story
-                NATURAL JOIN User
-            GROUP BY votable_entity_id
-            ORDER BY votable_entity_creation_date DESC
-            LIMIT ?
-            OFFSET ?;
-        ');
-        $stmt->execute(array($num_stories, $offset));
-        return $stmt->fetchAll(); 
-    }
-
-    function getRecentStoriesByMatch($offset, $num_stories, $match) {
+    function getRecentStories($offset, $num_stories, $match = "") {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT votable_entity_id, user_username, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
@@ -162,7 +126,7 @@
         return $stmt->fetchAll(); 
     }
 
-    function getMostUpvotedStories($offset, $num_stories) {
+    function getUserRecentStoriesByMatch($offset, $num_stories, $match = "") {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT votable_entity_id, user_username, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
@@ -189,16 +153,17 @@
                 NATURAL JOIN VotableEntity
                 NATURAL JOIN Story
                 NATURAL JOIN User
+            WHERE user_username like ? OR user_realname like ?
             GROUP BY votable_entity_id
-            ORDER BY upvotes DESC, downvotes DESC
+            ORDER BY votable_entity_creation_date DESC
             LIMIT ?
             OFFSET ?;
         ');
-        $stmt->execute(array($num_stories, $offset));
+        $stmt->execute(array("%$match%", "%$match%", $num_stories, $offset));
         return $stmt->fetchAll(); 
     }
 
-    function getMostUpvotedStoriesByMatch($offset, $num_stories, $match) {
+    function getMostUpvotedStories($offset, $num_stories, $match = "") {
         $db = Database::getInstance()->getDB();
         $stmt = $db->prepare('
             SELECT votable_entity_id, user_username, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
@@ -269,6 +234,43 @@
             OFFSET ?;
         ');
         $stmt->execute(array($user_id, $num_stories, $offset));
+        return $stmt->fetchAll(); 
+    }
+
+    function getUserMostUpvotedStoriesByMatch($offset, $num_stories, $match = "") {
+        $db = Database::getInstance()->getDB();
+        $stmt = $db->prepare('
+            SELECT votable_entity_id, user_username, user_id, story_title, story_content, votable_entity_creation_date, max(num_up_votes) as upvotes, max(num_down_votes) as downvotes
+            FROM
+                (SELECT votable_entity_id, COUNT(*) as num_up_votes
+                FROM Vote 
+                    NATURAL JOIN Story
+                WHERE vote_value = 1
+                GROUP BY votable_entity_id
+                UNION
+                SELECT votable_entity_id, 0
+                FROM Story)
+            
+                NATURAL JOIN
+                (SELECT votable_entity_id, COUNT(*) as num_down_votes
+                FROM Vote 
+                    NATURAL JOIN Story
+                WHERE vote_value = -1
+                GROUP BY votable_entity_id
+                UNION
+                SELECT votable_entity_id, 0
+                FROM Story)
+                
+                NATURAL JOIN VotableEntity
+                NATURAL JOIN Story
+                NATURAL JOIN User
+            WHERE user_username like ? OR user_realname like ?
+            GROUP BY votable_entity_id
+            ORDER BY upvotes DESC, downvotes DESC
+            LIMIT ?
+            OFFSET ?;
+        ');
+        $stmt->execute(array("%$match%", "%$match%", $num_stories, $offset));
         return $stmt->fetchAll(); 
     }
 

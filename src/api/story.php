@@ -352,12 +352,12 @@
 
         $offset = $data["offset"];
         $num_stories = $data["num_stories"];
+        $match = isset($data["match"]) ? $data["match"] : "";
 
-        $stories = null;
-        if (isset($data["match"]) && !empty($data["match"])) {
-            $stories = getRecentStoriesByMatch($offset, $num_stories, $data["match"]);
-        } else {
-            $stories = getRecentStories($offset, $num_stories);
+        $stories = getRecentStories($offset, $num_stories, $match);
+
+        if (count($stories) === 0) {
+            $stories = getUserRecentStoriesByMatch($offset, $num_stories, $match);
         }
 
         foreach ($stories as $index => $story) {
@@ -399,12 +399,12 @@
 
         $offset = $data["offset"];
         $num_stories = $data["num_stories"];
+        $match = isset($data["match"]) ? $data["match"] : "";
 
-        $stories = null;
-        if (isset($data["match"]) && !empty($data["match"])) {
-            $stories = getMostUpvotedStoriesByMatch($offset, $num_stories, $data["match"]);
-        } else {
-            $stories = getMostUpvotedStories($offset, $num_stories);
+        $stories = getMostUpvotedStories($offset, $num_stories, $match);
+
+        if (count($stories) === 0) {
+            $stories = getUserMostUpvotedStoriesByMatch($offset, $num_stories, $match);
         }
 
         foreach ($stories as $index => $story) {
