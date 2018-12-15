@@ -353,7 +353,13 @@
         $offset = $data["offset"];
         $num_stories = $data["num_stories"];
 
-        $stories = getRecentStories($offset, $num_stories);
+        $stories = null;
+        if (isset($data["match"]) && !empty($data["match"])) {
+            $stories = getRecentStoriesByMatch($offset, $num_stories, $match);
+        } else {
+            $stories = getRecentStories($offset, $num_stories);
+        }
+
         foreach ($stories as $index => $story) {
             $stories[$index] = api_addStoryExtraInfo($story);
             $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);            
@@ -394,7 +400,13 @@
         $offset = $data["offset"];
         $num_stories = $data["num_stories"];
 
-        $stories = getMostUpvotedStories($offset, $num_stories);
+        $stories = null;
+        if (isset($data["match"]) && !empty($data["match"])) {
+            $stories = getMostUpvotedStoriesByMatch($offset, $num_stories, $match);
+        } else {
+            $stories = getMostUpvotedStories($offset, $num_stories);
+        }
+
         foreach ($stories as $index => $story) {
             $stories[$index] = api_addStoryExtraInfo($story);
             $stories[$index]["story_content"] = api_getStoryPreview($story["story_content"]);
