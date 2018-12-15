@@ -19,11 +19,9 @@ function showChangePasswordForm(){
         let cancelDOM = form.querySelector('button.cancel');
         let confirmDOM = form.querySelector('button.submitChange');
         
-        confirmDOM.addEventListener('click', () => { submitChanges(form);});
+        confirmDOM.addEventListener('click', () => submitChanges(form, resolve));
 
-        cancelDOM.addEventListener('click', () => {
-            ModalHandler.hide();
-        })
+        cancelDOM.addEventListener('click', () => ModalHandler.hide());
 
         ModalHandler.show(form);
 
@@ -31,7 +29,7 @@ function showChangePasswordForm(){
     });
 }
 
-async function submitChanges(form) {
+async function submitChanges(form, resolve) {
     let currentPasswordDOM = form.querySelector('input[type="password"].currentPassword');
     let passwordDOM = form.querySelector('input[type="password"].password');
     let confirmPasswordDOM = form.querySelector('input[type="password"].confirmPassword');
@@ -52,6 +50,8 @@ async function submitChanges(form) {
     .then(data => {
         ModalHandler.hide();
         resolve();
-    }).catch(data => form.querySelector('.notification').innerText = 'Could not change password: ' + data.error)
+    }).catch(data => {
+        form.querySelector('.notification').innerText = 'Could not change password: ' + data.error;
+    });
 
 }

@@ -13,7 +13,7 @@ function showProfilePictureChangeForm() {
         let cancelDOM = form.querySelector('button.cancel');
         let confirmDOM = form.querySelector('button.submitChange');
         
-        confirmDOM.addEventListener('click', () => { submitPictureChanges(form);});
+        confirmDOM.addEventListener('click', () => { submitPictureChanges(form, resolve);});
 
         cancelDOM.addEventListener('click', () => {
             ModalHandler.hide();
@@ -23,7 +23,7 @@ function showProfilePictureChangeForm() {
     });
 }
 
-function submitPictureChanges(form) {
+function submitPictureChanges(form, resolve) {
     request({url: 'api/user/updateimage', 
             method: "POST", 
             content: {
@@ -34,5 +34,7 @@ function submitPictureChanges(form) {
         ModalHandler.hide();
         location.reload();
         resolve();
-    }).catch(data => form.querySelector('.notification').innerText = 'Could not change picture: ' + data.error)
+    }).catch(data => { 
+        form.querySelector('.notification').innerText = 'Could not change picture: ' + data.error
+    })
 }
