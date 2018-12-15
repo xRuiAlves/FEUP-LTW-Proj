@@ -198,6 +198,7 @@ input.input-pic {
     border-radius: 4em;
     color: white;
     text-align: center;
+    z-index: 4;
 }
 
 #floatingActionButton:active{
