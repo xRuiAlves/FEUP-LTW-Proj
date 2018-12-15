@@ -4,7 +4,7 @@ const AMOUNT_OF_STORIES_PER_FETCH = 6;
 
 let storiesRenderer = new StoriesRenderer();
 
-export function generic_story_fetch(destinationDOMId, requestPath, loadMoreButton){
+export function generic_story_fetch(destinationDOMId, requestPath, loadMoreButton, propertiesGetter){
     let offset;
     if(storiesRenderer.displayedStories[destinationDOMId]){
         offset = storiesRenderer.displayedStories[destinationDOMId].length;
@@ -13,17 +13,16 @@ export function generic_story_fetch(destinationDOMId, requestPath, loadMoreButto
     }
 
     request({url: requestPath, content: {
+        ...(propertiesGetter()),
         offset: offset,
         num_stories: AMOUNT_OF_STORIES_PER_FETCH
     }})
     .then(data => {
-        if(data.length === 0 && offset === 0){
-            document.getElementById(destinationDOMId).parentElement.parentElement.innerText = 'No stories to show';
+        storiesRenderer.displayStories(data, destinationDOMId);
+        if(data.length < AMOUNT_OF_STORIES_PER_FETCH && loadMoreButton){
+            loadMoreButton.style.visibility = 'hidden';
         }else{
-            storiesRenderer.displayStories(data, destinationDOMId);
-            if(data.length < AMOUNT_OF_STORIES_PER_FETCH && loadMoreButton){
-                loadMoreButton.parentNode.removeChild(loadMoreButton);
-            }
+            loadMoreButton.style.visibility = 'visible';
         }
     })
     .catch(err => console.log('Could not load stories'));
@@ -44,9 +43,15 @@ export function user_story_fetch(destinationDOMId, requestPath, user_id, loadMor
         }else{
             storiesRenderer.displayStories(data, destinationDOMId);
             if(data.length < AMOUNT_OF_STORIES_PER_FETCH && loadMoreButton){
-                loadMoreButton.parentNode.removeChild(loadMoreButton);
+                loadMoreButton.style.visibility = 'hidden';
+            }else{
+                loadMoreButton.style.visibility = 'visible';
             }
         }
     })
     .catch(err => console.log('Could not load stories', err));
+}
+
+export function clearStories(){
+    storiesRenderer.clear();
 }

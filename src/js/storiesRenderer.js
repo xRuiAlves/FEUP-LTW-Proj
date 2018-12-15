@@ -9,6 +9,13 @@ export default class StoriesRenderer{
         window.addEventListener('resize', this.rerenderStories.bind(this));
     }
 
+    clear(){
+        this.DOMColumns = {};
+        for(let parentElement of Object.keys(this.displayedStories)){
+            this.displayedStories[parentElement] = [];
+        }
+    }
+
     rerenderStories(force){
         for(let targetElementId in this.displayedStories){
             this.displayStories(this.displayedStories[targetElementId], targetElementId, true, force);
