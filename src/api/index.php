@@ -1,6 +1,4 @@
 <?php
-    session_start();
-
     include_once('./story.php');
     include_once('./user.php');
     include_once('./comment.php');

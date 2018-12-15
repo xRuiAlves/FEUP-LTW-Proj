@@ -109,7 +109,7 @@ export default class StoriesRenderer{
     generateFullStoryElem(story){
         let elem = this.generateStoryElem(story);
 
-        request({url:'api/story/info',
+        request({url:'api/index.php/story/info',
             content: {id: story.votable_entity_id}
         }).then(fullStory => {
             elem.querySelector('p.text').textContent = fullStory.story_content;
@@ -120,7 +120,7 @@ export default class StoriesRenderer{
     }
 
     appendCommentsDiv(story, elem, storyPreview, isComment){
-        request({url: `api/${isComment ? 'comment' : 'story'}/comments`, content: {id: story.votable_entity_id}})
+        request({url: `api/index.php/${isComment ? 'comment' : 'story'}/comments`, content: {id: story.votable_entity_id}})
         .then(comments => {
             let commentsWrapper = document.createElement('DIV');
             commentsWrapper.classList.add('comments');
@@ -192,7 +192,7 @@ export default class StoriesRenderer{
             ['comment_content']: content
         }
 
-        request({url:'api/comment/create',
+        request({url:'api/index.php/comment/create',
                 method:'POST',
                 content: body})
         .then(data => {
@@ -223,13 +223,13 @@ export default class StoriesRenderer{
         let unvoting = false;
         let method = 'PUT';
         if((upvoteElement.classList.contains('active') && upvotingBtnBool) || (downvoteElement.classList.contains('active') && !upvotingBtnBool)){
-            url = `/api/${entityType}/unvote`;
+            url = `/api/index.php/${entityType}/unvote`;
             method = 'DELETE';
             unvoting = true;
         }else if(upvotingBtnBool){
-            url = `/api/${entityType}/upvote`;
+            url = `/api/index.php/${entityType}/upvote`;
         }else{
-            url = `/api/${entityType}/downvote`;
+            url = `/api/index.php/${entityType}/downvote`;
         }
 
         request({url: url, method: method, content: {[entityType + '_id']: story.votable_entity_id}})

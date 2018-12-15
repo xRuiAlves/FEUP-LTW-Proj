@@ -24,7 +24,7 @@ function showProfilePictureChangeForm() {
 }
 
 function submitPictureChanges(form, resolve) {
-    request({url: 'api/user/updateimage', 
+    request({url: 'api/index.php/user/updateimage', 
             method: "POST", 
             content: {
                  user_img: form.querySelector('input[type="file"]').files[0]

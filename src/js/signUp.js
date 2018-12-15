@@ -43,7 +43,7 @@ async function submitSignUp(form, resolve){
         user_img: form.querySelector('input[type="file"]').files[0]
     }
     
-    request({url: 'api/user/create', method: "POST", content: requestBody})
+    request({url: 'api/index.php/user/create', method: "POST", content: requestBody})
     .then(data => {
         ModalHandler.hide();
         userLoggedIn(data);

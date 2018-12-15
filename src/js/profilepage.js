@@ -15,7 +15,7 @@ g_appState.addEventListener('load', (data) => {
         document.querySelector('.card.profile-info .bio').textContent = data.user_bio;
         document.querySelector('.card.profile-info .points').textContent = data.points;
     }else{
-        request({url: 'api/user/info', content:{id: externalProfileId}}).then(data => {
+        request({url: 'api/index.php/user/info', content:{id: externalProfileId}}).then(data => {
             document.querySelector('.card.profile-info .pic').setAttribute('src', g_root_path + data.user_img_big);
             document.querySelector('.card.profile-info .name').textContent = data.user_username;
             document.querySelector('.card.profile-info .bio').textContent = data.user_bio;
@@ -26,11 +26,11 @@ g_appState.addEventListener('load', (data) => {
         }).catch(openHomePage);
     }
 
-    user_story_fetch('latest-stories', 'api/story/recentuser', externalProfileId || data.user_id, document.getElementById('btn-load-latest'));
+    user_story_fetch('latest-stories', 'api/index.php/story/recentuser', externalProfileId || data.user_id, document.getElementById('btn-load-latest'));
     document.getElementById('btn-load-latest').addEventListener('click', 
-    e => user_story_fetch('latest-stories', 'api/story/recentuser', data.user_id, e.target));
+    e => user_story_fetch('latest-stories', 'api/index.php/story/recentuser', data.user_id, e.target));
 
-    user_story_fetch('upvoted-stories', 'api/story/mostupvoteduser', externalProfileId || data.user_id, document.getElementById('btn-load-most-upvoted'));
+    user_story_fetch('upvoted-stories', 'api/index.php/story/mostupvoteduser', externalProfileId || data.user_id, document.getElementById('btn-load-most-upvoted'));
     document.getElementById('btn-load-most-upvoted').addEventListener('click', 
-    e => user_story_fetch('upvoted-stories', 'api/story/mostupvoteduser', data.user_id, e.target));
+    e => user_story_fetch('upvoted-stories', 'api/index.php/story/mostupvoteduser', data.user_id, e.target));
 })

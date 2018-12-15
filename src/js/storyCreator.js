@@ -30,7 +30,7 @@ function submitNewStory(title, content, file, notificationForm){
         body.story_img = file;
     }
 
-    request({url: 'api/story/create', method: 'POST', content: body})
+    request({url: 'api/index.php/story/create', method: 'POST', content: body})
     .then(() => {
         openUserProfile();
     })

@@ -46,7 +46,7 @@ async function submitChanges(form, resolve) {
     }
     
 
-    request({url: 'api/user/updatepassword', method: "PUT", content: requestBody})
+    request({url: 'api/index.php/user/updatepassword', method: "PUT", content: requestBody})
     .then(data => {
         ModalHandler.hide();
         resolve();

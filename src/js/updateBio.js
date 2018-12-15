@@ -3,7 +3,7 @@ function updateBio() {
         user_bio: document.querySelector('textarea.bio').value
     }
     
-    request({url: 'api/user/updatebio', method: "PUT", content: requestBody})
+    request({url: 'api/index.php/user/updatebio', method: "PUT", content: requestBody})
     .then(data => {
         resolve();
     })

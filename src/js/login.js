@@ -30,7 +30,7 @@ async function submitLogin(form){
     let usernameDOM = form.querySelector('input[type="text"]');
     let passwordDOM = form.querySelector('input[type="password"]');
     
-    request({url: 'api/user/login',
+    request({url: 'api/index.php/user/login',
             method: "POST",
             content: {user_username: usernameDOM.value,
                       user_password: passwordDOM.value}})
@@ -71,7 +71,7 @@ function showLogOutModal(){
 }
 
 function submitLogOut(){
-    request({url: 'api/user/logout', 
+    request({url: 'api/index.php/user/logout', 
             method: "DELETE"})
     .then(data => {
         ModalHandler.hide();
