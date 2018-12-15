@@ -11,6 +11,7 @@
         <i class="fas fa-edit edit-picture-icon" onclick="showProfilePictureChangeForm()"></i>
     </div>
     <p class="name"></p>
+    <p class="username"></p>
     <textarea class="bio" onchange="updateBio()"></textarea>
     <div class="footer">
         <div class="user-points-div">
