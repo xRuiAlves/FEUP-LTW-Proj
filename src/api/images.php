@@ -75,8 +75,8 @@
             $crop_size, $crop_size
         );
 
-        $small_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id . "_small";
-        $big_path = $_SERVER["DOCUMENT_ROOT"] . "/db/images/user" . $user_id . "_big";
+        $small_path = "../db/images/user" . $user_id . "_small";
+        $big_path = "../db/images/user" . $user_id . "_big";
         $target_small_file = $small_path . "." . $extension;
         $target_big_file = $big_path . "." . $extension;
 
@@ -105,7 +105,7 @@
 
     function uploadStoryImage($img, $story_id) {
         $extension = getImageExtension($img["type"]);
-        $target_file = $_SERVER["DOCUMENT_ROOT"] . "/db/images/story" . $story_id . "." . $extension;
+        $target_file = "../db/images/story" . $story_id . "." . $extension;
 
         if (move_uploaded_file($img["tmp_name"], $target_file)) {
             return "uploaded";
@@ -120,7 +120,7 @@
         }
 
         $relative_file_path = "/db/images/user" . $user_id . "_" . $size;
-        $file_path = $_SERVER["DOCUMENT_ROOT"] . $relative_file_path;
+        $file_path = '..' . $relative_file_path;
         $isJpeg = file_exists($file_path . ".jpeg");
         $relative_file_path = $relative_file_path . ($isJpeg ? ".jpeg" : ".png");
         
@@ -129,7 +129,7 @@
 
     function api_getStoryImgJSON($story_id) {
         $relative_file_path = "/db/images/story" . $story_id;
-        $file_path = $_SERVER["DOCUMENT_ROOT"] . $relative_file_path;
+        $file_path = '..' . $relative_file_path;
         
         if (file_exists($file_path . ".jpeg")) {
             $relative_file_path = $relative_file_path . ".jpeg";

@@ -1,0 +1,1 @@
+let g_root_path = '/src/';

@@ -1,5 +1,5 @@
 <?php
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/db/Database.php');
+    include_once('../db/Database.php');
 
     function userExists($user_id) {
         $db = Database::getInstance()->getDB();

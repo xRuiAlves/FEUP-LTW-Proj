@@ -1,11 +1,11 @@
 <?php include('./templates/header.php') ?>
 
-<link rel="stylesheet" href="css/homepage.css">
+<link rel="stylesheet" href="<?=$_env_root_path?>css/homepage.css">
 
-<script src="js/homepage.js" defer type="module"></script>
+<script src="<?=$_env_root_path?>js/homepage.js" defer type="module"></script>
 
 <div id="banner">
-    <img src="images/banner-light.png"/>
+    <img src="<?=$_env_root_path?>images/banner-light.png"/>
 </div>
 <div id="floatingActionButton" class="hidden"><span>+</span><i class="fas fa-pen"></i></div>
 

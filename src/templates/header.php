@@ -1,7 +1,7 @@
 <?php
     session_start();
 
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/templates/env.php');
+    include_once('./templates/env.php');
 
     $sideMenuEntries = [
         (object) ['text' => 'Add new story', 'icon' => 'fa-plus', 'onclick' => 'createNewStory()'],
@@ -17,27 +17,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Maven+Pro" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"-->
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/network.js" ></script>
-    <script src="js/appstate.js" ></script>
-    <script src="js/widgets.js" ></script>
-    <script src="js/navbar.js" defer></script>
-    <script src="js/modal.js" defer></script>
-    <script src="js/login.js" defer></script>
-    <script src="js/signUp.js" defer></script>
-    <script src="js/passwordChange.js" defer></script>
-    <script src="js/profilePictureChange.js" defer></script>
-    <script src="js/updateBio.js" defer></script>
-    <script src="js/storyfetchers.js" type="module"></script>
-    <script src="js/storyCreator.js" defer></script>
+    <link rel="icon" type="image/png" href="<?=$_env_root_path?>images/favicon.png">
+    <link rel="stylesheet" href="<?=$_env_root_path?>css/style.css">
+    <script src="<?=$_env_root_path?>js/env.js" ></script>
+    <script src="<?=$_env_root_path?>js/network.js" ></script>
+    <script src="<?=$_env_root_path?>js/appstate.js" ></script>
+    <script src="<?=$_env_root_path?>js/widgets.js" ></script>
+    <script src="<?=$_env_root_path?>js/navbar.js" defer></script>
+    <script src="<?=$_env_root_path?>js/modal.js" defer></script>
+    <script src="<?=$_env_root_path?>js/login.js" defer></script>
+    <script src="<?=$_env_root_path?>js/signUp.js" defer></script>
+    <script src="<?=$_env_root_path?>js/passwordChange.js" defer></script>
+    <script src="<?=$_env_root_path?>js/profilePictureChange.js" defer></script>
+    <script src="<?=$_env_root_path?>js/updateBio.js" defer></script>
+    <script src="<?=$_env_root_path?>js/storyfetchers.js" type="module"></script>
+    <script src="<?=$_env_root_path?>js/storyCreator.js" defer></script>
     <title><?=$_env_website_name?></title>
 </head>
 <body>
     <div id="modal-container"></div>
     <nav id="topbar">
-        <div class="logo" onclick="window.location.href='/'">
-            <img src="images/logo_simple.png" />
+        <div class="logo" onclick="window.location.href='<?=$_env_root_path?>'">
+            <img src="<?=$_env_root_path?>images/logo_simple.png" />
             <h1><?=$_env_website_name?></h1>
         </div>
         <ul class="page-side-menu">
@@ -51,7 +52,7 @@
                     <div class="left"><?=$_SESSION['username']?></div>
                     <div class="right"><?=$_env_login?></div>
                 </div>
-                <img src="/images/default_profile.png"/>
+                <img src="<?=$_env_root_path?>/images/default_profile.png"/>
             </div>
             <div id="side-menu-hamburguer">
                 <div class="side-menu-hamburguer-bar"></div>

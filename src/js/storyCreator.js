@@ -32,7 +32,7 @@ function submitNewStory(title, content, file, notificationForm){
 
     request({url: 'api/story/create', method: 'POST', content: body})
     .then(() => {
-        window.location.href = 'profile.php'
+        openUserProfile();
     })
     .catch((data) => {
         notificationForm.innerText = 'Could not create story: ' + data.error;

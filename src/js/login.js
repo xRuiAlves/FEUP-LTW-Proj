@@ -70,14 +70,14 @@ function showLogOutModal(){
     ModalHandler.show(form);
 }
 
-function submitLogOut(resolve, reject){
+function submitLogOut(){
     request({url: 'api/user/logout', 
             method: "DELETE"})
     .then(data => {
         ModalHandler.hide();
         userLoggedOut();
-        if (window.location.pathname === "/profile.php") {
-            window.location.href = "index.php";
+        if (window.location.pathname === g_root_path + "profile.php") {
+            openHomePage();
         }
     })
     .catch(() => {
@@ -91,14 +91,14 @@ function userLoggedIn(data){
     document.getElementById('login_slider').classList.add('active');
     g_appState = {...g_appState, ...data};
     g_appState.triggerOnLoads();
-    document.querySelector('#login_slider > img').setAttribute('src', data.user_img_small);
+    document.querySelector('#login_slider > img').setAttribute('src', g_root_path + data.user_img_small);
 }
 
 function userLoggedOut(){
     document.querySelector('#topbar #login_slider > .slider_text div.left').innerText = '';
     document.getElementById('login_slider').classList.remove('active');
     document.querySelector('#topbar .page-side-menu').classList.remove('active');
-    document.querySelector('#login_slider > img').setAttribute('src', '/images/default_profile.png');
+    document.querySelector('#login_slider > img').setAttribute('src', g_root_path + 'images/default_profile.png');
     g_appState.user_username = undefined;
     g_appState.user_id = undefined;
     openHomePage();

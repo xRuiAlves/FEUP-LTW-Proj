@@ -18,7 +18,7 @@ page_content.addEventListener("click", () =>
 );
 
 g_appState.addEventListener('load', (state) => {
-    document.querySelector('#login_slider > img').setAttribute('src', state.user_img_small || '/images/default_profile.png');
+    document.querySelector('#login_slider > img').setAttribute('src', state.user_img_small ? (g_root_path + state.user_img_small) : (g_root_path + 'images/default_profile.png'));
     if(state.user_username){
         document.querySelector('#floatingActionButton').classList.remove('hidden');
     }
@@ -26,12 +26,12 @@ g_appState.addEventListener('load', (state) => {
 
 function openUserProfile(id){
     if(!id){
-        window.location.href="profile.php";
+        window.location.href=g_root_path + "profile.php";
     }else{
-        window.location.href="profile.php?id=" + id;
+        window.location.href=g_root_path + "profile.php?id=" + id;
     }
 }
 
 function openHomePage(){
-    window.location.href="index.php";
+    window.location.href=g_root_path + "index.php";
 }

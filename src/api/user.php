@@ -1,8 +1,8 @@
 <?php 
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/db/db_selectors.php");
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/http_responses.php");
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/images.php");
-    include_once($_SERVER["DOCUMENT_ROOT"] . "/api/auth.php");
+    include_once("../db/db_selectors.php");
+    include_once("./http_responses.php");
+    include_once("./images.php");
+    include_once("./auth.php");
 
     function handleUserRequest($request, $method) {
         if ($method === "POST") {

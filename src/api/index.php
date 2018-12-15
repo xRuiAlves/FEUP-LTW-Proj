@@ -1,9 +1,9 @@
 <?php
     session_start();
 
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/api/story.php');
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/api/user.php');
-    include_once($_SERVER['DOCUMENT_ROOT'] . '/api/comment.php');
+    include_once('./story.php');
+    include_once('./user.php');
+    include_once('./comment.php');
 
     session_start();
 

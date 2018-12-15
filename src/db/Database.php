@@ -4,7 +4,7 @@
     private static $instance = NULL;
 
     private function __construct() {
-      $this->db = new PDO('sqlite:' . $_SERVER['DOCUMENT_ROOT'] . '/db/database.db');
+      $this->db = new PDO('sqlite:' . '../db/database.db');
 
       $this->db->query('PRAGMA foreign_keys = ON');
       $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

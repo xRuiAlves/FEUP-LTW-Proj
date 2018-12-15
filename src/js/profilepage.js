@@ -10,13 +10,13 @@ g_appState.addEventListener('load', (data) => {
     }
 
     if(!externalProfileId || externalProfileId === data.user_id){
-        document.querySelector('.card.profile-info .pic').setAttribute('src', data.user_img_big);
+        document.querySelector('.card.profile-info .pic').setAttribute('src', g_root_path + data.user_img_big);
         document.querySelector('.card.profile-info .name').textContent = data.user_username;
         document.querySelector('.card.profile-info .bio').textContent = data.user_bio;
         document.querySelector('.card.profile-info .points').textContent = data.points;
     }else{
         request({url: 'api/user/info', content:{id: externalProfileId}}).then(data => {
-            document.querySelector('.card.profile-info .pic').setAttribute('src', data.user_img_big);
+            document.querySelector('.card.profile-info .pic').setAttribute('src', g_root_path + data.user_img_big);
             document.querySelector('.card.profile-info .name').textContent = data.user_username;
             document.querySelector('.card.profile-info .bio').textContent = data.user_bio;
             document.querySelector('.card.profile-info .points').textContent = data.points;
