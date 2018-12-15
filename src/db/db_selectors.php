@@ -115,13 +115,13 @@
                 NATURAL JOIN VotableEntity
                 NATURAL JOIN Story
                 NATURAL JOIN User
-            WHERE story_title like ?
+            WHERE story_title like ? OR user_username like ?
             GROUP BY votable_entity_id
             ORDER BY votable_entity_creation_date DESC
             LIMIT ?
             OFFSET ?;
         ');
-        $stmt->execute(array("%$match%", $num_stories, $offset));
+        $stmt->execute(array("%$match%", $match, $num_stories, $offset));
         return $stmt->fetchAll(); 
     }
 
@@ -225,13 +225,13 @@
                 NATURAL JOIN VotableEntity
                 NATURAL JOIN Story
                 NATURAL JOIN User
-            WHERE story_title like ?
+            WHERE story_title like ? OR user_username like ?
             GROUP BY votable_entity_id
             ORDER BY upvotes DESC, downvotes DESC
             LIMIT ?
             OFFSET ?;
         ');
-        $stmt->execute(array("%$match%", $num_stories, $offset));
+        $stmt->execute(array("%$match%", $match, $num_stories, $offset));
         return $stmt->fetchAll(); 
     }
 
