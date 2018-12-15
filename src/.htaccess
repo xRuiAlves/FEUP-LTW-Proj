@@ -1,0 +1,7 @@
+ErrorDocument 404 /ROOT_PATH/page404.php
+ErrorDocument 403 /ROOT_PATH/page403.php
+
+<Files ~ "\.(db|sql|sh)$">
+Order Allow,Deny
+Deny from All
+</Files>

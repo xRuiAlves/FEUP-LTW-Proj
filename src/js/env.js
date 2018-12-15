@@ -1,1 +1,1 @@
-let g_root_path = '/src/';
+let g_root_path = '/ROOT_PATH/';
