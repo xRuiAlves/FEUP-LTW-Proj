@@ -83,14 +83,14 @@ export default class StoriesRenderer{
         storyContainer.className = 'card story-container';
         storyContainer.innerHTML = `
             
-            ${story.story_img ? `<img class="banner" src="${g_root_path + story.story_img}"/> ` : ''}
+            ${story.story_img ? `<img class="banner" alt="Story picture" src="${g_root_path + story.story_img}"/> ` : ''}
             <div class="content">
                 <p class="title"></p>
                 <p class="date">${this.getStringFromDate(story.votable_entity_creation_date)}</p>
                 <p class="text"></p>
                 <footer class="story-details">
                     <div class="author">
-                        <img class="profile-image" src="${g_root_path + story.user_img_small}"/>
+                        <img class="profile-image" src="${g_root_path + story.user_img_small}" alt="Creator user picture"/>
                         <span class="author-name">${story.user_username}</span>
                     </div>
                     <div class="reactions">
@@ -147,7 +147,7 @@ export default class StoriesRenderer{
         commentContainer.classList.add('comment-container');
         commentContainer.innerHTML = `
             <div class="comment">
-                <img src="${g_root_path + comment.user_img_small}">
+                <img src="${g_root_path + comment.user_img_small}" alt="Creator user picture">
                 <p class="username"></p>
                 <p class="content"></p>
             </div>

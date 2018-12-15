@@ -6,7 +6,7 @@
 
 <div id="floatingActionButton" class="hidden"><span>+</span><i class="fas fa-pen"></i></div>
 <div class="card profile-info">
-    <img class="pic">
+    <img class="pic" alt="Profile picture">
     <div class="edit-picture">
         <i class="fas fa-edit edit-picture-icon" onclick="showProfilePictureChangeForm()"></i>
     </div>

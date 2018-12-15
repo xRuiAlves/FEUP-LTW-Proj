@@ -16,7 +16,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Maven+Pro" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="<?=$_env_root_path?>images/favicon.png">
     <link rel="stylesheet" href="<?=$_env_root_path?>css/style.css">
     <script src="<?=$_env_root_path?>js/env.js" ></script>
@@ -35,10 +35,9 @@
     <title><?=$_env_website_name?></title>
 </head>
 <body>
-    <div id="modal-container"></div>
     <nav id="topbar">
         <div class="logo" onclick="window.location.href='<?=$_env_root_path?>'">
-            <img src="<?=$_env_root_path?>images/logo_simple.png" />
+            <img src="<?=$_env_root_path?>images/logo_simple.png" alt="Traveler page logo"/>
             <h1><?=$_env_website_name?></h1>
         </div>
         <ul class="page-side-menu">
@@ -52,11 +51,11 @@
                     <div class="left"><?=$_SESSION['username']?></div>
                     <div class="right"><?=$_env_login?></div>
                 </div>
-                <img src="<?=$_env_root_path?>/images/default_profile.png"/>
+                <img src="<?=$_env_root_path?>/images/default_profile.png" alt="Anonymous user profile picture"/>
             </div>
             <div id="side-menu-hamburguer">
                 <div class="side-menu-hamburguer-bar"></div>
             </div>
         </div>
     </nav>
-    <section id="page-content">
+    <div id="page-content">

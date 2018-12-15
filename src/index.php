@@ -5,7 +5,7 @@
 <script src="<?=$_env_root_path?>js/homepage.js" defer type="module"></script>
 
 <div id="banner">
-    <img src="<?=$_env_root_path?>images/banner-light.png"/>
+    <img src="<?=$_env_root_path?>images/banner-light.png" alt="Traveler banner"/>
 </div>
 <div id="search-bar"><input type="text" placeholder="Search travelling stories!"/><i class="fas fa-search"></i></div>
 
