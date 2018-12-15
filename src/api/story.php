@@ -355,7 +355,7 @@
 
         $stories = null;
         if (isset($data["match"]) && !empty($data["match"])) {
-            $stories = getRecentStoriesByMatch($offset, $num_stories, $match);
+            $stories = getRecentStoriesByMatch($offset, $num_stories, $data["match"]);
         } else {
             $stories = getRecentStories($offset, $num_stories);
         }
@@ -402,7 +402,7 @@
 
         $stories = null;
         if (isset($data["match"]) && !empty($data["match"])) {
-            $stories = getMostUpvotedStoriesByMatch($offset, $num_stories, $match);
+            $stories = getMostUpvotedStoriesByMatch($offset, $num_stories, $data["match"]);
         } else {
             $stories = getMostUpvotedStories($offset, $num_stories);
         }
