@@ -61,7 +61,7 @@ export default class StoriesRenderer{
 
             let banner;
             if(banner = elem.querySelector('img.banner')){
-                banner.style.height = banner.offsetWidth * (story.story_img_height/story.story_img_width) + "px";
+                banner.style.height = elem.offsetWidth * (story.story_img_height/story.story_img_width) + "px";
             }    
         }
     }
