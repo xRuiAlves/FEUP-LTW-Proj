@@ -239,7 +239,7 @@ export default class StoriesRenderer{
             url = `/api/index.php/${entityType}/downvote`;
         }
 
-        request({url: url, method: method, content: {[entityType + '_id']: story.votable_entity_id}})
+        request({url: g_root_path + url, method: method, content: {[entityType + '_id']: story.votable_entity_id}})
         .then(() => {
                 if(unvoting){
                     upvoteElement.classList.remove('active');
