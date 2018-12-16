@@ -181,7 +181,7 @@
     content: "";
     position: relative;
     transform: translate(Calc(100% + var(--hamburguer-padding)),0%);
-    transition: transform var(--slider-animat2.5ion-duration) ease-out, background-color var(--slider-animation-duration) ease-out;
+    transition: transform var(--slider-animation-duration) ease-out, background-color var(--slider-animation-duration) ease-out;
 }
 
 #topbar .nav-bar-right-section #login_slider.active ~ #side-menu-hamburguer .side-menu-hamburguer-bar,
