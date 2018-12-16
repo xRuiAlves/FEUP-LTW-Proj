@@ -63,7 +63,7 @@ The were also implemented extra features:
   The user can also configure it's own profile (biography, profile picture and password) in his/hers profile page
 - Story pictures and user pictures -> The website allows users to post stories with pictures
 - Various design features:
-    - Implemented a custom dynamic masonry design to display stories
+    - Implemented a custom dynamic masonry layout to display stories
     - Added a website banner using parallax effect
     - A generic modal container to allow user to view stories in detail, login, register, ...  
 
