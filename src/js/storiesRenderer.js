@@ -230,16 +230,16 @@ export default class StoriesRenderer{
         let unvoting = false;
         let method = 'PUT';
         if((upvoteElement.classList.contains('active') && upvotingBtnBool) || (downvoteElement.classList.contains('active') && !upvotingBtnBool)){
-            url = `/api/index.php/${entityType}/unvote`;
+            url = `api/index.php/${entityType}/unvote`;
             method = 'DELETE';
             unvoting = true;
         }else if(upvotingBtnBool){
-            url = `/api/index.php/${entityType}/upvote`;
+            url = `api/index.php/${entityType}/upvote`;
         }else{
-            url = `/api/index.php/${entityType}/downvote`;
+            url = `api/index.php/${entityType}/downvote`;
         }
 
-        request({url: g_root_path + url, method: method, content: {[entityType + '_id']: story.votable_entity_id}})
+        request({url: url, method: method, content: {[entityType + '_id']: story.votable_entity_id}})
         .then(() => {
                 if(unvoting){
                     upvoteElement.classList.remove('active');
