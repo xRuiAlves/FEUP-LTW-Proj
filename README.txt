@@ -4,7 +4,6 @@
 ------------------------------------------------------
 
 
-
 Groups elements:
 - Filipa Manita Santos Durão        up201606640
 - Henrique Melo Lima                up201606525
@@ -42,6 +41,9 @@ To "build" the database, one needs to go the "db" direction (under the public_ht
 ./config_db.sh
 
 This script builds a new database file based on the schema.sql file (containing the database schema) and the data.sql file (containing database "dummie" data).
+
+The website is also live and running under the following hyperlink:
+https://web.fe.up.pt/~up201606746/
 
 ------------------------------------------------------
 
