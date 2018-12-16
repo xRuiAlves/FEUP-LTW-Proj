@@ -4,13 +4,14 @@ const AMOUNT_OF_STORIES_PER_FETCH = 6;
 
 let storiesRenderer = new StoriesRenderer();
 
-export function generic_story_fetch(destinationDOMId, requestPath, loadMoreButton, propertiesGetter){
+export function generic_story_fetch(destinationDOMId, requestPath, loadMoreButton, propertiesGetter, cleanStories){
     let offset;
-    if(storiesRenderer.displayedStories[destinationDOMId]){
+    if(storiesRenderer.displayedStories[destinationDOMId] && !cleanStories){
         offset = storiesRenderer.displayedStories[destinationDOMId].length;
     }else{
         offset = 0;
     }
+
 
     request({url: requestPath, content: {
         ...(propertiesGetter()),
@@ -18,6 +19,9 @@ export function generic_story_fetch(destinationDOMId, requestPath, loadMoreButto
         num_stories: AMOUNT_OF_STORIES_PER_FETCH
     }})
     .then(data => {
+        if(cleanStories){
+            storiesRenderer.clear(destinationDOMId);
+        }
         storiesRenderer.displayStories(data, destinationDOMId);
         if(data.length < AMOUNT_OF_STORIES_PER_FETCH && loadMoreButton){
             loadMoreButton.style.visibility = 'hidden';
@@ -50,8 +54,4 @@ export function user_story_fetch(destinationDOMId, requestPath, user_id, loadMor
         }
     })
     .catch(err => console.log('Could not load stories', err));
-}
-
-export function clearStories(){
-    storiesRenderer.clear();
 }

@@ -1,4 +1,4 @@
-import { generic_story_fetch, clearStories } from './storyfetchers.js';
+import { generic_story_fetch } from './storyfetchers.js';
 
 fetchStories();
 
@@ -9,7 +9,6 @@ let searchBarInput = document.querySelector('#search-bar input');
 setInterval(() => {
     if(searchBarInput.value !== lastMatch){
         lastMatch = searchBarInput.value;
-        clearStories();
         fetchStories();
     }
 }, 300);
@@ -46,8 +45,8 @@ document.querySelectorAll('.page-divider i').forEach(
 
 
 function fetchStories(){
-    generic_story_fetch('latest-stories', g_root_path + 'api/index.php/story/recent', document.getElementById('btn-load-latest'), getMatch);
-    generic_story_fetch('most-upvoted-stories', g_root_path + 'api/index.php/story/mostupvoted', document.getElementById('btn-load-most-upvoted'), getMatch);
+    generic_story_fetch('latest-stories', g_root_path + 'api/index.php/story/recent', document.getElementById('btn-load-latest'), getMatch, true);
+    generic_story_fetch('most-upvoted-stories', g_root_path + 'api/index.php/story/mostupvoted', document.getElementById('btn-load-most-upvoted'), getMatch, true);
 }
 
 function getMatch(){
