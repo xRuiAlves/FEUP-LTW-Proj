@@ -54,7 +54,7 @@ Implemented features:
 All the required features were implemented successfully.
 
 The were also implemented extra features:
-- Multilevel coments (2 levels due to design reasons, allthough the current database supports multi level comments)
+- Multilevel coments (2 levels due to design reasons, although the current database supports multi level comments)
 - Sorting -> Stories can be sorted in different ways
 - Search engine -> Users can search for stories in the website (both by their title or by their creator user)
 - A REST api (featuring authentication)
