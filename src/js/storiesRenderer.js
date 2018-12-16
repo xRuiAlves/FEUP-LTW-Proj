@@ -54,15 +54,18 @@ export default class StoriesRenderer{
             }
         }
 
-        for(let story of stories){
-            let elem = this.generateStoryElem(story);
-            elem.addEventListener('click', (e) => {this.showFullStory(story)});
-            this.getMinimumSizedDOMColumn(this.DOMColumns[targetElementId]).appendChild(elem);
-
-            let banner;
-            if(banner = elem.querySelector('img.banner')){
-                banner.style.height = elem.offsetWidth * (story.story_img_height/story.story_img_width) + "px";
-            }    
+        for(let i in stories){
+            let story = stories[i];
+                let elem = this.generateStoryElem(story);
+                elem.addEventListener('click', () => {this.showFullStory(story)});
+                this.getMinimumSizedDOMColumn(this.DOMColumns[targetElementId]).appendChild(elem);
+                let banner;
+                if(banner = elem.querySelector('div.banner-container')){
+                    let imgHeight = elem.offsetWidth * (story.story_img_height/story.story_img_width) + "px";
+                    banner.querySelector('img.banner').style.height = imgHeight;
+                    banner.style.height = imgHeight;
+                }
+            
         }
     }
 
@@ -73,7 +76,7 @@ export default class StoriesRenderer{
             if(column.offsetHeight < minSize){
                 minSize = column.offsetHeight;
                 minColumn = column;
-            }
+            }   
         }
         return minColumn;
     }
@@ -83,7 +86,7 @@ export default class StoriesRenderer{
         storyContainer.className = 'card story-container';
         storyContainer.innerHTML = `
             
-            ${story.story_img ? `<img class="banner" alt="Story picture" src="${g_root_path + story.story_img}"/> ` : ''}
+            ${story.story_img ? `<div class="banner-container"><img class="banner" alt="Story picture" src="${g_root_path + story.story_img}"/></div> ` : ''}
             <div class="content">
                 <p class="title"></p>
                 <p class="date">${this.getStringFromDate(story.votable_entity_creation_date)}</p>
