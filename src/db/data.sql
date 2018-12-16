@@ -45,6 +45,8 @@ INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES 
 
 ----------------------
 -- Votable Entities
+
+-- Stories
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1527149000"); 
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1527946402"); 
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1527648000");
@@ -66,6 +68,7 @@ INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "15
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1527049666");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (7, "1526848567");
 
+-- First level Comments
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528848406");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528847306");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1528848412");
@@ -95,8 +98,40 @@ INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (7, "15
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (7, "1528845555");
 INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (7, "1528846666");
 
+-- Sub Comments
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (7, "1538858406");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (7, "1538867306");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1538878412");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1538888452");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1538898322");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1538907423");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (6, "1538913454");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1538921235");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1538936735");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1538946375");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1538956462");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1538962854");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (5, "1538972375");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1538985825");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1538996492");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1539006923");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1539010014");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1539026386");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (1, "1539037852");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1539046257");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (2, "1539058888");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1539062639");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1539071111");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1539082222");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1539093333");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (3, "1539104444");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1539115555");
+INSERT INTO VotableEntity (user_id, votable_entity_creation_date) VALUES (4, "1539126666");
+
 -------------
 -- Comments
+
+-- First Level Comments
 INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (21, 5, 'Amazing!');
 INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (22, 2, 'Good picture.');
 INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (23, 13, 'Terrible...');
@@ -125,6 +160,36 @@ INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUE
 INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (46, 2, 'Marvelous ;)');
 INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (47, 13, 'meh :/');
 INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (48, 9, 'Wow!');
+
+-- Sub Comments
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (49, 21, 'Indeed ...');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (50, 21, 'In a certain way, that is true :)');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (51, 22, 'Totally!!');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (52, 24, 'I think so too');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (53, 25, 'yep');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (54, 25, ';)');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (55, 27, 'Indeed!');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (56, 27, 'Ahah');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (57, 28, ':P');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (58, 30, 'Well, you do have a point!');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (59, 30, 'I have also been to this city');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (60, 31, 'I think i have been there before');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (61, 33, 'It think its a good picture');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (62, 34, ':) :)');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (63, 34, 'What a time to be alive');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (64, 36, 'Agreed.');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (65, 36, 'I kind of disagree ...');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (66, 37, 'Well, in a certain way thats true :P');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (67, 39, 'eheheh');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (68, 39, 'lmao!');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (69, 40, 'I wish i could go there ...');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (70, 42, 'It is a beautifull beautiful city');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (71, 43, 'Indeed!!');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (72, 43, 'That is a valid argument!');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (73, 45, 'well ....');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (74, 45, ':D');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (75, 47, 'I am commenting on your comment!');
+INSERT INTO Comment (votable_entity_id, parent_entity_id, comment_content) VALUES (76, 47, 'I Completely AGREE with that!!');
 
 ------------
 -- Stories
@@ -307,3 +372,19 @@ INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 7, 41);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 42);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 2, 43);
 INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 3, 44);
+
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 7, 76);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 6, 74);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 5, 72);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 4, 70);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 3, 68);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 2, 66);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 1, 64);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 2, 62);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 3, 60);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 4, 58);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 5, 56);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 6, 54);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 7, 52);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (1, 1, 50);
+INSERT INTO Vote (vote_value, user_id, votable_entity_id) VALUES (-1, 1, 57);
