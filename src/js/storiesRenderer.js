@@ -61,9 +61,7 @@ export default class StoriesRenderer{
                 this.getMinimumSizedDOMColumn(this.DOMColumns[targetElementId]).appendChild(elem);
                 let banner;
                 if(banner = elem.querySelector('div.banner-container')){
-                    let imgHeight = elem.offsetWidth * (story.story_img_height/story.story_img_width) + "px";
-                    banner.querySelector('img.banner').style.height = imgHeight;
-                    banner.style.height = imgHeight;
+                    banner.style.height = elem.offsetWidth * (story.story_img_height/story.story_img_width) + "px";
                 }
             
         }
