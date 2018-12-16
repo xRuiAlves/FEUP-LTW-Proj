@@ -55,10 +55,6 @@
     width: 100%;
 }
 
-.non-editable {
-    pointer-events: none;
-}
-
 .invisible {
     display: none;
 }
