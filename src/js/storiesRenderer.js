@@ -93,7 +93,7 @@ export default class StoriesRenderer{
                         <img class="profile-image" src="${g_root_path + story.user_img_small}" alt="Creator user picture"/>
                         <span class="author-name">${story.user_username}</span>
                     </div>
-                    <div class="reactions">
+                    <div class="reactions entity-${story.votable_entity_id}">
                         <span class="n-replies"><span class="counter">${story.num_comments || 0}</span><i class="fas fa-comment"></i></span>
                         <span class="n-upvotes ${story.hasupvoted ? 'active' : ''}"><span class="counter">${story.upvotes || 0}</span><i class="fas fa-arrow-up"></i></span>
                         <span class="n-downvotes ${story.hasdownvoted ? 'active' : ''}"><span class="counter">${story.downvotes || 0}</span><i class="fas fa-arrow-down"></i></span>
@@ -151,13 +151,14 @@ export default class StoriesRenderer{
                 <p class="username"></p>
                 <p class="content"></p>
             </div>
-            <div class="reactions">
+            <div class="reactions entity-${comment.votable_entity_id}">
                 ${hideReplies ? '' : `<span class="n-replies"><span class="counter">${comment.num_comments || 0}</span> replies</span>`}
                 <span class="n-upvotes ${comment.hasupvoted ? 'active' : ''}"><span class="counter">${comment.upvotes || 0}</span><i class="fas fa-arrow-up"></i></span>
                 <span class="n-downvotes ${comment.hasdownvoted ? 'active' : ''}"><span class="counter">${comment.downvotes || 0}</span><i class="fas fa-arrow-down"></i></span>
                 <span class="date">${this.getStringFromDate(comment.votable_entity_creation_date)}</span>
             </div>
         `;
+
         commentContainer.querySelector('.username').textContent = comment.user_username;
         commentContainer.querySelector('.content').textContent = comment.comment_content;
 
@@ -208,7 +209,6 @@ export default class StoriesRenderer{
                 storyDiv.querySelector('.reactions .n-replies span.counter').textContent = parseInt(storyDiv.querySelector('.reactions .n-replies span.counter').textContent) + 1;
                 if(storyPreview){
                     storyPreview.num_comments = parseInt(storyPreview.num_comments) + 1;
-                    this.rerenderStories(true);
                 }
             })
         .catch(() => console.log('Cannot comment. Please check your connection'))
@@ -238,47 +238,57 @@ export default class StoriesRenderer{
         }else{
             url = `api/index.php/${entityType}/downvote`;
         }
-
         request({url: url, method: method, content: {[entityType + '_id']: story.votable_entity_id}})
         .then(() => {
-                if(unvoting){
-                    upvoteElement.classList.remove('active');
-                    downvoteElement.classList.remove('active');
-                    if(upvotingBtnBool){
-                        upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)-1;
-                        story.hasupvoted = false;
-                        story.upvotes--;
-                    }else{
-                        downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)-1;
-                        story.hasdownvoted = false;
-                        story.downvotes--;
-                    }
-                }else if(upvotingBtnBool){
-                    upvoteElement.classList.add('active');
-                    upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)+1;
-                    story.upvotes++;
-                    story.hasupvoted = true;
-                    if(downvoteElement.classList.contains('active')){
-                        downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)-1;
-                        story.hasdownvoted = false;
-                        story.downvotes--;
-                    }
-                    downvoteElement.classList.remove('active');
-                }else{
-                    downvoteElement.classList.add('active');
-                    downvoteElement.querySelector('span.counter').textContent = parseInt(downvoteElement.textContent)+1;
-                    story.downvotes++;
-                    story.hasdownvoted = true;
-                    if(upvoteElement.classList.contains('active')){
-                        upvoteElement.querySelector('span.counter').textContent = parseInt(upvoteElement.textContent)-1;
-                        story.upvotes--
-                        story.hasupvoted = false;
-                    }
-                    upvoteElement.classList.remove('active');
-                }
-                this.rerenderStories(true);
-            })
+                this.applyVoteUI(story, story.votable_entity_id, unvoting, upvotingBtnBool, upvoteElement, downvoteElement);
+        })
         .catch(() => console.log('Could not vote. Please check your connection'))
+    }
+
+    applyVoteUI(entity, id, unvoting, upvoting, upvoteElement, downvoteElement){
+        if(unvoting){
+            if(upvoting){
+                this.changeVoteCounter(id, 'n-upvotes', false, false);
+                entity.hasupvoted = false;
+                entity.upvotes--;
+            }else{
+                this.changeVoteCounter(id, 'n-downvotes', false, false);
+                entity.hasdownvoted = false;
+                entity.downvotes--;
+            }
+        }else if(upvoting){
+            this.changeVoteCounter(id, 'n-upvotes', true, true);
+            entity.upvotes++;
+            entity.hasupvoted = true;
+            if(downvoteElement.classList.contains('active')){
+                this.changeVoteCounter(id, 'n-downvotes', false, false);
+                entity.hasdownvoted = false;
+                entity.downvotes--;
+            }
+            downvoteElement.classList.remove('active');
+        }else{
+            this.changeVoteCounter(id, 'n-downvotes', true, true);
+            entity.downvotes++;
+            entity.hasdownvoted = true;
+            if(upvoteElement.classList.contains('active')){
+                this.changeVoteCounter(id, 'n-upvotes', false, false);
+                entity.upvotes--
+                entity.hasupvoted = false;
+            }
+            upvoteElement.classList.remove('active');
+        }
+    }
+
+    changeVoteCounter(entityId, reactionClass, increment, setActive){
+        document.querySelectorAll(`.entity-${entityId}.reactions .${reactionClass}`).forEach(elem => {
+            let counter = elem.querySelector('span.counter');
+            counter.textContent = parseInt(counter.textContent)+(increment ? 1 : -1);
+            if(setActive){
+                elem.classList.add('active');
+            }else{
+                elem.classList.remove('active');
+            }
+        });
     }
 
     getStringFromDate(epochTime){
