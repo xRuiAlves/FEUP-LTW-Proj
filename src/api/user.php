@@ -162,6 +162,8 @@
     }
 
     function api_createUser($data) {
+        $password_min_length = 8;
+        
         if(!verifyRequestParameters($data, ["user_username", "user_realname", "user_password", "user_bio"])) {
             return;
         }
@@ -170,6 +172,12 @@
         $user_realname = $data["user_realname"];
         $user_password = $data["user_password"];
         $user_bio = $data["user_bio"];
+
+        
+        if (strlen($user_password) < $password_min_length) {
+            httpBadRequest("password length should be at least $password_min_length characters long");
+            return;
+        } 
 
         if (usernameExists($user_username)){
             httpBadRequest("username already exists");
@@ -228,6 +236,8 @@
     }
 
     function api_userUpdatePassword($data) {
+        $password_min_length = 8;
+        
         if(!verifyRequestParameters($data, ["user_username", "user_old_password", "user_new_password"])) {
             return;
         }
@@ -235,6 +245,11 @@
         $user_username = $data["user_username"];
         $user_old_password = $data["user_old_password"];
         $user_new_password = $data["user_new_password"];
+
+        if (strlen($user_new_password) < $password_min_length) {
+            httpBadRequest("password length should be at least $password_min_length characters long");
+            return;
+        }
 
         if (!usernameExists($user_username)) {
             httpNotFound("user with id $user_username does not exist");
