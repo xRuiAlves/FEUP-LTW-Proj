@@ -3,43 +3,43 @@
 INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (
     'marktsu1996', 
     'Mark Tsu Yu', 
-    '$2y$10$CWyOrDZnmvSji2kyQPYysuJb.RuD1ZpTI21VFOw0XcYB6uaTX1Xy6', 
+    '$2y$10$7Ofawasf2V6iYF7O96Q/ve6JxZeJdtlIx6O1SWu4kkaBkv.ecDBx.', 
     'Theatre and Performative Arts bachelor degree student at Boston University. Chess player in the Boston Chess Club and Scholastic Center (BCC&SC).'
 );
 INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (
     'pphig125', 
     'Paul Higgins', 
-    '$2y$10$IQlzXG7PaMVyfIe0wTf3huXzSsA4Q8yndS5MsI3RiRUtZrCxyLSqa', 
+    '$2y$10$YQ0xX9uR2Rq84MQuFUFNg.ksMmjokn21CBDkv2FSeVpLJ4KyWoBvO', 
     'I have been a farmar for most of my life. I spend my free days travelling, hiking and recently I have acquired a taste in bird watching.'
 );
 INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (
     'SelenaPeterson', 
     'Selena Peterson', 
-    '$2y$10$OCNGlPJLOvIUEl0dTHloEuaAqSfv1QXbmT1mSLo7Cho66AzxVe/SO', 
+    '$2y$10$UfOu1zeyuvCHanoFwRjl..xCO6o.DVDtKNvAQlK4j0cHBo96qIDX.', 
     'Biologic Tissue Regeneration reseacher at Saint Louis University, under a Scientific PPTW Scholaship. In my free time, I enjoy stamp collecting and boat trips by the lake.'
 );
 INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (
     'SarahVD', 
     'Sarah Van Davidson', 
-    '$2y$10$ARpT2Ld3qugxjQPs96joRuOvFociuGrcVeP1hVdnj0Uhimi04x.c.', 
+    '$2y$10$yb1Xna0UdZykTmgHWpCAnOZHlZ02d3gaO5L9EoSH.J97dxGfVM39y', 
     'Full Stack-Entwickler in der deutschen Personalabteilung von JS Integrated Systems. In meiner Freizeit gehe ich gerne schwimmen, tauchen und skaten.'
 );
 INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (
     'rogerMC', 
     'Roger McGreggor', 
-    '$2y$10$8OUkAhEBGsO.6x/SQs1xRuvkGq34Cp3PEhop3X0h513Ia21UiYP0W', 
+    '$2y$10$7Qt6sb2lEasaIUKgwiMvGe6LddfpyxMIByvlOEgk7g4sYtOsb.DFy', 
     'Health care assistant. Youtube and twich streamer in free times, where I show people how to solve puzzles (one of my biggest passions since I was a child!).'
 );
 INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (
     'muffinJP', 
     'Jessica Patrice', 
-    '$2y$10$G3//ZwoCshDNNV5wwcZideZRgqJ/QkkRz/xyYfIFg.P4vrPkDmipS', 
+    '$2y$10$IdM9s2fkcBKtFCr/vX7.z.aZUqiSvTO4MZ7DqEGnSqqw1VJRclv9W', 
     'My name is Jessica, but most of my friends call me muffin! I am a cooking teacher at Escola de Cozinha de Guimaraes. I am also a hicking teacher and ocosionally I enjoy 1-month long road trips.' 
 );
 INSERT INTO User (user_username, user_realname, user_password, user_bio) VALUES (
     'guillermoLu', 
     'Guillermo de Lucia', 
-    '$2y$10$rxI8WbRuyAPZDGILT0/DyOpQlNxddF6y8bzJgS5gVzqmACe3ncI3.', 
+    '$2y$10$R4RKDxKQuQMGW6ZtxtTTZeA3AGCvfwgmEvoNLJJgGX67YzCJXiRbC', 
     'Atleta a Venezia Scuola sportiva e Competenza accademica. Mi piace il mio tempo libero giocando a calcio e a basket con il mio amico. Suono il pianoforte da quando avevo 5 anni, e ho vinto un premio al concorso per pianoforte junior di San Tiago.'
 );
 
