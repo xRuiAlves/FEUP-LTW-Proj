@@ -14,23 +14,23 @@ Groups elements:
 Some user login credentials:
 
 username: SelenaPeterson
-password: 1234
+password: 12345678
 
 username: rogerMC
-password: 1234
+password: 12345678
 
 ------------------------------------------------------
 
 Deployment instructions:
-In order to deploy the website in a gnomo.fe.up.pt, one needs to decompress the src.zip file in the desired folder and run the following script, 
-which is present inside the src.zip file:
+In order to deploy the website in a gnomo.fe.up.pt, one needs to decompress the ltw32.zip file in the desired folder and run the following script, 
+which is present inside the ltw32.zip file:
 
 ./server_config.sh <root_path>
 
 where the root_path is the server's root path inside gnomo.fe.up.pt
 
 Example:
-To deploy the server in student up2016KXYZW, one needs to extract the src.zip to the public_html folder of user's 2016KXYZW home page.
+To deploy the server in student up2016KXYZW, one needs to extract the ltw32.zip to the public_html folder of user's 2016KXYZW home page.
 Then, inside the public_html folder, one needs to run the configuration script:
 ./server_config.sh "~up2016KXYZW"
 The server is now up and running
