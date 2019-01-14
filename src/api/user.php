@@ -161,57 +161,6 @@
         }
     }
 
-    function api_createUser($data) {
-        $password_min_length = 8;
-        
-        if(!verifyRequestParameters($data, ["user_username", "user_realname", "user_password", "user_bio"])) {
-            return;
-        }
-
-        $user_username = $data["user_username"];
-        $user_realname = $data["user_realname"];
-        $user_password = $data["user_password"];
-        $user_bio = $data["user_bio"];
-
-        
-        if (strlen($user_password) < $password_min_length) {
-            httpBadRequest("password length should be at least $password_min_length characters long");
-            return;
-        } 
-
-        if (usernameExists($user_username)){
-            httpBadRequest("username already exists");
-        } else {
-            if (!isset($_FILES["user_img"])) {
-                httpBadRequest("image missing");
-                return;
-            }
-            
-            $img = $_FILES["user_img"];
-
-            $img_validation = validateImage($img);
-            if ($img_validation !== "valid") {
-                httpBadRequest($img_validation);
-                return;
-            }
-
-            if (!api_checkInvalidUsername($user_username) && !api_checkInvalidRealname($user_realname)) {
-                $user_id = createUser($user_username, $user_realname, $user_password, $user_bio);
-                $img_upload = uploadUserImage($img, $user_id);
-                
-                // log user
-                $csrf_token = generate_csrf_token();
-                $csrf_info = ["csrf_token" => $csrf_token];
-                $_SESSION["username"] = $user_username;
-                $_SESSION["user_id"] = $user_id;
-                $_SESSION["csrf_token"] = $csrf_token;
-                
-                echo(json_encode(array_merge(getUserInfo($user_id), api_getUserImgJSON($user_id, "big"), api_getUserImgJSON($user_id, "small"), $csrf_info)));
-                http_response_code(201);
-            }
-        }
-    }
-
     function api_userUpdateBio($data) {
         if(!isset($_SESSION["user_id"])) {
             httpUnauthorizedRequest("invalid permissions");

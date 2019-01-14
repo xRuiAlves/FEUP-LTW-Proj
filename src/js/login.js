@@ -18,7 +18,7 @@ function showLoginForm(){
     });
     
     form.querySelector('button.login').addEventListener('click', () => submitLogin(form));
-    form.querySelector('button.register').addEventListener('click', () => showSignUpForm());
+    form.querySelector('button.register').addEventListener('click', () => (form.querySelector('.notification').innerText = 'User register is currently disabled'));
 
     ModalHandler.show(form);
 
